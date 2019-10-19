@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Map : MonoBehaviour
 {
     private MozDataParse mozData;
-    
+    private Locations locations = new Locations();
     public GameObject prefab;
     
     private MapTile[][] map;
@@ -24,6 +22,8 @@ public class Map : MonoBehaviour
         mozData = gameObject.AddComponent<MozDataParse>();
         CreateMap();
         CreateMapOverlay();
+        CreateMapCities();
+
     }
 
     private void CreateMap()
@@ -35,8 +35,8 @@ public class Map : MonoBehaviour
             map[y] = new MapTile[gridWidth];
             for (var x = 0; x < gridWidth; x++)
             {
-                var realX = (float)mapWidth / gridWidth * (x - (float) gridWidth / 2);
-                var realY = (float)mapHeight / gridHeight * (y - (float) gridHeight / 2);
+                var realX = GridToMapX(x);
+                var realY = GridToMapY(y);
                 map[y][x] = new MapTile(x, y, new Vector2(realX, realY), mozData.HasEvent(x, y));//Random.value < 0.5);
             }
         }
@@ -53,10 +53,31 @@ public class Map : MonoBehaviour
                 {
                     var point = Instantiate(prefab, new Vector3(tile.pos.x, tile.pos.y, -1), Quaternion.Euler(-90, 0, 0));
                     point.transform.parent = transform;
-                    point.GetComponent<MeshRenderer>().material.color = new Color(tile.testValue, 0, 0);
+                    point.GetComponent<MeshRenderer>().material.color = new Color((float)y/(float)map.Length, (float)x/(float)map[y].Length, 0);
                 }
             }
         }
+    }
+
+    private void CreateMapCities()
+    {
+        for (var l = 0; l < locations.LocationsList.Length; l++)
+        {
+            var point = Instantiate(prefab, new Vector3(GridToMapX(locations.LocationsList[l].x), GridToMapY(locations.LocationsList[l].y), -1), Quaternion.Euler(-90, 0, 0));
+            point.transform.parent = transform;
+            point.GetComponent<MeshRenderer>().material.color = new Color(1,1,0);
+        }
+    }
+
+    private float GridToMapX(int GridX)
+    {
+        float x = (float)mapWidth / gridWidth * (GridX+0.5f - (float)gridWidth / 2);
+        return x;
+    }
+    private float GridToMapY(int GridY)
+    {
+        float y = (float)mapHeight / gridHeight * (GridY+0.5f - (float)gridHeight / 2);
+        return y;
     }
 
     // Update is called once per frame

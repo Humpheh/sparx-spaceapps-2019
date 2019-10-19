@@ -7,6 +7,7 @@ public class Map : MonoBehaviour
     public GameObject prefab;
     
     private MapTile[][] map;
+    private bool[][] landMap;
     
     // Bounds of the map
     private static int mapWidth = 82;
@@ -20,12 +21,36 @@ public class Map : MonoBehaviour
     void Start()
     {
         mozData = gameObject.AddComponent<MozDataParse>();
+        
+        BuildLandData();
+        
         CreateMap();
         CreateMapOverlay();
         CreateMapCities();
 
     }
 
+    void BuildLandData()
+    {
+        TextAsset bindata = Resources.Load("landData") as TextAsset;
+        var lines = bindata.text.Split('\n');
+
+        var y = 0;
+        landMap = new bool[gridHeight][];
+        foreach (var line in lines)
+        {
+            if (y >= gridHeight) break;
+            var x = 0;
+            landMap[gridHeight-1-y] = new bool[gridWidth];
+            foreach (var c in line)
+            {
+                landMap[gridHeight-1-y][x] = c == '1';
+                x++;
+            }
+            y++;
+        }
+    }
+    
     private void CreateMap()
     {
         // Create the multidimensional array of map tiles
@@ -37,7 +62,7 @@ public class Map : MonoBehaviour
             {
                 var realX = GridToMapX(x);
                 var realY = GridToMapY(y);
-                map[y][x] = new MapTile(x, y, new Vector2(realX, realY), mozData.HasEvent(x, y));//Random.value < 0.5);
+                map[y][x] = new MapTile(x, y, new Vector2(realX, realY), landMap[y][x]);
             }
         }
     }
@@ -49,7 +74,7 @@ public class Map : MonoBehaviour
             for (var x = 0; x < map[y].Length; x++)
             {
                 var tile = map[y][x];
-                if (tile.on)
+                if (tile.isLand)
                 {
                     var point = Instantiate(prefab, new Vector3(tile.pos.x, tile.pos.y, -1), Quaternion.Euler(-90, 0, 0));
                     point.transform.parent = transform;
@@ -79,31 +104,20 @@ public class Map : MonoBehaviour
         float y = (float)mapHeight / gridHeight * (GridY+0.5f - (float)gridHeight / 2);
         return y;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    private void AdvanceMapTime()
-    {
-        
-    }
 }
 
 class MapTile
 {
     public int x, y;
     public Vector2 pos;
-    public bool on;
+    public bool isLand;
     public float testValue;
     
-    public MapTile(int x, int y, Vector2 pos, bool on)
+    public MapTile(int x, int y, Vector2 pos, bool isLand)
     {
         this.x = x;
         this.y = y;
-        this.on = on;
+        this.isLand = isLand;
         this.pos = pos;
         this.testValue = Random.value;
     }

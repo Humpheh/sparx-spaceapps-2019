@@ -38,21 +38,33 @@ public class CameraControl : MonoBehaviour
             diff.x += 1;
         }
 
+        if (Input.GetKey(KeyCode.Q))
+        {
+            scroll(1);
+        }
+        if (Input.GetKey(KeyCode.E))
+        {
+            scroll(-1);
+        }
+
         transform.position = transform.position + diff.normalized * Time.deltaTime * 5;
 
         mouseZoom();
         mouseDrag();
     }
 
+    private void scroll(float s) {
+        Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize + s * scrollMultiplier, 2, 20);
+    }
+
     private void mouseZoom()
     {
-        var scroll = Input.mouseScrollDelta.y;
-        if (Mathf.Abs(scroll) > 0)
-        {
-            Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize + scroll * scrollMultiplier, 2, 20);
-        }
+        var amount = Input.mouseScrollDelta.y;
+        if (Mathf.Abs(amount) <= 0)
+            return;
+        this.scroll(amount);
     }
-    
+
     private void mouseDrag()
     {
         Vector3 pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - dragOrigin);

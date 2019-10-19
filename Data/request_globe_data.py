@@ -30,9 +30,6 @@ for obs in data['features']:
 
   parsedData.append(parsedObs)
 
-with open('processed/mosquito_data.json', 'w') as ff:
-  json.dump(parsedData, ff)
-
 # pass through geodataframe format and keep only key columns
 
 gdf = gpd.GeoDataFrame(
@@ -73,6 +70,15 @@ gdf = gpd.GeoDataFrame(
     "geometry"
 })
 
+# convert strings to bools and create new column for if there were signs of mosquitos
+
+dct = {'true': True, 'false': False} 
+
+df["adults"] = df["adults"].map(dct)
+df["eggs"] = df["eggs"].map(dct)
+df["pupae"] = df["pupae"].map(dct)
+df['seen'] = df[["adults", "eggs", "pupae"]].any(axis=1)
+
 def coalesce(df, column_names):
     i = iter(column_names)
     column_name = next(i)
@@ -97,3 +103,5 @@ gdf = gdf.drop(
     columns = {"abdomen_images", "larvae_images", "water_images"}
 )
 
+with open('processed/mosquito_data.json', 'w') as ff:
+    json.dump(parsedData, ff)

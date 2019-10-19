@@ -1,7 +1,11 @@
-import requests as r
+import requests
 import json
+import numpy as np
 import pandas as pd
+import geopandas as gpd
 import sys
+import geopandas as gpd
+import numpy as np
 
 base_url = 'https://api.globe.gov/search/v1/measurement/protocol/'
 
@@ -11,7 +15,7 @@ query_params = {
   'sample': "FALSE"
 }
 
-res = r.get(base_url, params = query_params)
+res = requests.get(base_url, params = query_params)
 
 data = res.json()
 
@@ -20,8 +24,7 @@ data = res.json()
 parsedData = []
 
 for obs in data['features']:
-  #parsedObs = obs['properties']
-  parsedObs = {}  
+  parsedObs = obs['properties']
   latitude = obs['geometry']['coordinates'][1]
   longitude = obs['geometry']['coordinates'][0]
 
@@ -30,13 +33,10 @@ for obs in data['features']:
 
   parsedData.append(parsedObs)
 
-with open('processed/mosquito_data.json', 'w') as ff:
-  json.dump(parsedData, ff)
-
 # pass through geodataframe format and keep only key columns
-
+df = pd.DataFrame(parsedData)
 gdf = gpd.GeoDataFrame(
-    parsedData, 
+    parsedData,
     geometry = gpd.points_from_xy(df.longitude, df.latitude),
     crs = {'init' :'epsg:4326'}
 ).rename(columns = {
@@ -54,7 +54,7 @@ gdf = gpd.GeoDataFrame(
     "mosquitohabitatmapperAbdomenCloseupPhotoUrls": "abdomen_images",
     "mosquitohabitatmapperWaterSourcePhotoUrls": "water_images",
 }).drop(columns = {
-    "mosquitohabitatmapperMeasurementLongitude", 
+    "mosquitohabitatmapperMeasurementLongitude",
     "mosquitohabitatmapperMeasurementLatitude",
     "countryCode",
     "mosquitohabitatmapperBreedingGroundEliminated",
@@ -72,6 +72,15 @@ gdf = gpd.GeoDataFrame(
     "mosquitohabitatmapperComments",
     "geometry"
 })
+
+# convert strings to bools and create new column for if there were signs of mosquitos
+
+dct = {'true': True, 'false': False}
+
+gdf["adults"] = gdf["adults"].map(dct)
+gdf["eggs"] = gdf["eggs"].map(dct)
+gdf["pupae"] = gdf["pupae"].map(dct)
+gdf['seen'] = gdf[["adults", "eggs", "pupae"]].any(axis=1)
 
 def coalesce(df, column_names):
     i = iter(column_names)
@@ -97,3 +106,7 @@ gdf = gdf.drop(
     columns = {"abdomen_images", "larvae_images", "water_images"}
 )
 
+gdf = gdf[gdf.seen]
+
+with open('processed/mosquito_data.json', 'w') as ff:
+    ff.write(json.dumps(list(gdf.T.to_dict().values()), indent=4, sort_keys=True))

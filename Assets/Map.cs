@@ -17,8 +17,10 @@ public class Map : MonoBehaviour
     private Locations locations = new Locations();
 
     public GameObject prefab;
-    public GameObject cityPrefab;
     public GameObject canvas;
+    public GameObject cityText;
+    public GameObject cityIcon;
+    public GameObject doctorIcon;
     private MapTile[][] map;
     private bool[][] landMap;
 
@@ -56,9 +58,14 @@ public class Map : MonoBehaviour
         }, delegate { Started(""); });
     }
 
+    public ResourceManager GetResourceManager()
+    {
+        return GetComponent<ResourceManager>();
+    }
+
     void Started(string option)
     {
-        Debug.Log("Start");;
+        Debug.Log("Start");
     }
 
     public void PauseMap()
@@ -140,33 +147,37 @@ public class Map : MonoBehaviour
 
     public void CreateLocation(Location location)
     {
-        GameObject cityText = UnityEngine.Resources.Load("CityName") as GameObject;
-
         GameObject iconPrefab;
-        if (location.isStatic) iconPrefab = UnityEngine.Resources.Load("CityIcon") as GameObject;
-        else iconPrefab = UnityEngine.Resources.Load("DoctorIcon") as GameObject;
+        if (location.isStatic) iconPrefab = cityIcon;
+        else iconPrefab = doctorIcon;
 
         // Circle at the location (is clickable)
-        var worldLocation = new Vector3(GridToMapX(location.x), GridToMapY(location.y), -1);
+        Vector3 worldLocation;
+        if (location.usingLatLon) worldLocation = new Vector3(GridToMapX((int)location.latlon.x), GridToMapY((int)location.latlon.y), -1);
+        else worldLocation = new Vector3(location.position.x, location.position.y, -1);
+        
         var icon = Instantiate(iconPrefab);
-        icon.GetComponent<CityControl>().location = location;
-        icon.GetComponent<CityControl>().worldLocation = worldLocation;
+        var city = icon.GetComponent<CityControl>();
+        city.location = location;
+        city.worldLocation = worldLocation;
+        if (location.isLocked) icon.GetComponent<Image>().color = Color.grey;
         icon.transform.SetParent(canvas.transform, false);
 
         // Text overlay for the location
         var text = Instantiate(cityText);
         text.GetComponent<Text>().text = location.city;
         text.transform.SetParent(canvas.transform, false);
-        icon.GetComponent<CityControl>().text = text;
+        city.text = text;
+        city.SetPosition();
+        city.UpdateText();
 
         location.obj = icon;
     }
 
     public void DropDoctor(Vector3 worldLocation)
     {
-        var lat = MapXToGrid(worldLocation.x);
-        var lon = MapYToGrid(worldLocation.y);    
-        
+        var location = new Location(worldLocation, 1);
+        CreateLocation(location);
     }
 
     public float GridToMapX(int GridX)
@@ -211,9 +222,12 @@ public class Map : MonoBehaviour
         {
             Debug.Log(hit.point);
             Debug.Log(MapPointToGrid(hit.point));
-            if (CityControl.CurrentSelection != null)
+            var location = CityControl.CurrentSelection;
+            if (location != null && location.CanRemoveDoctor())
             {
+                location.RemoveDoctor();
                 PlaneBehaviour.SpawnPlane(CityControl.CurrentSelection.worldLocation, hit.point);
+                CityControl.CurrentSelection.TryRemoveCity();
                 CityControl.CurrentSelection.Deselect();
             }
         }

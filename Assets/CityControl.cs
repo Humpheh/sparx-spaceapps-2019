@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CityControl : MonoBehaviour
 {
@@ -32,7 +33,11 @@ public class CityControl : MonoBehaviour
 //                if (lastSelection != this) Select();
 //            }
 //        }
+        SetPosition();
+    }
 
+    public void SetPosition()
+    {
         RectTransform canvasRect = Map.GetSingleton().canvas.GetComponent<RectTransform>();
         Vector2 viewportPosition = Camera.main.WorldToViewportPoint(worldLocation);
         Vector2 screenPosition = new Vector2(
@@ -44,11 +49,11 @@ public class CityControl : MonoBehaviour
         uiElement.anchoredPosition = screenPosition;
         GetComponent<RectTransform>().anchoredPosition = screenPosition;
     }
-
+    
     public void HandleClick()
     {
-        Debug.LogFormat("clicked city {0}", location.city);
-                
+        //Debug.LogFormat("clicked city {0}", location.city);
+        
         var lastSelection = CurrentSelection;
         if (CurrentSelection != null) CurrentSelection.Deselect();
         if (lastSelection != this) Select();
@@ -56,11 +61,48 @@ public class CityControl : MonoBehaviour
 
     void Select()
     {
+        if (location.isLocked == true) return;
         CurrentSelection = this;
+        GetComponent<Image>().color = new Color(1.0f, 0.55f, 0f);
+    }
+
+    public void UpdateText()
+    {
+        text.GetComponent<Text>().text = location.city + " x" + location.doctors;
     }
 
     public void Deselect()
     {
         CurrentSelection = null;
+        GetComponent<Image>().color = Color.red;
+    }
+
+    public void TryRemoveCity()
+    {
+        if (location.doctors == 0 && !location.isStatic)
+        {
+            Destroy(text);
+            Destroy(gameObject);
+        }
+    }
+    
+    public bool CanRemoveDoctor()
+    {
+        return location.doctors > 0;
+    }
+
+    public void RemoveDoctor()
+    {
+        if (location.doctors > 0)
+        {
+            location.doctors--;
+            UpdateText();
+        }
+    }
+
+    public void AddDoctor()
+    {
+        location.doctors++;
+        UpdateText();
     }
 }

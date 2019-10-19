@@ -21,7 +21,12 @@ namespace mosquitodefenders.Tickers
 
         protected internal override void Tick(GameObject gameObject)
         {
-            gameObject.BroadcastMessage(topic, this.ticker.NextValue());
+            var nextValue = this.ticker.NextValue();
+            if (nextValue == null)
+            {
+                return;
+            }
+            gameObject.BroadcastMessage(topic, nextValue);
         }
     }
 

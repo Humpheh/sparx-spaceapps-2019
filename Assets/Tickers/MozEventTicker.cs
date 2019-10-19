@@ -10,7 +10,7 @@ namespace mosquitodefenders.Tickers
 
         public TickValue<MozEvent> NextValue()
         {
-            if (Random.value < 1)
+            if (Random.value < 0.05)
             {
                 DataPoint[] locations = Map.GetSingleton().mozData.points;
                 DataPoint location = Utils.RandomInArr(locations);

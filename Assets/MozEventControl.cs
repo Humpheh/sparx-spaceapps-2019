@@ -17,8 +17,6 @@ public class MozEventControl : MonoBehaviour
             -1
             );
 
-        Debug.LogFormat("event position: {0}", pos);
-
         GameObject newObject = Instantiate(eventPrefab, pos, Quaternion.identity);
         newObject.transform.parent = transform;
     }

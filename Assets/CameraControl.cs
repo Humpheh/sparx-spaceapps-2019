@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class CameraControl : MonoBehaviour
 {
-    private Vector3 velocity;
-    public float dragSpeed = 10;
+    public float dragMultipler = 2;
     private Vector3 dragOrigin;
 
+    const float scrollMultiplier = -0.5f;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -39,19 +40,28 @@ public class CameraControl : MonoBehaviour
 
         transform.position = transform.position + diff.normalized * Time.deltaTime * 5;
 
-        Debug.Log(Input.mouseScrollDelta);
-        
+        mouseZoom();
         mouseDrag();
     }
 
+    private void mouseZoom()
+    {
+        var scroll = Input.mouseScrollDelta.y;
+        if (Mathf.Abs(scroll) > 0)
+        {
+            Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize + scroll * scrollMultiplier, 2, 20);
+        }
+    }
+    
     private void mouseDrag()
     {
         Vector3 pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - dragOrigin);
-        Vector3 move = new Vector3(-pos.x * dragSpeed, -pos.y * dragSpeed, 0);
         dragOrigin = Input.mousePosition;
  
         if (Input.GetMouseButton(0))
         {
+            var dragSpeed = Camera.main.orthographicSize * dragMultipler;
+            Vector3 move = new Vector3(-pos.x * dragSpeed, -pos.y * dragSpeed, 0);
             transform.Translate(move, Space.World);  
         }
     }

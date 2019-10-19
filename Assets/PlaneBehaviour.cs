@@ -15,6 +15,8 @@ public class PlaneBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Map.GetSingleton().IsPaused()) return;
+        
         var diff = (new Vector3(endPosition.x, endPosition.y, 0) - transform.position).normalized * Time.deltaTime * speed;
         speed = Mathf.Clamp(speed + Time.deltaTime / 2, 0, maxSpeed);
         transform.position += diff;

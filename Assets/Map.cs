@@ -11,6 +11,8 @@ public class Map : MonoBehaviour
         return _mapSingleton;
     }
 
+    private bool _paused = false;
+    
     public MozDataParse mozData;
     private Locations locations = new Locations();
 
@@ -40,16 +42,38 @@ public class Map : MonoBehaviour
         CreateMapOverlay();
         CreateMapCities();
 
-        Modal.OpenModal(
-            "You are the Mosquito Defender!", 
-            "<b>The world needs your help!</b>\\nThe world health organisation is gone, and you're the only one that can save the world from mosquitoes.",
-            Started
-        );
+//        Modal.OpenModal(
+//            "You are the Mosquito Defender!", 
+//            "<b>The world needs your help!</b>\\nThe world health organisation is gone, and you're the only one that can save the world from mosquitoes.",
+//            Started
+//        );
+
+        Choice.OpenChoice("What do you want to do?", "Choose something to do please", new []
+        {
+            new ChoiceOption("Fly 1 there", "$1000", delegate {  }),
+            new ChoiceOption("Fly 2 there", "$2000", delegate {  }),
+            new ChoiceOption("Fly 3 there", "$2500", delegate {  }),
+        }, delegate { Started(""); });
     }
 
     void Started(string option)
     {
         Debug.Log("Start");;
+    }
+
+    public void PauseMap()
+    {
+        _paused = true;
+    }
+
+    public void UnpauseMap()
+    {
+        _paused = false;
+    }
+
+    public bool IsPaused()
+    {
+        return _paused;
     }
     
     void BuildLandData()
@@ -108,38 +132,46 @@ public class Map : MonoBehaviour
 
     private void CreateMapCities()
     {
-        GameObject cityText = UnityEngine.Resources.Load("CityName") as GameObject;
         foreach (var location in locations.LocationsList)
         {
-            // Circle at the location (is clickable)
-            var point = Instantiate(cityPrefab, new Vector3(GridToMapX(location.x), GridToMapY(location.y), -1), Quaternion.identity);
-            point.transform.parent = transform;
-            point.GetComponent<CityControl>().location = location;
-
-            // Text overlay for the location
-            var text = Instantiate(cityText, new Vector3(0, 0, 0), Quaternion.identity);
-            text.GetComponent<Text>().text = location.city;
-            text.transform.SetParent(canvas.transform, false);
-            point.GetComponent<CityControl>().text = text;
+            CreateCity(location);
         }
     }
 
-    private float GridToMapX(int GridX)
+    private void CreateCity(Location location)
+    {
+        GameObject cityText = UnityEngine.Resources.Load("CityName") as GameObject;
+        
+        // Circle at the location (is clickable)
+        var point = Instantiate(cityPrefab, new Vector3(GridToMapX(location.x), GridToMapY(location.y), -1), Quaternion.identity);
+        point.transform.parent = transform;
+        point.GetComponent<CityControl>().location = location;
+
+        // Text overlay for the location
+        var text = Instantiate(cityText, new Vector3(0, 0, 0), Quaternion.identity);
+        text.GetComponent<Text>().text = location.city;
+        text.transform.SetParent(canvas.transform, false);
+        point.GetComponent<CityControl>().text = text;
+
+        location.obj = point;
+    }
+
+    public float GridToMapX(int GridX)
     {
         return (float)mapWidth / gridWidth * (GridX + 0.5f - (float)gridWidth / 2);
     }
 
-    private float GridToMapY(int GridY)
+    public float GridToMapY(int GridY)
     {
         return (float)mapHeight / gridHeight * (GridY + 0.5f - (float)gridHeight / 2);
     }
 
-    private int MapXToGrid(float mapX)
+    public int MapXToGrid(float mapX)
     {
         return (int)Math.Round((mapX - 0.5f + ((float)mapWidth / 2)) / mapWidth * gridWidth);
     }
 
-    private int MapYToGrid(float mapY)
+    public int MapYToGrid(float mapY)
     {
         return (int)Math.Round((mapY - 0.5f + ((float)mapHeight / 2)) / mapHeight * gridHeight);
     }
@@ -151,6 +183,7 @@ public class Map : MonoBehaviour
 
     void Update()
     {
+        if (IsPaused()) return;
         if (Input.GetMouseButtonDown(0))
         {
             CastRay();

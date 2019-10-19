@@ -23,6 +23,7 @@ public class Modal : MonoBehaviour
 
     public void OnClose()
     {
+        Map.GetSingleton().UnpauseMap();
         Destroy(gameObject);
         callback?.Invoke("Continue");
     }
@@ -38,5 +39,7 @@ public class Modal : MonoBehaviour
         modal.transform.parent = Map.GetSingleton().canvas.transform;
         modal.GetComponent<RectTransform>().offsetMin = new Vector2(0, 0);
         modal.GetComponent<RectTransform>().offsetMax = new Vector2(0, 0);
+        
+        Map.GetSingleton().PauseMap();
     }
 }

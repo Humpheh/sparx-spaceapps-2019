@@ -34,6 +34,10 @@ namespace mosquitodefenders.Tickers
         protected internal override void Tick(GameObject gameObject)
         {
             var newValue = ticker.NextValue();
+            if (newValue == null)
+            {
+                return;
+            }
             gameObject.BroadcastMessage(topic, newValue);
             foreach (NotifyUpdateDelegate<T> receiver in receivers)
                 receiver(newValue);

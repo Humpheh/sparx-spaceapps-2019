@@ -4,20 +4,15 @@ using UnityEngine;
 
 namespace mosquitodefenders.Tickers
 {
-    public class MozEventTicker : IResourceTicker<MozEvent?>
+    public class MozEventTicker : IResourceTicker<MozEvent>
     {
         private MozEvent mozEvent;
 
         private string[] mozEventTypes = { "outbreak", "report" };
 
-
-        public MozEventTicker()
+        public MozEvent NextValue()
         {
-        }
-
-        public MozEvent? NextValue()
-        {
-            if (Random.value < 0.01)
+            if (Random.value < 1)
             {
                 DataPoint[] locations = Map.GetSingleton().mozData.points;
 
@@ -26,20 +21,22 @@ namespace mosquitodefenders.Tickers
 
                 MozEvent mosEvent;
                 mosEvent.eventType = evtType;
-                mosEvent.location = location;
+                mosEvent.Location = location;
 
                 return mozEvent;
             }
             else
             {
-                return null;
+                return new MozEvent { };
             }
         }
     }
-}
 
-public struct MozEvent
-{
-    public string eventType;
-    public DataPoint location;
+
+    public struct MozEvent
+    {
+        public string eventType;
+        public DataPoint Location;
+    }
+
 }

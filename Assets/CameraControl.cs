@@ -25,6 +25,8 @@ public class CameraControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Map.GetSingleton().IsPaused()) return;
+        
         Vector3 diff = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         
         // -41 < x < 41

@@ -4,7 +4,9 @@ public class Map : MonoBehaviour
 {
     private MozDataParse mozData;
     private Locations locations = new Locations();
+    
     public GameObject prefab;
+    public GameObject cityPrefab;
     
     private MapTile[][] map;
     private bool[][] landMap;
@@ -88,7 +90,7 @@ public class Map : MonoBehaviour
     {
         for (var l = 0; l < locations.LocationsList.Length; l++)
         {
-            var point = Instantiate(prefab, new Vector3(GridToMapX(locations.LocationsList[l].x), GridToMapY(locations.LocationsList[l].y), -1), Quaternion.Euler(-90, 0, 0));
+            var point = Instantiate(cityPrefab, new Vector3(GridToMapX(locations.LocationsList[l].x), GridToMapY(locations.LocationsList[l].y), -1), Quaternion.Euler(-90, 0, 0));
             point.transform.parent = transform;
             point.GetComponent<MeshRenderer>().material.color = new Color(1,1,0);
         }

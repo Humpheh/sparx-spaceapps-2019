@@ -295,6 +295,7 @@ GameObject:
   - component: {fileID: 71121234584757990}
   - component: {fileID: 71121234584757985}
   - component: {fileID: 4384412447622081090}
+  - component: {fileID: 6413799737514731822}
   m_Layer: 5
   m_Name: ChoicePrefab
   m_TagString: Untagged
@@ -373,6 +374,22 @@ MonoBehaviour:
   titleGameObject: {fileID: 71121233322442913}
   textGameObject: {fileID: 71121233707548690}
   optionsObject: {fileID: 7335614800290215705}
+--- !u!111 &6413799737514731822
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 71121234584757987}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: cf0c358e573a9465ba61d7e4a7b2182c, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: cf0c358e573a9465ba61d7e4a7b2182c, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &71121235039984340
 GameObject:
   m_ObjectHideFlags: 0

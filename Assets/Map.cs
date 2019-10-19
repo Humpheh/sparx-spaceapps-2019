@@ -49,13 +49,11 @@ public class Map : MonoBehaviour
         //        CreateMapOverlay();
         CreateMapCities();
 
-//        Modal.OpenModal(
-//            "You are the Mosquito Defender!", 
-//            "<b>The world needs your help!</b>\\nThe world health organisation is gone, and you're the only one that can save the world from mosquitoes.",
-//            Started
-//        );
-
-        Popup.SpawnPanel(Vector3.zero, "https://data.globe.gov/system/photos/2019/05/23/1079041/original.jpg");
+        Modal.OpenModal(
+            "You are the Mosquito Defender!", 
+            "<b>The world needs your help!</b>\\nThe world health organisation is gone, and you're the only one that can save the world from mosquitoes.",
+            Started
+        );
     }
 
     public ResourceManager GetResourceManager()
@@ -65,7 +63,7 @@ public class Map : MonoBehaviour
 
     void Started(string option)
     {
-        Debug.Log("Start");
+        Popup.SpawnPanel(Vector3.zero, "https://data.globe.gov/system/photos/2019/05/23/1079041/original.jpg");
     }
 
     public void PauseMap()

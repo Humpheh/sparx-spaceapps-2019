@@ -44,7 +44,7 @@ class Events(Resource):
                 'type': 1,
                 'severity': 3,
                 'text': event['text'],
-                'image_url': image_url,
+                'image_url': event['image_url'],
             }
         }]
         return(events)

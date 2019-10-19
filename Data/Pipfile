@@ -7,16 +7,15 @@ verify_ssl = true
 notebook = "*"
 jupyterlab = "*"
 pylint = "*"
+nbstripout = "*"
 
 [packages]
 requests = "*"
 pandas = "*"
 geopandas = "*"
-utm = "*"
 matplotlib = "*"
 descartes = "*"
 rasterio = "*"
-nbstripout = "*"
 flask = "*"
 flask-restful = "*"
 

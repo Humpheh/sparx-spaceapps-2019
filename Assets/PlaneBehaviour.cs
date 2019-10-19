@@ -15,6 +15,8 @@ public class PlaneBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Map.GetSingleton().IsPaused()) return;
+        
         var diff = (new Vector3(endPosition.x, endPosition.y, 0) - transform.position).normalized * Time.deltaTime * speed;
         speed = Mathf.Clamp(speed + Time.deltaTime / 2, 0, maxSpeed);
         transform.position += diff;
@@ -31,6 +33,7 @@ public class PlaneBehaviour : MonoBehaviour
 
     public static void SpawnPlane(Vector2 from, Vector2 to)
     {
+//        if (Resources.money.value 
         GameObject planePrefab = UnityEngine.Resources.Load("Plane") as GameObject;
         var plane = Instantiate(planePrefab, from, Quaternion.identity);
         var planeB = plane.GetComponent<PlaneBehaviour>();

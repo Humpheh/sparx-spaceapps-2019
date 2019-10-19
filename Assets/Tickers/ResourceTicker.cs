@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace mosquitodefenders.Tickers
 {
@@ -8,10 +9,16 @@ namespace mosquitodefenders.Tickers
         protected internal abstract void Tick(GameObject gameObject);
     }
 
-    public class BroadcastingResourceUpdater<T> : ResourceUpdater
+    interface IUpdateReceiver<T>
+    {
+        void RegisterReceiver(NotifyUpdateDelegate<T> receiver);
+    }
+
+    public class BroadcastingResourceUpdater<T> : ResourceUpdater, IUpdateReceiver<T>
     {
         private readonly string topic;
         private readonly IResourceTicker<T> ticker;
+        private readonly List<NotifyUpdateDelegate<T>> receivers = new List<NotifyUpdateDelegate<T>>();
 
         public BroadcastingResourceUpdater(string topic, IResourceTicker<T> ticker)
         {
@@ -19,14 +26,21 @@ namespace mosquitodefenders.Tickers
             this.ticker = ticker;
         }
 
+        public void RegisterReceiver(NotifyUpdateDelegate<T> receiver)
+        {
+            receivers.Add(receiver);
+        }
+
         protected internal override void Tick(GameObject gameObject)
         {
-            var nextValue = this.ticker.NextValue();
-            if (nextValue == null)
+            var newValue = ticker.NextValue();
+            if (newValue == null)
             {
                 return;
             }
-            gameObject.BroadcastMessage(topic, nextValue);
+            gameObject.BroadcastMessage(topic, newValue);
+            foreach (NotifyUpdateDelegate<T> receiver in receivers)
+                receiver(newValue);
         }
     }
 
@@ -34,4 +48,6 @@ namespace mosquitodefenders.Tickers
     {
         T NextValue();
     }
+
+    public delegate void NotifyUpdateDelegate<T>(T value);
 }

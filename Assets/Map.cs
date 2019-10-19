@@ -11,6 +11,8 @@ public class Map : MonoBehaviour
         return _mapSingleton;
     }
 
+    private bool _paused = false;
+    
     public MozDataParse mozData;
     private Locations locations = new Locations();
 
@@ -37,11 +39,43 @@ public class Map : MonoBehaviour
         BuildLandData();
 
         CreateMap();
-        //CreateMapOverlay();
+        CreateMapOverlay();
         CreateMapCities();
 
+//        Modal.OpenModal(
+//            "You are the Mosquito Defender!", 
+//            "<b>The world needs your help!</b>\\nThe world health organisation is gone, and you're the only one that can save the world from mosquitoes.",
+//            Started
+//        );
+
+        Choice.OpenChoice("What do you want to do?", "Choose something to do please", new []
+        {
+            new ChoiceOption("Fly 1 there", "$1000", delegate {  }),
+            new ChoiceOption("Fly 2 there", "$2000", delegate {  }),
+            new ChoiceOption("Fly 3 there", "$2500", delegate {  }),
+        }, delegate { Started(""); });
     }
 
+    void Started(string option)
+    {
+        Debug.Log("Start");;
+    }
+
+    public void PauseMap()
+    {
+        _paused = true;
+    }
+
+    public void UnpauseMap()
+    {
+        _paused = false;
+    }
+
+    public bool IsPaused()
+    {
+        return _paused;
+    }
+    
     void BuildLandData()
     {
         TextAsset bindata = UnityEngine.Resources.Load("landData") as TextAsset;
@@ -86,7 +120,7 @@ public class Map : MonoBehaviour
             for (var x = 0; x < map[y].Length; x++)
             {
                 var tile = map[y][x];
-                if (tile.isLand)
+                if (mozData.HasEvent(x, y))
                 {
                     var point = Instantiate(prefab, new Vector3(tile.pos.x, tile.pos.y, -1), Quaternion.Euler(-90, 0, 0));
                     point.transform.parent = transform;
@@ -102,9 +136,8 @@ public class Map : MonoBehaviour
         foreach (var location in locations.LocationsList)
         {
             // Circle at the location (is clickable)
-            var point = Instantiate(cityPrefab, new Vector3(GridToMapX(location.x), GridToMapY(location.y), -1), Quaternion.Euler(-90, 0, 0));
+            var point = Instantiate(cityPrefab, new Vector3(GridToMapX(location.x), GridToMapY(location.y), -1), Quaternion.identity);
             point.transform.parent = transform;
-            point.GetComponent<MeshRenderer>().material.color = new Color(1, 1, 0);
             point.GetComponent<CityControl>().location = location;
 
             // Text overlay for the location
@@ -142,6 +175,7 @@ public class Map : MonoBehaviour
 
     void Update()
     {
+        if (IsPaused()) return;
         if (Input.GetMouseButtonDown(0))
         {
             CastRay();

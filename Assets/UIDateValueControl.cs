@@ -8,7 +8,7 @@ public class UIDateValueControl : MonoBehaviour
 {
     public void GlobalTimeStep(DateTime newDate)
     {
-        Resources.time.value = newDate;
+        Resources.Time.value = newDate;
         GetComponent<Text>().text = newDate.ToString("dd MMMM yyyy hh:mm");
     }
 }

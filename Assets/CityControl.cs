@@ -18,6 +18,8 @@ public class CityControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Map.GetSingleton().IsPaused()) return;
+        
         if (Input.GetMouseButtonDown(0)){ 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -44,13 +46,13 @@ public class CityControl : MonoBehaviour
     void Select()
     {
         CurrentSelection = this;
-        GetComponent<MeshRenderer>().material.color = new Color(0,1,1);
-        transform.localScale = new Vector3(1, 1, 1);
+        GetComponent<SpriteRenderer>().color = new Color(1,1,0);
+        transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
     }
 
     public void Deselect()
     {
-        GetComponent<MeshRenderer>().material.color = new Color(1,1,0);
+        GetComponent<SpriteRenderer>().color = new Color(1,1,1);
         transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
         CurrentSelection = null;
     }

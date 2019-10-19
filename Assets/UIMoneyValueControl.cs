@@ -10,6 +10,11 @@ public class UIMoneyValueControl : MonoBehaviour
         SetBalanceText(Resources.Bank.Balance);
     }
 
+    public void GlobalMoney()
+    {
+        // nothing hack
+    }
+
     public void SetBalanceText(double balance)
     {
         var prefix = "Bank: ";

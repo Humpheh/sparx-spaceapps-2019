@@ -15,13 +15,12 @@ namespace mosquitodefenders.Tickers
             if (Random.value < 1)
             {
                 DataPoint[] locations = Map.GetSingleton().mozData.points;
-
                 DataPoint location = Utils.RandomInArr(locations);
                 string evtType = Utils.RandomInArr(mozEventTypes);
 
                 MozEvent mosEvent;
                 mosEvent.eventType = evtType;
-                mosEvent.Location = location;
+                mosEvent.location = location;
 
                 return mozEvent;
             }
@@ -36,7 +35,7 @@ namespace mosquitodefenders.Tickers
     public struct MozEvent
     {
         public string eventType;
-        public DataPoint Location;
+        public DataPoint location;
     }
 
 }

@@ -8,16 +8,16 @@ public class Map : MonoBehaviour
     {
         return _mapSingleton;
     }
-    
-    private MozDataParse mozData;
+
+    public MozDataParse mozData;
     private Locations locations = new Locations();
-    
+
     public GameObject prefab;
     public GameObject cityPrefab;
     public GameObject canvas;
     private MapTile[][] map;
     private bool[][] landMap;
-    
+
     // Bounds of the map
     private static int mapWidth = 82;
     private static int mapHeight = 41;
@@ -31,9 +31,9 @@ public class Map : MonoBehaviour
     {
         _mapSingleton = this;
         mozData = gameObject.AddComponent<MozDataParse>();
-        
+
         BuildLandData();
-        
+
         CreateMap();
         //CreateMapOverlay();
         CreateMapCities();
@@ -51,16 +51,16 @@ public class Map : MonoBehaviour
         {
             if (y >= gridHeight) break;
             var x = 0;
-            landMap[gridHeight-1-y] = new bool[gridWidth];
+            landMap[gridHeight - 1 - y] = new bool[gridWidth];
             foreach (var c in line)
             {
-                landMap[gridHeight-1-y][x] = c == '1';
+                landMap[gridHeight - 1 - y][x] = c == '1';
                 x++;
             }
             y++;
         }
     }
-    
+
     private void CreateMap()
     {
         // Create the multidimensional array of map tiles
@@ -88,7 +88,7 @@ public class Map : MonoBehaviour
                 {
                     var point = Instantiate(prefab, new Vector3(tile.pos.x, tile.pos.y, -1), Quaternion.Euler(-90, 0, 0));
                     point.transform.parent = transform;
-                    point.GetComponent<MeshRenderer>().material.color = new Color((float)y/(float)map.Length, (float)x/(float)map[y].Length, 0);
+                    point.GetComponent<MeshRenderer>().material.color = new Color((float)y / (float)map.Length, (float)x / (float)map[y].Length, 0);
                 }
             }
         }
@@ -97,12 +97,12 @@ public class Map : MonoBehaviour
     private void CreateMapCities()
     {
         GameObject cityText = Resources.Load("CityName") as GameObject;
-        foreach (var location in  locations.LocationsList)       
+        foreach (var location in locations.LocationsList)
 
         {
             var point = Instantiate(cityPrefab, new Vector3(GridToMapX(location.x), GridToMapY(location.y), -1), Quaternion.Euler(-90, 0, 0));
             point.transform.parent = transform;
-            point.GetComponent<MeshRenderer>().material.color = new Color(1,1,0);
+            point.GetComponent<MeshRenderer>().material.color = new Color(1, 1, 0);
             point.GetComponent<CityControl>().location = location;
 
             var text = Instantiate(cityText, new Vector3(0, 0, 0), Quaternion.identity);
@@ -115,12 +115,12 @@ public class Map : MonoBehaviour
 
     private float GridToMapX(int GridX)
     {
-        float x = (float)mapWidth / gridWidth * (GridX+0.5f - (float)gridWidth / 2);
+        float x = (float)mapWidth / gridWidth * (GridX + 0.5f - (float)gridWidth / 2);
         return x;
     }
     private float GridToMapY(int GridY)
     {
-        float y = (float)mapHeight / gridHeight * (GridY+0.5f - (float)gridHeight / 2);
+        float y = (float)mapHeight / gridHeight * (GridY + 0.5f - (float)gridHeight / 2);
         return y;
     }
 }
@@ -131,7 +131,7 @@ class MapTile
     public Vector2 pos;
     public bool isLand;
     public float testValue;
-    
+
     public MapTile(int x, int y, Vector2 pos, bool isLand)
     {
         this.x = x;

@@ -22,7 +22,8 @@ public class ResourceManager : MonoBehaviour
             new BroadcastingResourceUpdater<double>("GlobalMoney", new MoneyTicker(
                 DefaultResources.MoneyIncrement,
                 DefaultResources.DefaultMoney
-            ))
+            )),
+            new BroadcastingResourceUpdater<MozEvent?>("MozEvent", new MozEventTicker())
         };
     }
 

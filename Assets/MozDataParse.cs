@@ -7,16 +7,16 @@ using UnityEngine;
 public class MozDataParse : MonoBehaviour
 {
     Dictionary<(int, int), bool> pointLookup = new Dictionary<(int, int), bool>();
-    private DataPoint[] points;
+    public DataPoint[] points;
     public void Awake()
     {
         TextAsset bindata = Resources.Load("mozData") as TextAsset;
         var data = JsonUtility.FromJson<DataPoints>(bindata.text);
         points = data.data;
-        
+
         foreach (var point in points)
         {
-            var yx = ((int) Mathf.Round(point.latitude + 90), (int) Mathf.Round(point.longitude + 180));
+            var yx = ((int)Mathf.Round(point.latitude + 90), (int)Mathf.Round(point.longitude + 180));
             if (!pointLookup.ContainsKey(yx))
             {
                 pointLookup.Add(yx, true);
@@ -39,7 +39,7 @@ class DataPoints
 }
 
 [Serializable]
-class DataPoint
+public class DataPoint
 {
     public float latitude;
     public float longitude;

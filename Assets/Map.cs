@@ -11,7 +11,7 @@ public class Map : MonoBehaviour
         return _mapSingleton;
     }
 
-    private MozDataParse mozData;
+    public MozDataParse mozData;
     private Locations locations = new Locations();
 
     public GameObject prefab;

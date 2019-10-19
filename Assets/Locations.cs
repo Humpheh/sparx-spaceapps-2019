@@ -70,24 +70,6 @@ public class Location
         isLocked = false;
     }
 
-    public bool CanRemoveDoctor()
-    {
-        return doctors > 0;
-    }
-
-    public void RemoveDoctor()
-    {
-        if (doctors > 0)
-        {
-            doctors--;
-        }
-    }
-
-    public void AddDoctor()
-    {
-        doctors++;
-    }
-    
     private int LatToY(double lat)
     {
         // Lat is -90 -> 90

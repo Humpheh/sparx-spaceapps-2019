@@ -34,12 +34,6 @@ public class PlaneBehaviour : MonoBehaviour
 
     public static void SpawnPlane(Vector2 from, Vector2 to)
     {
-        GameObject planePrefab = UnityEngine.Resources.Load("Plane") as GameObject;
-        var plane = Instantiate(planePrefab, from, Quaternion.identity);
-        var planeB = plane.GetComponent<PlaneBehaviour>();
-        planeB.startPosition = from;
-        planeB.endPosition = to;
-
         Material lineMaterial = UnityEngine.Resources.Load("NoLight") as Material;
         GameObject line = new GameObject("PlaneLine");
         var lineRender = line.AddComponent<LineRenderer>();
@@ -47,6 +41,15 @@ public class PlaneBehaviour : MonoBehaviour
         lineRender.startWidth = 0.1f;
         lineRender.endWidth = 0.1f;
         lineRender.SetPositions(new[] { new Vector3(from.x, from.y, -0.1f), new Vector3(to.x, to.y, -0.1f) });
+
+        var dir = from - to;
+        var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        
+        GameObject planePrefab = UnityEngine.Resources.Load("Plane") as GameObject;
+        var plane = Instantiate(planePrefab, from, Quaternion.AngleAxis(angle, Vector3.up));
+        var planeB = plane.GetComponent<PlaneBehaviour>();
+        planeB.startPosition = from;
+        planeB.endPosition = to;
         planeB.line = line;
 
         Resources.Bank.Spend(30000);

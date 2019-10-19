@@ -66,6 +66,11 @@ public class CityControl : MonoBehaviour
         GetComponent<Image>().color = new Color(1.0f, 0.55f, 0f);
     }
 
+    public void UpdateText()
+    {
+        text.GetComponent<Text>().text = location.city + " x" + location.doctors;
+    }
+
     public void Deselect()
     {
         CurrentSelection = null;
@@ -79,5 +84,25 @@ public class CityControl : MonoBehaviour
             Destroy(text);
             Destroy(gameObject);
         }
+    }
+    
+    public bool CanRemoveDoctor()
+    {
+        return location.doctors > 0;
+    }
+
+    public void RemoveDoctor()
+    {
+        if (location.doctors > 0)
+        {
+            location.doctors--;
+            UpdateText();
+        }
+    }
+
+    public void AddDoctor()
+    {
+        location.doctors++;
+        UpdateText();
     }
 }

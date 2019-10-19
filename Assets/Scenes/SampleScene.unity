@@ -698,9 +698,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mozData: {fileID: 0}
   prefab: {fileID: 3957819215582022896, guid: f7da8264a692f49b591095dc9fde1b78, type: 3}
-  cityPrefab: {fileID: 8703937251319470419, guid: baac921ac004d4ab299171c0661beac1,
-    type: 3}
   canvas: {fileID: 740017724}
+  cityText: {fileID: 6418734702071364870, guid: 4b159a4bf357548fcb6b046f90ceecf8,
+    type: 3}
+  cityIcon: {fileID: 3275050112599640060, guid: f1b9394bf36ef4be5b027ba7a1275fdf,
+    type: 3}
+  doctorIcon: {fileID: 3275050112599640060, guid: 320474cf046d24d2f8ecf2d7a4c2ee1e,
+    type: 3}
 --- !u!61 &2012416259
 BoxCollider2D:
   m_ObjectHideFlags: 0

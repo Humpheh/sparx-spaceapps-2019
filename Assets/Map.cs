@@ -25,7 +25,6 @@ public class Map : MonoBehaviour
     public GameObject doctorIcon;
     private MapTile[][] map;
     private bool[][] landMap;
-    public bool currentlyCasting;
 
     // Bounds of the map
     private static int mapWidth = 82;
@@ -261,7 +260,6 @@ public class Map : MonoBehaviour
                 location.TryRemoveCity();
                 location.Deselect();
             }
-            currentlyCasting = false;
         }
     }
 }

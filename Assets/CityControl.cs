@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CityControl : MonoBehaviour
 {
-    private static CityControl currentSelection;
+    public static CityControl CurrentSelection;
 
     public Location location;
     public GameObject text;
@@ -24,8 +24,8 @@ public class CityControl : MonoBehaviour
             if (Physics.Raycast(ray, out hit) && hit.transform == transform){
                 Debug.LogFormat("clicked city {0}", location.city);
                 
-                var lastSelection = currentSelection;
-                if (currentSelection != null) currentSelection.Deselect();
+                var lastSelection = CurrentSelection;
+                if (CurrentSelection != null) CurrentSelection.Deselect();
                 if (lastSelection != this) Select();
             }
         }
@@ -43,14 +43,15 @@ public class CityControl : MonoBehaviour
 
     void Select()
     {
-        currentSelection = this;
+        CurrentSelection = this;
         GetComponent<MeshRenderer>().material.color = new Color(0,1,1);
         transform.localScale = new Vector3(1, 1, 1);
     }
 
-    void Deselect()
+    public void Deselect()
     {
         GetComponent<MeshRenderer>().material.color = new Color(1,1,0);
         transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+        CurrentSelection = null;
     }
 }

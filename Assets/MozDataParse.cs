@@ -10,7 +10,7 @@ public class MozDataParse : MonoBehaviour
     public DataPoint[] points;
     public void Awake()
     {
-        TextAsset bindata = Resources.Load("mozData") as TextAsset;
+        TextAsset bindata = UnityEngine.Resources.Load("mozData") as TextAsset;
         var data = JsonUtility.FromJson<DataPoints>(bindata.text);
         points = data.data;
 

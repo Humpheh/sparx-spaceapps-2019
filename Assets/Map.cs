@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class Map : MonoBehaviour
 {
@@ -9,7 +11,7 @@ public class Map : MonoBehaviour
         return _mapSingleton;
     }
 
-    public MozDataParse mozData;
+    private MozDataParse mozData;
     private Locations locations = new Locations();
 
     public GameObject prefab;
@@ -42,7 +44,7 @@ public class Map : MonoBehaviour
 
     void BuildLandData()
     {
-        TextAsset bindata = Resources.Load("landData") as TextAsset;
+        TextAsset bindata = UnityEngine.Resources.Load("landData") as TextAsset;
         var lines = bindata.text.Split('\n');
 
         var y = 0;
@@ -88,7 +90,7 @@ public class Map : MonoBehaviour
                 {
                     var point = Instantiate(prefab, new Vector3(tile.pos.x, tile.pos.y, -1), Quaternion.Euler(-90, 0, 0));
                     point.transform.parent = transform;
-                    point.GetComponent<MeshRenderer>().material.color = new Color((float)y / (float)map.Length, (float)x / (float)map[y].Length, 0);
+                    point.GetComponent<MeshRenderer>().material.color = new Color(y / (float)map.Length, x / (float)map[y].Length, 0);
                 }
             }
         }
@@ -96,32 +98,70 @@ public class Map : MonoBehaviour
 
     private void CreateMapCities()
     {
-        GameObject cityText = Resources.Load("CityName") as GameObject;
+        GameObject cityText = UnityEngine.Resources.Load("CityName") as GameObject;
         foreach (var location in locations.LocationsList)
-
         {
+            // Circle at the location (is clickable)
             var point = Instantiate(cityPrefab, new Vector3(GridToMapX(location.x), GridToMapY(location.y), -1), Quaternion.Euler(-90, 0, 0));
             point.transform.parent = transform;
             point.GetComponent<MeshRenderer>().material.color = new Color(1, 1, 0);
             point.GetComponent<CityControl>().location = location;
 
+            // Text overlay for the location
             var text = Instantiate(cityText, new Vector3(0, 0, 0), Quaternion.identity);
             text.GetComponent<Text>().text = location.city;
             text.transform.SetParent(canvas.transform, false);
             point.GetComponent<CityControl>().text = text;
-
         }
     }
 
     private float GridToMapX(int GridX)
     {
-        float x = (float)mapWidth / gridWidth * (GridX + 0.5f - (float)gridWidth / 2);
-        return x;
+        return (float)mapWidth / gridWidth * (GridX + 0.5f - (float)gridWidth / 2);
     }
+
     private float GridToMapY(int GridY)
     {
-        float y = (float)mapHeight / gridHeight * (GridY + 0.5f - (float)gridHeight / 2);
-        return y;
+        return (float)mapHeight / gridHeight * (GridY + 0.5f - (float)gridHeight / 2);
+    }
+
+    private int MapXToGrid(float mapX)
+    {
+        return (int)Math.Round((mapX - 0.5f + ((float)mapWidth / 2)) / mapWidth * gridWidth);
+    }
+
+    private int MapYToGrid(float mapY)
+    {
+        return (int)Math.Round((mapY - 0.5f + ((float)mapHeight / 2)) / mapHeight * gridHeight);
+    }
+
+    public (int, int) MapPointToGrid(Vector2 point)
+    {
+        return (MapXToGrid(point.x), MapYToGrid(point.y));
+    }
+
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            CastRay();
+        }
+    }
+
+    void CastRay()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
+        if (hit)
+        {
+            Debug.Log(hit.point);
+            Debug.Log(MapPointToGrid(hit.point));
+            if (CityControl.CurrentSelection != null)
+            {
+                PlaneBehaviour.SpawnPlane(CityControl.CurrentSelection.transform.position, hit.point);
+                CityControl.CurrentSelection.Deselect();
+            }
+        }
     }
 }
 

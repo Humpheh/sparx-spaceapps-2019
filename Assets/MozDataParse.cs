@@ -17,7 +17,6 @@ public class MozDataParse : MonoBehaviour
         foreach (var point in points)
         {
             var yx = ((int) Mathf.Round(point.latitude + 90), (int) Mathf.Round(point.longitude + 180));
-            Debug.Log(yx);
             if (!pointLookup.ContainsKey(yx))
             {
                 pointLookup.Add(yx, true);

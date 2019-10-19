@@ -2,6 +2,7 @@
 using System.Collections;
 using System;
 using mosquitodefenders.Tickers;
+using System.Runtime.CompilerServices;
 
 static class DefaultResources
 {
@@ -9,10 +10,22 @@ static class DefaultResources
     readonly public static double MoneyIncrement = 1000;
 }
 
+internal class ResourceTracker<T>
+{
+    private T _value;
+    public T value
+    {
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        get { return _value; }
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        set { _value = value; }
+    }
+}
+
 static class Resources
 {
-    public static double money { get; set; }
-    public static DateTime time { get; set; }
+    public static ResourceTracker<double> money { get; } = new ResourceTracker<double>();
+    public static ResourceTracker<DateTime> time { get; } = new ResourceTracker<DateTime>();
 }
 
 public class ResourceManager : MonoBehaviour

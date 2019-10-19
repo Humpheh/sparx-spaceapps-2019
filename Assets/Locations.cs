@@ -45,6 +45,7 @@ public class Location
     public bool isStatic;
     public int doctors;
     public bool isLocked;
+    public bool isSelected;
 
     public Location(string city, double lon, double lat)
     {
@@ -52,7 +53,7 @@ public class Location
         usingLatLon = true;
         latlon = new Vector2(LonToX(lon), LatToY(lat));
         isStatic = true;
-        doctors = city == "Exeter" ? 1 : 0;
+        doctors = city == "Exeter" ? 10 : 0;
         isLocked = city != "Exeter";
     }
 
@@ -61,6 +62,7 @@ public class Location
         city = "Doctor";
         this.position = position;
         this.doctors = doctors;
+        this.isSelected = false;
     }
 
     public void UnlockCity()

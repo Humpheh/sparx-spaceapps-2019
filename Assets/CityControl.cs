@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CityControl : MonoBehaviour
 {
@@ -51,8 +52,8 @@ public class CityControl : MonoBehaviour
     
     public void HandleClick()
     {
-        Debug.LogFormat("clicked city {0}", location.city);
-                
+        //Debug.LogFormat("clicked city {0}", location.city);
+        
         var lastSelection = CurrentSelection;
         if (CurrentSelection != null) CurrentSelection.Deselect();
         if (lastSelection != this) Select();
@@ -62,11 +63,13 @@ public class CityControl : MonoBehaviour
     {
         if (location.isLocked == true) return;
         CurrentSelection = this;
+        GetComponent<Image>().color = new Color(1.0f, 0.55f, 0f);
     }
 
     public void Deselect()
     {
         CurrentSelection = null;
+        GetComponent<Image>().color = Color.red;
     }
 
     public void TryRemoveCity()

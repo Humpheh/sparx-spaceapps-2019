@@ -58,6 +58,11 @@ public class Map : MonoBehaviour
         }, delegate { Started(""); });
     }
 
+    public ResourceManager GetResourceManager()
+    {
+        return GetComponent<ResourceManager>();
+    }
+
     void Started(string option)
     {
         Debug.Log("Start");

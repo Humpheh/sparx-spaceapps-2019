@@ -9,7 +9,7 @@ public class PlaneBehaviour : MonoBehaviour
     public float timer;
     public Vector2 startPosition;
     public Vector2 endPosition;
-
+    
     public GameObject line;
 
     // Update is called once per frame
@@ -48,5 +48,8 @@ public class PlaneBehaviour : MonoBehaviour
         lineRender.endWidth = 0.1f;
         lineRender.SetPositions(new[] { new Vector3(from.x, from.y, -0.1f), new Vector3(to.x, to.y, -0.1f) });
         planeB.line = line;
+
+        Resources.Bank.Spend(30000);
+
     }
 }

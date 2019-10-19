@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 static class DefaultResources
 {
-    readonly public static double DefaultMoney = 10000;
+    readonly public static double DefaultMoney = 10000000;
     readonly public static double MoneyIncrement = 1000;
 }
 

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -32,6 +34,8 @@ public class Map : MonoBehaviour
     public static int gridWidth = 360; //mapWidth*2;
     public static int gridHeight = 180; //mapHeight*2;
 
+    private List<CityControl> cities = new List<CityControl>();
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -41,7 +45,7 @@ public class Map : MonoBehaviour
         BuildLandData();
 
         CreateMap();
-        CreateMapOverlay();
+//        CreateMapOverlay();
         CreateMapCities();
 
 //        Modal.OpenModal(
@@ -49,13 +53,6 @@ public class Map : MonoBehaviour
 //            "<b>The world needs your help!</b>\\nThe world health organisation is gone, and you're the only one that can save the world from mosquitoes.",
 //            Started
 //        );
-
-        Choice.OpenChoice("What do you want to do?", "Choose something to do please", new []
-        {
-            new ChoiceOption("Fly 1 there", "$1000", delegate {  }),
-            new ChoiceOption("Fly 2 there", "$2000", delegate {  }),
-            new ChoiceOption("Fly 3 there", "$2500", delegate {  }),
-        }, delegate { Started(""); });
     }
 
     public ResourceManager GetResourceManager()
@@ -172,12 +169,37 @@ public class Map : MonoBehaviour
         city.UpdateText();
 
         location.obj = icon;
+        cities.Add(city);
     }
 
+    [CanBeNull]
+    public CityControl FindCloseCity(Vector3 worldLocation, float threshold = 1) 
+    {
+        foreach (var city in cities)
+        {
+            float num1 = worldLocation.x - city.worldLocation.x;
+            float num2 = worldLocation.y - city.worldLocation.y;
+            var diff = Math.Sqrt((double) num1 * num1 + (double) num2 * num2);
+            if (diff < threshold)
+            {
+                return city;
+            }
+        }
+
+        return null;
+    }
+    
     public void DropDoctor(Vector3 worldLocation)
     {
-        var location = new Location(worldLocation, 1);
-        CreateLocation(location);
+        var closeCity = FindCloseCity(worldLocation);
+        if (closeCity != null)
+        {
+            closeCity.AddDoctor();
+        } else {
+            // None were nearby, create a new location
+            var location = new Location(worldLocation, 1);
+            CreateLocation(location);
+        }
     }
 
     public float GridToMapX(int GridX)
@@ -225,8 +247,15 @@ public class Map : MonoBehaviour
             var location = CityControl.CurrentSelection;
             if (location != null && location.CanRemoveDoctor())
             {
+                Vector3 toLocation = hit.point;
+                var closeCity = FindCloseCity(hit.point);
+                if (closeCity != null)
+                {
+                    toLocation = closeCity.worldLocation;
+                }
+                
                 location.RemoveDoctor();
-                PlaneBehaviour.SpawnPlane(CityControl.CurrentSelection.worldLocation, hit.point);
+                PlaneBehaviour.SpawnPlane(CityControl.CurrentSelection.worldLocation, toLocation);
                 CityControl.CurrentSelection.TryRemoveCity();
                 CityControl.CurrentSelection.Deselect();
             }

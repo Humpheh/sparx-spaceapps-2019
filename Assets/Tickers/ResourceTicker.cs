@@ -38,6 +38,7 @@ namespace mosquitodefenders.Tickers
             {
                 return;
             }
+
             gameObject.BroadcastMessage(topic, newValue);
             foreach (NotifyUpdateDelegate<T> receiver in receivers)
                 receiver(newValue);

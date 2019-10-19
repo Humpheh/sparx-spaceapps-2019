@@ -59,7 +59,7 @@ public class CityControl : MonoBehaviour
             "Select something to do:",
             new []
             {
-                new ChoiceOption("Deploy Doctor", "$30000", delegate { }),
+                new ChoiceOption("Deploy Doctor", "$30000", delegate { }, Resources.Bank.Balance >= 30000),
                 new ChoiceOption("Remove Doctor", "$0", delegate { RemoveDoctor(); })
             },
             delegate { Deselect(); }
@@ -103,6 +103,11 @@ public class CityControl : MonoBehaviour
         return location.doctors > 0;
     }
 
+    public bool HasDoctors(int number)
+    {
+        return location.doctors >= number;
+    }
+    
     public void RemoveDoctor()
     {
         if (location.doctors > 0)

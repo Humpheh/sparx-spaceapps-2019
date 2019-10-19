@@ -38,15 +38,15 @@ public class PlaneBehaviour : MonoBehaviour
         GameObject line = new GameObject("PlaneLine");
         var lineRender = line.AddComponent<LineRenderer>();
         lineRender.material = lineMaterial;
-        lineRender.startWidth = 0.1f;
-        lineRender.endWidth = 0.1f;
+        lineRender.startWidth = 0.05f;
+        lineRender.endWidth = 0.05f;
         lineRender.SetPositions(new[] { new Vector3(from.x, from.y, -0.1f), new Vector3(to.x, to.y, -0.1f) });
 
-        var dir = from - to;
-        var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+//        var dir = from - to;
+//        var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         
         GameObject planePrefab = UnityEngine.Resources.Load("Plane") as GameObject;
-        var plane = Instantiate(planePrefab, from, Quaternion.AngleAxis(angle, Vector3.up));
+        var plane = Instantiate(planePrefab, from, Quaternion.identity);//Quaternion.AngleAxis(angle, Vector3.up));
         var planeB = plane.GetComponent<PlaneBehaviour>();
         planeB.startPosition = from;
         planeB.endPosition = to;

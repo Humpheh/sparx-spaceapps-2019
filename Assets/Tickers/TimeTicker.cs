@@ -17,7 +17,7 @@ namespace mosquitodefenders.Tickers
         public DateTime NextValue()
         {
             //Debug.LogFormat("Update time {0}", currentDate.ToString());
-            currentDate = currentDate.AddHours(1);
+            currentDate = currentDate.AddHours(24);
             return currentDate;
         }
     }

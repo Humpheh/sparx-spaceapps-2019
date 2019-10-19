@@ -22,12 +22,15 @@ parsedData = []
 
 for obs in data['features']:
   parsedObs = obs['properties']
-  
+
   latitude = obs['geometry']['coordinates'][1]
   longitude = obs['geometry']['coordinates'][0]
-  
-  del parsedObs['mosquitohabitatmapperMeasurementLatitude']
-  del parsedObs['mosquitohabitatmapperMeasurementLongitude']  
+
+  try:
+    easting, northing, zoneNum, zoneLetter = utm.from_latlon(latitude, longitude)
+  except:
+    print("skipping: ", longitude, latitude)
+    continue
 
   parsedObs['latitude'] = latitude
   parsedObs['longitude'] = longitude
@@ -36,7 +39,10 @@ for obs in data['features']:
 
 df = pd.DataFrame(parsedData)
 df.to_csv('data.csv')
+<<<<<<< HEAD
 
 with open('parsedData.json', 'w') as ff:
   json.dump(parsedData, ff)
 
+=======
+>>>>>>> 83c3b0ad962f00ef272d3bb40c8eb662db7b361e

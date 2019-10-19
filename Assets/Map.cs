@@ -17,8 +17,10 @@ public class Map : MonoBehaviour
     private Locations locations = new Locations();
 
     public GameObject prefab;
-    public GameObject cityPrefab;
     public GameObject canvas;
+    public GameObject cityText;
+    public GameObject cityIcon;
+    public GameObject doctorIcon;
     private MapTile[][] map;
     private bool[][] landMap;
 
@@ -58,7 +60,7 @@ public class Map : MonoBehaviour
 
     void Started(string option)
     {
-        Debug.Log("Start");;
+        Debug.Log("Start");
     }
 
     public void PauseMap()
@@ -140,17 +142,18 @@ public class Map : MonoBehaviour
 
     public void CreateLocation(Location location)
     {
-        GameObject cityText = UnityEngine.Resources.Load("CityName") as GameObject;
+        
 
         GameObject iconPrefab;
-        if (location.isStatic) iconPrefab = UnityEngine.Resources.Load("CityIcon") as GameObject;
-        else iconPrefab = UnityEngine.Resources.Load("DoctorIcon") as GameObject;
+        if (location.isStatic) iconPrefab = cityIcon;
+        else iconPrefab = doctorIcon;
 
         // Circle at the location (is clickable)
         var worldLocation = new Vector3(GridToMapX(location.x), GridToMapY(location.y), -1);
         var icon = Instantiate(iconPrefab);
         icon.GetComponent<CityControl>().location = location;
         icon.GetComponent<CityControl>().worldLocation = worldLocation;
+        if (location.isLocked) icon.GetComponent<Image>().color = Color.grey;
         icon.transform.SetParent(canvas.transform, false);
 
         // Text overlay for the location

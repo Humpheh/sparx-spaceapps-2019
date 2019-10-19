@@ -56,6 +56,7 @@ public class CityControl : MonoBehaviour
 
     void Select()
     {
+        if (location.isLocked == true) return;
         CurrentSelection = this;
     }
 

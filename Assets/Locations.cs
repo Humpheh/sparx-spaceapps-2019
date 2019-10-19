@@ -43,16 +43,19 @@ public class Location
     public GameObject obj;
     public bool isStatic;
     public int doctors;
+    public bool isLocked;
 
-    public Location(string city, double lon, double lat, bool isStatic = true)
+    public Location(string city, double lon, double lat)
     {
         this.city = city;
         this.lat = lat;
         this.lon = lon;
         x = LonToX(lon);
         y = LatToY(lat);
-
-        this.doctors = doctors;
+        this.isStatic = true;
+        if (city != "Exeter") this.isLocked = true;
+        else this.isLocked = false;
+        this.doctors = 0;
     }
 
     public Location(double lon, double lat, int doctors)
@@ -62,7 +65,14 @@ public class Location
         this.lon = lon;
         x = LonToX(lon);
         y = LatToY(lat);
+        this.isStatic = false;
+        this.isLocked = false;
         this.doctors = doctors;
+    }
+
+    public void UnlockCity()
+    {
+        isLocked = false;
     }
 
     public bool CanRemoveDoctor()

@@ -109,8 +109,7 @@ public class CameraControl : MonoBehaviour
                 dragSpeed = 0f;
             }
         }
-        Debug.Log(dragSpeed);
-
+        
         Vector3 move = new Vector3(-pos.x * dragSpeed, -pos.y * dragSpeed, 0);
         if (move.x + transform.position.x < -limX)
         {

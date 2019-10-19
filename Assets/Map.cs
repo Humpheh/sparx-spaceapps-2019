@@ -47,18 +47,14 @@ public class Map : MonoBehaviour
         CreateMap();
         //        CreateMapOverlay();
         CreateMapCities();
-        //Modal.OpenModal(
-        //    "You are the Mosquito Defender!",
-        //    "<b>The world needs your help!</b>\\nThe world health organisation is gone, and you're the only one that can save the world from mosquitoes.",
-        //    Started
-        //);
 
-        //Choice.OpenChoice("What do you want to do?", "Choose something to do please", new []
-        //{
-        //    new ChoiceOption("Fly 1 there", "$1000", delegate {  }),
-        //    new ChoiceOption("Fly 2 there", "$2000", delegate {  }),
-        //    new ChoiceOption("Fly 3 there", "$2500", delegate {  }),
-        //}, delegate { Started(""); });
+//        Modal.OpenModal(
+//            "You are the Mosquito Defender!", 
+//            "<b>The world needs your help!</b>\\nThe world health organisation is gone, and you're the only one that can save the world from mosquitoes.",
+//            Started
+//        );
+
+        Popup.SpawnPanel(Vector3.zero, "https://data.globe.gov/system/photos/2019/05/23/1079041/original.jpg");
     }
 
     public ResourceManager GetResourceManager()

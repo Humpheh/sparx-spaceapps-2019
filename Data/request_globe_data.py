@@ -126,13 +126,23 @@ def generate_text(row):
     text += "."
     return(text)
     
+def generate_timer(row):
+    if row['adults']:
+        return(15)
+    if row['pupae']:
+        return(30)
+    return(60) 
+
+
 gdf['text'] = gdf.apply(generate_text, axis=1)
+gdf['timer'] = gdf.apply(generate_timer, axis=1)
 
 gdf = gdf[[
   'latitude',
   'longitude',
   'text',
   'image_url',
+  'timer',
 ]]
 
 

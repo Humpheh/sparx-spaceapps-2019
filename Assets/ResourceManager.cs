@@ -38,9 +38,12 @@ public class ResourceManager : MonoBehaviour
 
     public ResourceManager()
     {
-        var MoneyTicker = new BroadcastingResourceUpdater<double>("GlobalMoney", new MoneyTicker(
-            DefaultResources.MoneyIncrement
-        ));
+        var MoneyTicker = new BroadcastingResourceUpdater<double>(
+            "GlobalMoney",
+            new MoneyTicker(
+                new MoneyTickCountIncrementer(7, DefaultResources.MoneyIncrement)
+            )
+        );
         MoneyTicker.RegisterReceiver(Resources.Bank.Add);
 
         updaters = new ResourceUpdater[]

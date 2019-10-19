@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CityControl : MonoBehaviour
 {
@@ -64,6 +65,11 @@ public class CityControl : MonoBehaviour
         CurrentSelection = this;
     }
 
+    public void UpdateText()
+    {
+        text.GetComponent<Text>().text = location.city + " x" + location.doctors;
+    }
+
     public void Deselect()
     {
         CurrentSelection = null;
@@ -76,5 +82,25 @@ public class CityControl : MonoBehaviour
             Destroy(text);
             Destroy(gameObject);
         }
+    }
+    
+    public bool CanRemoveDoctor()
+    {
+        return location.doctors > 0;
+    }
+
+    public void RemoveDoctor()
+    {
+        if (location.doctors > 0)
+        {
+            location.doctors--;
+            UpdateText();
+        }
+    }
+
+    public void AddDoctor()
+    {
+        location.doctors++;
+        UpdateText();
     }
 }

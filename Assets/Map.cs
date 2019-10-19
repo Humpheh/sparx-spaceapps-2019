@@ -152,8 +152,9 @@ public class Map : MonoBehaviour
         else worldLocation = new Vector3(location.position.x, location.position.y, -1);
         
         var icon = Instantiate(iconPrefab);
-        icon.GetComponent<CityControl>().location = location;
-        icon.GetComponent<CityControl>().worldLocation = worldLocation;
+        var city = icon.GetComponent<CityControl>();
+        city.location = location;
+        city.worldLocation = worldLocation;
         if (location.isLocked) icon.GetComponent<Image>().color = Color.grey;
         icon.transform.SetParent(canvas.transform, false);
 
@@ -161,8 +162,9 @@ public class Map : MonoBehaviour
         var text = Instantiate(cityText);
         text.GetComponent<Text>().text = location.city;
         text.transform.SetParent(canvas.transform, false);
-        icon.GetComponent<CityControl>().text = text;
-        icon.GetComponent<CityControl>().SetPosition();
+        city.text = text;
+        city.SetPosition();
+        city.UpdateText();
 
         location.obj = icon;
     }
@@ -216,9 +218,9 @@ public class Map : MonoBehaviour
             Debug.Log(hit.point);
             Debug.Log(MapPointToGrid(hit.point));
             var location = CityControl.CurrentSelection;
-            if (location != null && location.location.CanRemoveDoctor())
+            if (location != null && location.CanRemoveDoctor())
             {
-                location.location.RemoveDoctor();
+                location.RemoveDoctor();
                 PlaneBehaviour.SpawnPlane(CityControl.CurrentSelection.worldLocation, hit.point);
                 CityControl.CurrentSelection.TryRemoveCity();
                 CityControl.CurrentSelection.Deselect();

@@ -22,10 +22,10 @@ parsedData = []
 
 for obs in data['features']:
   parsedObs = obs['properties']
-  
+
   latitude = obs['geometry']['coordinates'][1]
   longitude = obs['geometry']['coordinates'][0]
-  
+
   try:
     easting, northing, zoneNum, zoneLetter = utm.from_latlon(latitude, longitude)
   except:
@@ -41,4 +41,3 @@ for obs in data['features']:
 
 df = pd.DataFrame(parsedData)
 df.to_csv('data.csv')
-

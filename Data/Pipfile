@@ -16,6 +16,7 @@ utm = "*"
 matplotlib = "*"
 descartes = "*"
 rasterio = "*"
+nbstripout = "*"
 
 [requires]
 python_version = "3.7"

@@ -7,7 +7,7 @@ using UnityEngine;
 public class MozDataParse : MonoBehaviour
 {
     Dictionary<(int, int), bool> pointLookup = new Dictionary<(int, int), bool>();
-    private DataPoint[] points;
+    public DataPoint[] points;
     public void Awake()
     {
         TextAsset bindata = UnityEngine.Resources.Load("mozData") as TextAsset;
@@ -39,7 +39,7 @@ class DataPoints
 }
 
 [Serializable]
-class DataPoint
+public class DataPoint
 {
     public float latitude;
     public float longitude;

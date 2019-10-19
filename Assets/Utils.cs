@@ -19,4 +19,9 @@ public class Utils
             ((viewportPosition.y * canvasRect.sizeDelta.y) - (canvasRect.sizeDelta.y * 0.5f)));
 
     }
+
+    public static Vector3 LatLongToMapCoords(int lat, int longitude)
+    {
+        return new Vector3(Map.GetSingleton().GridToMapX(longitude + 180), Map.GetSingleton().GridToMapY(lat + 90), -1);
+    }
 }

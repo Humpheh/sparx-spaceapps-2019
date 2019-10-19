@@ -18,6 +18,7 @@ descartes = "*"
 rasterio = "*"
 flask = "*"
 flask-restful = "*"
+alphashape = "*"
 
 [requires]
 python_version = "3.7"

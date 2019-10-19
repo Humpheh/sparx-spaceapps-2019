@@ -14,11 +14,11 @@ namespace mosquitodefenders.Tickers
             currentDate = DateTime.Parse("01/01/2000");
         }
 
-        public DateTime NextValue()
+        public TickValue<DateTime> NextValue()
         {
             //Debug.LogFormat("Update time {0}", currentDate.ToString());
             currentDate = currentDate.AddHours(24);
-            return currentDate;
+            return new TickValue<DateTime>(currentDate);
         }
     }
 }

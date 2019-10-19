@@ -7,28 +7,16 @@ import random
 app = Flask(__name__)
 api = Api(app)
 
-with open('processed/survey_data.json') as json_file:
-    survey_data = json.load(json_file)
-
-
 with open('processed/mosquito_data.json') as json_file:
     mosquito_data = json.load(json_file)
 
-
 class Events(Resource):
     def get(self):
-        if random.randint(0, 1) == 0:
-            rand_int = random.randint(0, len(survey_data))
-            lat = survey_data[rand_int]['latitude']
-            long = survey_data[rand_int]['longitude']
-            text = random.choice(['Diagnosis'])
-        else:
-            rand_int = random.randint(0, len(mosquito_data))
-            lat = mosquito_data[rand_int]['latitude']
-            long = mosquito_data[rand_int]['longitude']
-            text = random.choice(
-                ['Mosquito habitat detected', 'Mosquito larave found']
-            )
+        sample = mosquito_data[random.randint(0, len(mosquito_data))]
+        text = sample['text']
+        lat = sample['latitude']
+        long = sample['longitude']
+        image_url = sample['image_url']
         events = [{
             'event': {
                 'lat': lat,
@@ -36,6 +24,7 @@ class Events(Resource):
                 'type': 1,
                 'severity': 3,
                 'text': text,
+                'image_url': image_url,
             }
         }]
         return(events)

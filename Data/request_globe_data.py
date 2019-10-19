@@ -99,14 +99,16 @@ def first_image_only(series):
             newvar.append(photos.split(";")[0]) # first listed image
     return newvar
 
-gdf['image_name'] = coalesce(gdf, ["abdomen_images", "larvae_images", "water_images"])
-gdf['image_name'] = first_image_only(gdf.image_name)
+gdf['image_url'] = coalesce(gdf, ["abdomen_images", "larvae_images", "water_images"])
+gdf['image_url'] = first_image_only(gdf.image_url)
 
 gdf = gdf.drop(
     columns = {"abdomen_images", "larvae_images", "water_images"}
 )
 
 gdf = gdf[gdf.seen]
+
+gdf['text'] = "text"
 
 with open('processed/mosquito_data.json', 'w') as ff:
     ff.write(json.dumps(list(gdf.T.to_dict().values()), indent=4, sort_keys=True))

@@ -78,7 +78,7 @@ public class TickValue<T>
         set
         {
             _value = value;
-            Valid = (_value != null);
+            Valid = _value != null;
         }
     }
 

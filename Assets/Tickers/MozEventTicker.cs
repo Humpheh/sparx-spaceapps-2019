@@ -8,9 +8,9 @@ namespace mosquitodefenders.Tickers
     {
         private string[] mozEventTypes = { "outbreak", "report" };
 
-        public MozEvent NextValue()
+        public TickValue<MozEvent> NextValue()
         {
-            if (Random.value < 1)
+            if (Random.value < 0.05)
             {
                 DataPoint[] locations = Map.GetSingleton().mozData.points;
                 DataPoint location = Utils.RandomInArr(locations);
@@ -20,11 +20,11 @@ namespace mosquitodefenders.Tickers
                 mozEvent.eventType = evtType;
                 mozEvent.location = location;
 
-                return mozEvent;
+                return new TickValue<MozEvent>(mozEvent);
             }
             else
             {
-                return new MozEvent { };
+                return null;
             }
         }
     }
@@ -36,4 +36,8 @@ namespace mosquitodefenders.Tickers
         public DataPoint location;
     }
 
+    public interface MozEventGetter
+    {
+
+    }
 }

@@ -38,13 +38,7 @@ public class CityControl : MonoBehaviour
 
     public void SetPosition()
     {
-        RectTransform canvasRect = Map.GetSingleton().canvas.GetComponent<RectTransform>();
-        Vector2 viewportPosition = Camera.main.WorldToViewportPoint(worldLocation);
-        Vector2 screenPosition = new Vector2(
-            ((viewportPosition.x*canvasRect.sizeDelta.x)-(canvasRect.sizeDelta.x*0.5f)),
-            ((viewportPosition.y*canvasRect.sizeDelta.y)-(canvasRect.sizeDelta.y*0.5f)));
- 
-        //now you can set the position of the ui element
+        var screenPosition = Utils.CanvasPosition(worldLocation);
         var uiElement = text.GetComponent<RectTransform>();
         uiElement.anchoredPosition = screenPosition;
         GetComponent<RectTransform>().anchoredPosition = screenPosition;

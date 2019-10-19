@@ -8,34 +8,34 @@ public class CameraControl : MonoBehaviour
     private Vector3 dragOrigin;
 
     const float scrollMultiplier = -0.5f;
-    
+
+    private Vector2 earthSize = new Vector2(82, 41);
+
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 diff = new Vector3();
-        
-        if (Input.GetKey(KeyCode.W))
+        Vector3 diff = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+
+        if (diff.x + transform.position.x < -earthSize.x / 2)
         {
-            diff.y += 1;
+            diff.x = 0f;
         }
-        if (Input.GetKey(KeyCode.S))
+        else if (diff.x + transform.position.x > earthSize.x / 2)
         {
-            diff.y -= 1;
+            diff.x = 0f;
         }
-        
-        if (Input.GetKey(KeyCode.A))
+        if (diff.y + transform.position.y < -earthSize.y / 2)
         {
-            diff.x -= 1;
+            diff.y = 0f;
         }
-        if (Input.GetKey(KeyCode.D))
+        else if (diff.y + transform.position.y > earthSize.y / 2)
         {
-            diff.x += 1;
+            diff.y = 0f;
         }
 
         if (Input.GetKey(KeyCode.Q))
@@ -53,7 +53,8 @@ public class CameraControl : MonoBehaviour
         mouseDrag();
     }
 
-    private void scroll(float s) {
+    private void scroll(float s)
+    {
         Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize + s * scrollMultiplier, 2, 20);
     }
 
@@ -69,12 +70,12 @@ public class CameraControl : MonoBehaviour
     {
         Vector3 pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - dragOrigin);
         dragOrigin = Input.mousePosition;
- 
+
         if (Input.GetMouseButton(0))
         {
             var dragSpeed = Camera.main.orthographicSize * dragMultipler;
             Vector3 move = new Vector3(-pos.x * dragSpeed, -pos.y * dragSpeed, 0);
-            transform.Translate(move, Space.World);  
+            transform.Translate(move, Space.World);
         }
     }
 }

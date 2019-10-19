@@ -44,7 +44,7 @@ public class Map : MonoBehaviour
 
     void BuildLandData()
     {
-        TextAsset bindata = UnityEngine.Resources.Load("landData") as TextAsset;
+        TextAsset bindata = UnityEngine.UnityEngine.Resources.Load("landData") as TextAsset;
         var lines = bindata.text.Split('\n');
 
         var y = 0;
@@ -98,7 +98,7 @@ public class Map : MonoBehaviour
 
     private void CreateMapCities()
     {
-        GameObject cityText = Resources.Load("CityName") as GameObject;
+        GameObject cityText = UnityEngine.Resources.Load("CityName") as GameObject;
         foreach (var location in  locations.LocationsList)
         {
             // Circle at the location (is clickable)

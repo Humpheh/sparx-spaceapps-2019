@@ -173,7 +173,7 @@ public class Map : MonoBehaviour
     }
 
     [CanBeNull]
-    public CityControl FindCloseCity(Vector3 worldLocation, float threshold = 1) 
+    public CityControl FindCloseCity(Vector3 worldLocation, float threshold = 1, bool isStatic = false) 
     {
         foreach (var city in cities)
         {
@@ -182,8 +182,10 @@ public class Map : MonoBehaviour
             var diff = Math.Sqrt((double) num1 * num1 + (double) num2 * num2);
             if (diff < threshold)
             {
-                if (city.location.isLocked) return null;
-                else return city;
+                if (city.location.isStatic == isStatic)
+                {
+                    if (city.location.isLocked == false) return city;
+                }
             }
         }
 

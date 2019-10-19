@@ -2,6 +2,8 @@ import requests as r
 import json
 import pandas as pd
 import sys
+import geopandas as gpd
+import numpy as np
 
 base_url = 'https://api.globe.gov/search/v1/measurement/protocol/'
 
@@ -20,8 +22,7 @@ data = res.json()
 parsedData = []
 
 for obs in data['features']:
-  #parsedObs = obs['properties']
-  parsedObs = {}  
+  parsedObs = obs['properties']
   latitude = obs['geometry']['coordinates'][1]
   longitude = obs['geometry']['coordinates'][0]
 
@@ -32,8 +33,10 @@ for obs in data['features']:
 
 # pass through geodataframe format and keep only key columns
 
+df = pd.DataFrame(parsedData)
+
 gdf = gpd.GeoDataFrame(
-    parsedData, 
+    df, 
     geometry = gpd.points_from_xy(df.longitude, df.latitude),
     crs = {'init' :'epsg:4326'}
 ).rename(columns = {
@@ -74,10 +77,10 @@ gdf = gpd.GeoDataFrame(
 
 dct = {'true': True, 'false': False} 
 
-df["adults"] = df["adults"].map(dct)
-df["eggs"] = df["eggs"].map(dct)
-df["pupae"] = df["pupae"].map(dct)
-df['seen'] = df[["adults", "eggs", "pupae"]].any(axis=1)
+gdf["adults"] = gdf["adults"].map(dct)
+gdf["eggs"] = gdf["eggs"].map(dct)
+gdf["pupae"] = gdf["pupae"].map(dct)
+gdf['seen'] = gdf[["adults", "eggs", "pupae"]].any(axis=1)
 
 def coalesce(df, column_names):
     i = iter(column_names)
@@ -104,4 +107,4 @@ gdf = gdf.drop(
 )
 
 with open('processed/mosquito_data.json', 'w') as ff:
-    json.dump(parsedData, ff)
+    ff.write(json.dumps(list(gdf.T.to_dict().values()))) 

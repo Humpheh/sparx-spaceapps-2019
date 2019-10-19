@@ -7,6 +7,7 @@ public class Locations
 {
     public Location[] LocationsList =
     {
+        new Location("Exeter", 50.7236, -3.52751),
         new Location("London", -0.127758299999982, 51.5073509),
         new Location("New York", -74.0059728, 40.7127753),
         new Location("Seattle", -122.3320708, 47.6062095),
@@ -39,7 +40,7 @@ public class Location
     public string city;
     public double lat, lon;
     public int x, y;
-    
+
     public Location(string city, double lat, double lon)
     {
         this.city = city;

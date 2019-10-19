@@ -134,18 +134,21 @@ public class Map : MonoBehaviour
     {
         foreach (var location in locations.LocationsList)
         {
-            CreateCity(location);
+            CreateLocation(location);
         }
     }
 
-    private void CreateCity(Location location)
+    public void CreateLocation(Location location)
     {
         GameObject cityText = UnityEngine.Resources.Load("CityName") as GameObject;
-        GameObject cityIcon = UnityEngine.Resources.Load("CityIcon") as GameObject;
-        
+
+        GameObject iconPrefab;
+        if (location.isStatic) iconPrefab = UnityEngine.Resources.Load("CityIcon") as GameObject;
+        else iconPrefab = UnityEngine.Resources.Load("DoctorIcon") as GameObject;
+
         // Circle at the location (is clickable)
         var worldLocation = new Vector3(GridToMapX(location.x), GridToMapY(location.y), -1);
-        var icon = Instantiate(cityIcon);
+        var icon = Instantiate(iconPrefab);
         icon.GetComponent<CityControl>().location = location;
         icon.GetComponent<CityControl>().worldLocation = worldLocation;
         icon.transform.SetParent(canvas.transform, false);
@@ -157,6 +160,13 @@ public class Map : MonoBehaviour
         icon.GetComponent<CityControl>().text = text;
 
         location.obj = icon;
+    }
+
+    public void DropDoctor(Vector3 worldLocation)
+    {
+        var lat = MapXToGrid(worldLocation.x);
+        var lon = MapYToGrid(worldLocation.y);    
+        
     }
 
     public float GridToMapX(int GridX)

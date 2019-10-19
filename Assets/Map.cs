@@ -3,6 +3,12 @@ using UnityEngine.UI;
 
 public class Map : MonoBehaviour
 {
+    private static Map _mapSingleton;
+    public static Map GetSingleton()
+    {
+        return _mapSingleton;
+    }
+    
     private MozDataParse mozData;
     private Locations locations = new Locations();
     
@@ -23,6 +29,7 @@ public class Map : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _mapSingleton = this;
         mozData = gameObject.AddComponent<MozDataParse>();
         
         BuildLandData();

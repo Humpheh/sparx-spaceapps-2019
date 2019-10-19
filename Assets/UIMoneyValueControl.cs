@@ -7,7 +7,7 @@ public class UIMoneyValueControl : MonoBehaviour
 {
     public void GlobalMoney(double balance)
     {
-        Resources.money = balance;
+        Resources.money.value = balance;
         GetComponent<Text>().text = $"$ {balance}";
     }
 }

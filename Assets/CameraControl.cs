@@ -5,7 +5,9 @@ using UnityEngine;
 public class CameraControl : MonoBehaviour
 {
     private Vector3 velocity;
-    
+    public float dragSpeed = 10;
+    private Vector3 dragOrigin;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,14 +21,38 @@ public class CameraControl : MonoBehaviour
         
         if (Input.GetKey(KeyCode.W))
         {
-            velocity.y += 1;
+            diff.y += 1;
         }
-
         if (Input.GetKey(KeyCode.S))
         {
-            velocity.y -= 1;
+            diff.y -= 1;
+        }
+        
+        if (Input.GetKey(KeyCode.A))
+        {
+            diff.x -= 1;
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            diff.x += 1;
         }
 
-        transform.position = transform.position + diff.normalized * Time.deltaTime;
+        transform.position = transform.position + diff.normalized * Time.deltaTime * 5;
+
+        Debug.Log(Input.mouseScrollDelta);
+        
+        mouseDrag();
+    }
+
+    private void mouseDrag()
+    {
+        Vector3 pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - dragOrigin);
+        Vector3 move = new Vector3(-pos.x * dragSpeed, -pos.y * dragSpeed, 0);
+        dragOrigin = Input.mousePosition;
+ 
+        if (Input.GetMouseButton(0))
+        {
+            transform.Translate(move, Space.World);  
+        }
     }
 }

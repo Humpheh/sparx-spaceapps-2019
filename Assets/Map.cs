@@ -45,14 +45,20 @@ public class Map : MonoBehaviour
         BuildLandData();
 
         CreateMap();
-//        CreateMapOverlay();
+        //        CreateMapOverlay();
         CreateMapCities();
+        //Modal.OpenModal(
+        //    "You are the Mosquito Defender!",
+        //    "<b>The world needs your help!</b>\\nThe world health organisation is gone, and you're the only one that can save the world from mosquitoes.",
+        //    Started
+        //);
 
-//        Modal.OpenModal(
-//            "You are the Mosquito Defender!", 
-//            "<b>The world needs your help!</b>\\nThe world health organisation is gone, and you're the only one that can save the world from mosquitoes.",
-//            Started
-//        );
+        //Choice.OpenChoice("What do you want to do?", "Choose something to do please", new []
+        //{
+        //    new ChoiceOption("Fly 1 there", "$1000", delegate {  }),
+        //    new ChoiceOption("Fly 2 there", "$2000", delegate {  }),
+        //    new ChoiceOption("Fly 3 there", "$2500", delegate {  }),
+        //}, delegate { Started(""); });
     }
 
     public ResourceManager GetResourceManager()
@@ -242,8 +248,8 @@ public class Map : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
         if (hit)
         {
-            Debug.Log(hit.point);
-            Debug.Log(MapPointToGrid(hit.point));
+            //Debug.Log(hit.point);
+            //Debug.Log(MapPointToGrid(hit.point));
             var location = CityControl.CurrentSelection;
             if (location != null && location.CanRemoveDoctor())
             {
@@ -255,7 +261,8 @@ public class Map : MonoBehaviour
                 }
                 
                 location.RemoveDoctor();
-                PlaneBehaviour.SpawnPlane(CityControl.CurrentSelection.worldLocation, toLocation);
+
+                PlaneBehaviour.SpawnPlane(location.worldLocation, toLocation);
                 CityControl.CurrentSelection.TryRemoveCity();
                 CityControl.CurrentSelection.Deselect();
             }

@@ -54,20 +54,48 @@ public class CityControl : MonoBehaviour
     {
         //Debug.LogFormat("clicked city {0}", location.city);
 
-        Choice.OpenChoice(
-            location.city,
-            "Select something to do:",
-            new []
-            {
-                new ChoiceOption("Deploy Doctor", "$30000", delegate { }, Resources.Bank.Balance >= 30000),
-                new ChoiceOption("Remove Doctor", "$0", delegate { RemoveDoctor(); })
-            },
-            delegate { Deselect(); }
-        );
-
         var lastSelection = CurrentSelection;
-        //if (CurrentSelection != null) CurrentSelection.Deselect();
+        if (CurrentSelection != null) CurrentSelection.Deselect();
         if (lastSelection != this) Select();
+
+        if (location.isLocked == true)
+        {
+            Choice.OpenChoice(
+                location.city,
+                "Select something to do:",
+                new[]
+                {
+                    new ChoiceOption("Buy Doctor", "$100,000", delegate { UnlockCity(); }, Resources.Bank.Balance >= 100000)
+                },
+                delegate { Deselect(); }
+            );
+        }
+        else if (location.isStatic == false)
+        {
+            Choice.OpenChoice(
+                location.city,
+                "Select something to do:",
+                new[]
+                {
+                    //new ChoiceOption("Remove Doctor", "$0", delegate { RemoveDoctor(); })
+                    new ChoiceOption("Deploy Doctor", "$10,000", delegate { })
+                },
+                delegate { Deselect(); }
+            );
+        }
+        else
+        {
+            Choice.OpenChoice(
+                location.city,
+                "Select something to do:",
+                new[]
+                {
+                    new ChoiceOption("Deploy Doctor", "$10,000", delegate { }, Resources.Bank.Balance >= 10000 && CurrentSelection.HasDoctors(1)),
+                    new ChoiceOption("Buy Doctor", "$100,000", delegate { AddDoctor(); }, Resources.Bank.Balance >= 100000)
+                },
+                delegate { Deselect(); }
+            );
+        }
     }
 
     void Select()
@@ -116,11 +144,22 @@ public class CityControl : MonoBehaviour
             UpdateText();
             TryRemoveCity();
         }
+        Deselect();
     }
 
     public void AddDoctor()
     {
         location.doctors++;
+        Resources.Bank.Spend(100000);
         UpdateText();
+        Deselect();
+    }
+
+    public void UnlockCity()
+    {
+        location.isLocked = false;
+        GetComponent<Image>().color = Color.red;
+        Resources.Level.value++;
+        AddDoctor();
     }
 }

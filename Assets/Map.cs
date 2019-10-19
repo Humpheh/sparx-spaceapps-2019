@@ -10,16 +10,16 @@ public class Map : MonoBehaviour
     {
         return _mapSingleton;
     }
-    
+
     private MozDataParse mozData;
     private Locations locations = new Locations();
-    
+
     public GameObject prefab;
     public GameObject cityPrefab;
     public GameObject canvas;
     private MapTile[][] map;
     private bool[][] landMap;
-    
+
     // Bounds of the map
     private static int mapWidth = 82;
     private static int mapHeight = 41;
@@ -33,9 +33,9 @@ public class Map : MonoBehaviour
     {
         _mapSingleton = this;
         mozData = gameObject.AddComponent<MozDataParse>();
-        
+
         BuildLandData();
-        
+
         CreateMap();
         //CreateMapOverlay();
         CreateMapCities();
@@ -44,7 +44,7 @@ public class Map : MonoBehaviour
 
     void BuildLandData()
     {
-        TextAsset bindata = Resources.Load("landData") as TextAsset;
+        TextAsset bindata = UnityEngine.Resources.Load("landData") as TextAsset;
         var lines = bindata.text.Split('\n');
 
         var y = 0;
@@ -53,16 +53,16 @@ public class Map : MonoBehaviour
         {
             if (y >= gridHeight) break;
             var x = 0;
-            landMap[gridHeight-1-y] = new bool[gridWidth];
+            landMap[gridHeight - 1 - y] = new bool[gridWidth];
             foreach (var c in line)
             {
-                landMap[gridHeight-1-y][x] = c == '1';
+                landMap[gridHeight - 1 - y][x] = c == '1';
                 x++;
             }
             y++;
         }
     }
-    
+
     private void CreateMap()
     {
         // Create the multidimensional array of map tiles
@@ -104,7 +104,7 @@ public class Map : MonoBehaviour
             // Circle at the location (is clickable)
             var point = Instantiate(cityPrefab, new Vector3(GridToMapX(location.x), GridToMapY(location.y), -1), Quaternion.Euler(-90, 0, 0));
             point.transform.parent = transform;
-            point.GetComponent<MeshRenderer>().material.color = new Color(1,1,0);
+            point.GetComponent<MeshRenderer>().material.color = new Color(1, 1, 0);
             point.GetComponent<CityControl>().location = location;
 
             // Text overlay for the location
@@ -167,7 +167,7 @@ class MapTile
     public Vector2 pos;
     public bool isLand;
     public float testValue;
-    
+
     public MapTile(int x, int y, Vector2 pos, bool isLand)
     {
         this.x = x;

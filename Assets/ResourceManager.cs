@@ -9,6 +9,12 @@ static class DefaultResources
     readonly public static double MoneyIncrement = 1000;
 }
 
+static class Resources
+{
+    public static double money { get; set; }
+    public static DateTime time { get; set; }
+}
+
 public class ResourceManager : MonoBehaviour
 {
     private float ticker = 0;

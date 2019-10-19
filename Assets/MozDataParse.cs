@@ -10,13 +10,13 @@ public class MozDataParse : MonoBehaviour
     private DataPoint[] points;
     public void Awake()
     {
-        TextAsset bindata = Resources.Load("mozData") as TextAsset;
+        TextAsset bindata = UnityEngine.Resources.Load("mozData") as TextAsset;
         var data = JsonUtility.FromJson<DataPoints>(bindata.text);
         points = data.data;
-        
+
         foreach (var point in points)
         {
-            var yx = ((int) Mathf.Round(point.latitude + 90), (int) Mathf.Round(point.longitude + 180));
+            var yx = ((int)Mathf.Round(point.latitude + 90), (int)Mathf.Round(point.longitude + 180));
             if (!pointLookup.ContainsKey(yx))
             {
                 pointLookup.Add(yx, true);

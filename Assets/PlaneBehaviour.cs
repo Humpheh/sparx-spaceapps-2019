@@ -31,6 +31,7 @@ public class PlaneBehaviour : MonoBehaviour
 
     public static void SpawnPlane(Vector2 from, Vector2 to)
     {
+//        if (Resources.money.value 
         GameObject planePrefab = UnityEngine.Resources.Load("Plane") as GameObject;
         var plane = Instantiate(planePrefab, from, Quaternion.identity);
         var planeB = plane.GetComponent<PlaneBehaviour>();

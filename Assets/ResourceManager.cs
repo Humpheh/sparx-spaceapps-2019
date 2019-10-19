@@ -43,8 +43,8 @@ public class ResourceManager : MonoBehaviour
         updaters = new ResourceUpdater[]
         {
             new BroadcastingResourceUpdater<DateTime>("GlobalTimeStep", new TimeTicker()),
-            new BroadcastingResourceUpdater<MozEvent?>("MozEvent", new MozEventTicker())
-            MoneyTicker,
+            new BroadcastingResourceUpdater<MozEvent?>("MozEvent", new MozEventTicker()),
+            MoneyTicker
         };
     }
 

@@ -102,13 +102,39 @@ def first_image_only(series):
 gdf['image_url'] = coalesce(gdf, ["abdomen_images", "larvae_images", "water_images"])
 gdf['image_url'] = first_image_only(gdf.image_url)
 
-gdf = gdf.drop(
-    columns = {"abdomen_images", "larvae_images", "water_images"}
-)
-
 gdf = gdf[gdf.seen]
 
-gdf['text'] = "text"
+def generate_text(row):
+    text = "Mosquito activity detected!\n"
+    
+    types = []
+    if row['adults']:
+        types.append('adults')
+    if row['eggs']:
+        types.append('eggs')
+    if row['pupae']:
+        types.append('pupae')
+    
+    if len(types) == 1:
+        text += types[0].capitalize() + " found"
+    if len(types) == 2:
+        text += types[0].capitalize() + " and " + types[1] +" found"  
+    if len(types) == 3:
+        text += types[0].capitalize() + ", " + types[1] + " and " + types[2] +" found"
+    if (row["waterSource"] not in ["other", "discarded: other"]):
+        text += " in " + row["waterSource"]
+    text += "."
+    return(text)
+    
+gdf['text'] = gdf.apply(generate_text, axis=1)
+
+gdf = gdf[[
+  'latitude',
+  'longitude',
+  'text',
+  'image_url',
+]]
+
 
 with open('processed/mosquito_data.json', 'w') as ff:
     ff.write(json.dumps(list(gdf.T.to_dict().values()), indent=4, sort_keys=True))

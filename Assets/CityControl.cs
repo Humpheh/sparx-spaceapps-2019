@@ -24,17 +24,6 @@ public class CityControl : MonoBehaviour
     {
         if (Map.GetSingleton().IsPaused()) return;
 
-        //        if (Input.GetMouseButtonDown(0)){ 
-//            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-//            RaycastHit hit;
-//            if (Physics.Raycast(ray, out hit) && hit.transform == transform){
-//                Debug.LogFormat("clicked city {0}", location.city);
-//                
-//                var lastSelection = CurrentSelection;
-//                if (CurrentSelection != null) CurrentSelection.Deselect();
-//                if (lastSelection != this) Select();
-//            }
-//        }
         SetPosition();
 
         if (Camera.main.orthographicSize < ZOOM_CUTOFF && !text.activeSelf)
@@ -70,7 +59,7 @@ public class CityControl : MonoBehaviour
                 "Select something to do:",
                 new[]
                 {
-                    new ChoiceOption("Buy Doctor", "$100,000", delegate { UnlockCity(); }, Resources.Bank.Balance >= 100000)
+                    new ChoiceOption("Buy Doctor (L"+Resources.Level.value+")", "$100,000", delegate { UnlockCity(); }, Resources.Bank.Balance >= 100000)
                 },
                 delegate { Deselect(); }
             );
@@ -96,7 +85,7 @@ public class CityControl : MonoBehaviour
                 new[]
                 {
                     new ChoiceOption("Deploy Doctor", "$10,000", delegate { }, Resources.Bank.Balance >= 10000 && CurrentSelection.HasDoctors(1)),
-                    new ChoiceOption("Buy Doctor", "$100,000", delegate { AddDoctor(); }, Resources.Bank.Balance >= 100000)
+                    new ChoiceOption("Buy Doctor (L"+Resources.Level.value+")", "$100,000", delegate { AddDoctor(); }, Resources.Bank.Balance >= 100000)
                 },
                 delegate { Deselect(); }
             );
@@ -121,8 +110,6 @@ public class CityControl : MonoBehaviour
         if (location.isStatic == false) GetComponent<Image>().color = Color.blue;
         else if (location.isLocked == true) GetComponent<Image>().color = Color.grey;
         else GetComponent<Image>().color = Color.red;
-
-        Map.GetSingleton().currentlyCasting = false;
     }
 
     public void TryRemoveCity()
@@ -169,5 +156,9 @@ public class CityControl : MonoBehaviour
         GetComponent<Image>().color = Color.red;
         Resources.Level.value++;
         AddDoctor();
+        Modal.OpenModal(
+            "Congratulations!",
+            "You're now Level "+Resources.Level.value+"!\\nDoctors are now more effective in the fight against Malaria.",
+            delegate { });
     }
 }

@@ -647,6 +647,7 @@ MonoBehaviour:
     type: 3}
   doctorIcon: {fileID: 3275050112599640060, guid: 320474cf046d24d2f8ecf2d7a4c2ee1e,
     type: 3}
+  currentlyCasting: 0
 --- !u!61 &2012416259
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -685,7 +686,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7edf2d878f16463094c5141e6b9eb5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eventPrefab: {fileID: 8703937251319470419, guid: 942ee3e2fade04e46b5ebf964c11f1e1,
+  eventPrefab: {fileID: 2395466428171680225, guid: 1e3f9bf0355774edf92b864698882e55,
     type: 3}
 --- !u!1 &2065459609
 GameObject:

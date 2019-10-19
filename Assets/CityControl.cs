@@ -22,6 +22,16 @@ public class CityControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Update if the text should be shown
+        if (Camera.main.orthographicSize < ZOOM_CUTOFF && !text.activeSelf)
+        {
+            text.SetActive(true);
+        }
+        else if (Camera.main.orthographicSize >= ZOOM_CUTOFF && text.activeSelf)
+        {
+            text.SetActive(false);
+        }
+        
         if (Map.GetSingleton().IsPaused()) return;
 
         //        if (Input.GetMouseButtonDown(0)){ 
@@ -36,15 +46,6 @@ public class CityControl : MonoBehaviour
 //            }
 //        }
         SetPosition();
-
-        if (Camera.main.orthographicSize < ZOOM_CUTOFF && !text.activeSelf)
-        {
-            text.SetActive(true);
-        }
-        else if (Camera.main.orthographicSize >= ZOOM_CUTOFF && text.activeSelf)
-        {
-            text.SetActive(false);
-        }
     }
 
     public void SetPosition()

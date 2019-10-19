@@ -4,13 +4,13 @@ using UnityEngine;
 
 namespace mosquitodefenders.Tickers
 {
-    public class MozEventTicker : IResourceTicker<MozEvent?>
+    public class MozEventTicker : IResourceTicker<MozEvent>
     {
         private MozEvent mozEvent;
 
         private string[] mozEventTypes = { "outbreak", "report" };
 
-        public MozEvent? NextValue()
+        public MozEvent NextValue()
         {
             if (Random.value < 1)
             {
@@ -27,7 +27,7 @@ namespace mosquitodefenders.Tickers
             }
             else
             {
-                return null;
+                return new MozEvent { };
             }
         }
     }

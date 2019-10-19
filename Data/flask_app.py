@@ -49,13 +49,21 @@ def new_location_within_radius(lat, long):
         if n > N:
             return random_land_location()
 
+def new_timer(lifestage):
+    if lifestage == 'adults':
+        return 15
+    elif lifestage == 'pupae':
+        return 30
+    else:
+        return 60
+
 def event():
     event = sample_real_event()
     events = [{
         'event': {
             'lat': event['latitude'],
             'long': event['longitude'],
-            'timer': event['timer'],
+            'timer': new_timer(event['severity']),
             'text': event['text'],
             'image_url': event['image_url'],
         }
@@ -70,7 +78,7 @@ def spread(lat, long):
         events.append({
             'lat': new_loc[0],
             'long': new_loc[1],
-            'timer': 60,
+            'timer': random.uniform(40, 60),
             'text': 'Mosquito activity spreading!',
             'image_url': None
         })

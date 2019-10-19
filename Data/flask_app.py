@@ -26,7 +26,7 @@ raster_map = np.genfromtxt(
 )
 
 def random_location():
-    lat = random.uniform(0, 159)
+    lat = random.uniform(50, 130) # exclude the high latitudes
     long = random.uniform(0, 359)
     return np.round(np.array([lat, long]), 5)
 
@@ -43,7 +43,23 @@ def random_land_location():
         if inland(lat, long): return loc
 
 def sample_real_event():
-    return random.sample(mosquito_data, 1)[0]
+    event = random.sample(mosquito_data, 1)[0]
+    event['type'] = "mosquito_report"
+    event['debug'] = "genuine_event"
+    return event
+
+def create_fake_event():
+    event = sample_real_event()
+    lat, long = random_land_location()
+    event['latitude'] = lat
+    event['longitude'] = long
+    event['type'] = "mosquito_report"
+    event['debug'] = "fake_event"
+    return event
+
+def new_event():
+    method = random.choice([sample_real_event, create_fake_event])
+    return method()
 
 def new_location_nearby(lat, long):
     N = 10
@@ -66,7 +82,7 @@ def new_timer(lifestage):
         return 60
 
 def event():
-    event = sample_real_event()
+    event = new_event()
     lat = event['latitude']
     long = event['longitude']
     events = [{
@@ -76,7 +92,9 @@ def event():
             'timer': new_timer(event['severity']),
             'text': event['text'],
             'image_url': event['image_url'],
-            'malarial_risk': in_malaria_area(lat, long),
+            'infection_risk': in_malaria_area(lat, long),
+            'type': event['type'],
+            'debug': event['debug']
         }
     }]
     return events

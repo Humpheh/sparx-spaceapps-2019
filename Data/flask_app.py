@@ -4,6 +4,8 @@ from flask_restful import Resource, Api
 import json
 import random
 import numpy as np
+from shapely.geometry import Point
+import geopandas as gpd
 
 app = Flask(__name__)
 api = Api(app)
@@ -13,6 +15,9 @@ with open('processed/survey_data.json') as json_file:
 
 with open('processed/mosquito_data.json') as json_file:
     mosquito_data = json.load(json_file)
+
+with open('processed/malaria_polygon.json') as geojson_file:
+    malaria_polygon = gpd.read_file("processed/malaria_polygon.json").iloc[0].geometry
 
 raster_map = np.genfromtxt(
     "processed/raster-world-map.txt",
@@ -28,6 +33,9 @@ def random_location():
 def inland(lat, long):
     return raster_map[int(lat), int(long)] == 1
 
+def in_malaria_area(lat, long):
+    return malaria_polygon.contains(Point(lat, long))
+
 def random_land_location():
     while True:
         loc = random_location()
@@ -37,7 +45,7 @@ def random_land_location():
 def sample_real_event():
     return random.sample(mosquito_data, 1)[0]
 
-def new_location_within_radius(lat, long):
+def new_location_nearby(lat, long):
     N = 10
     n = 1
     while True:
@@ -59,6 +67,8 @@ def new_timer(lifestage):
 
 def event():
     event = sample_real_event()
+    lat = event['latitude']
+    long = event['longitude']
     events = [{
         'event': {
             'lat': event['latitude'],
@@ -66,6 +76,7 @@ def event():
             'timer': new_timer(event['severity']),
             'text': event['text'],
             'image_url': event['image_url'],
+            'malarial_risk': in_malaria_area(lat, long),
         }
     }]
     return events
@@ -74,15 +85,15 @@ def spread(lat, long):
     n_spread = random.randint(1, 4)
     events = []
     for i in range(0, n_spread):
-        new_loc = new_location_within_radius(lat, long)
+        new_loc = new_location_nearby(lat, long)
         events.append({
             'lat': new_loc[0],
             'long': new_loc[1],
             'timer': random.uniform(40, 60),
             'text': 'Mosquito activity spreading!',
-            'image_url': None
+            'image_url': None,
+            'malarial_risk': False
         })
-
     return events
 
 class Events(Resource):

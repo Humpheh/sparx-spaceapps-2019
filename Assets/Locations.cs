@@ -41,16 +41,48 @@ public class Location
     public double lat, lon;
     public int x, y;
     public GameObject obj;
+    public bool isStatic;
+    public int doctors;
 
-    public Location(string city, double lon, double lat)
+    public Location(string city, double lon, double lat, bool isStatic = true)
     {
         this.city = city;
         this.lat = lat;
         this.lon = lon;
-        this.x = LonToX(lon);
-        this.y = LatToY(lat);
+        x = LonToX(lon);
+        y = LatToY(lat);
+
+        this.doctors = doctors;
     }
 
+    public Location(double lon, double lat, int doctors)
+    {
+        this.city = "Doctor";
+        this.lat = lat;
+        this.lon = lon;
+        x = LonToX(lon);
+        y = LatToY(lat);
+        this.doctors = doctors;
+    }
+
+    public bool CanRemoveDoctor()
+    {
+        return doctors > 1;
+    }
+
+    public void RemoveDoctor()
+    {
+        if (doctors > 1)
+        {
+            doctors--;
+        }
+    }
+
+    public void AddDoctor()
+    {
+        doctors++;
+    }
+    
     private int LatToY(double lat)
     {
         // Lat is -90 -> 90

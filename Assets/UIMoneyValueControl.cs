@@ -13,11 +13,29 @@ public class UIMoneyValueControl : MonoBehaviour
     public void SetBalanceText(double balance)
     {
         var prefix = "Bank: ";
+        var suffix = "";
+        var printBalance = balance;
         if (balance < -1000000000)
         {
             prefix = "YEE HOWDY BOY BETTER CHECK Your student loan 😢: ";
         }
 
-        GetComponent<Text>().text = $"{prefix} ${balance}";
+        if (balance > 100000)
+        {
+            printBalance /= 1000;
+            suffix = "K";
+        }
+        if (balance > 1000000)
+        {
+            printBalance = balance / 1000000;
+            suffix = "m";
+        }
+        if (balance > 10000000)
+        {
+            printBalance = balance / 10000000;
+            suffix = "Bn";
+        }
+
+        GetComponent<Text>().text = $"{prefix} ${printBalance}{suffix}";
     }
 }

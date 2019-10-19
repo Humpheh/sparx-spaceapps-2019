@@ -7,15 +7,25 @@ public class Map : MonoBehaviour
     public GameObject prefab;
     
     private MapTile[][] map;
+    
+    // Bounds of the map
     private static int mapWidth = 82;
     private static int mapHeight = 41;
 
-    public static int gridWidth = mapWidth*2;
-    public static int gridHeight = mapHeight*2;
+    // Size of the grid on the map
+    public static int gridWidth = 360; //mapWidth*2;
+    public static int gridHeight = 180; //mapHeight*2;
 
     // Start is called before the first frame update
     void Start()
     {
+        CreateMap();
+//        CreateMapOverlay();
+    }
+
+    private void CreateMap()
+    {
+        // Create the multidimensional array of map tiles
         map = new MapTile[gridHeight][];
         for (var y = 0; y < gridHeight; y++)
         {
@@ -27,8 +37,10 @@ public class Map : MonoBehaviour
                 map[y][x] = new MapTile(x, y, new Vector2(realX, realY), true);//Random.value < 0.5);
             }
         }
+    }
 
-        Debug.Log(map);
+    private void CreateMapOverlay()
+    {
         for (var y = 0; y < map.Length; y++)
         {
             for (var x = 0; x < map[y].Length; x++)
@@ -46,6 +58,11 @@ public class Map : MonoBehaviour
 
     // Update is called once per frame
     void Update()
+    {
+        
+    }
+
+    private void AdvanceMapTime()
     {
         
     }

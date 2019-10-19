@@ -113,8 +113,11 @@ public class CityControl : MonoBehaviour
     public void Deselect()
     {
         CurrentSelection = null;
-        if (location.isStatic) GetComponent<Image>().color = Color.red;
-        else GetComponent<Image>().color = Color.blue;
+        if (location.isStatic == false) GetComponent<Image>().color = Color.blue;
+        else if (location.isLocked == true) GetComponent<Image>().color = Color.grey;
+        else GetComponent<Image>().color = Color.red;
+
+        Map.GetSingleton().currentlyCasting = false;
     }
 
     public void TryRemoveCity()

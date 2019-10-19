@@ -24,6 +24,7 @@ public class Locations
         new Location("Mumbai", 72.8776559, 19.0759837),
         new Location("Sydney", 151.2092955, -33.8688197),
         new Location("Perth", 115.8604572, -31.9505269),
+        // Spacing so title is left-aligned and in view
         new Location("Wellington             ", 174.776236, -41.2864603),
         new Location("Tokyo", 139.6503106, 35.6761919),
         new Location("Ulaanbaatar", 106.9057439, 47.8863988),

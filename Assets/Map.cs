@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Map : MonoBehaviour
 {
+    private MozDataParse mozData;
+    
     public GameObject prefab;
     
     private MapTile[][] map;
@@ -19,8 +21,9 @@ public class Map : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        mozData = gameObject.AddComponent<MozDataParse>();
         CreateMap();
-//        CreateMapOverlay();
+        CreateMapOverlay();
     }
 
     private void CreateMap()
@@ -34,7 +37,7 @@ public class Map : MonoBehaviour
             {
                 var realX = (float)mapWidth / gridWidth * (x - (float) gridWidth / 2);
                 var realY = (float)mapHeight / gridHeight * (y - (float) gridHeight / 2);
-                map[y][x] = new MapTile(x, y, new Vector2(realX, realY), true);//Random.value < 0.5);
+                map[y][x] = new MapTile(x, y, new Vector2(realX, realY), mozData.HasEvent(x, y));//Random.value < 0.5);
             }
         }
     }

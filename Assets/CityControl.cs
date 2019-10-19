@@ -18,6 +18,8 @@ public class CityControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Map.GetSingleton().IsPaused()) return;
+        
         if (Input.GetMouseButtonDown(0)){ 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;

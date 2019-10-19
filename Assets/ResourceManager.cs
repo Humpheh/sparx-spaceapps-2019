@@ -43,14 +43,16 @@ public class ResourceManager : MonoBehaviour
         updaters = new ResourceUpdater[]
         {
             new BroadcastingResourceUpdater<DateTime>("GlobalTimeStep", new TimeTicker()),
-            new BroadcastingResourceUpdater<MozEvent?>("MozEvent", new MozEventTicker())
-            MoneyTicker,
+            new BroadcastingResourceUpdater<MozEvent?>("MozEvent", new MozEventTicker()),
+            MoneyTicker
         };
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Map.GetSingleton().IsPaused()) return;
+
         ticker += Time.deltaTime;
         if (ticker > 1)
         {

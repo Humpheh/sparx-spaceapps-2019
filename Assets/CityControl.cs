@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class CityControl : MonoBehaviour
 {
+    private static float ZOOM_CUTOFF = 10;
+    
     public static CityControl CurrentSelection;
 
     public Location location;
@@ -34,6 +36,15 @@ public class CityControl : MonoBehaviour
 //            }
 //        }
         SetPosition();
+
+        if (Camera.main.orthographicSize < ZOOM_CUTOFF && !text.activeSelf)
+        {
+            text.SetActive(true);
+        }
+        else if (Camera.main.orthographicSize >= ZOOM_CUTOFF && text.activeSelf)
+        {
+            text.SetActive(false);
+        }
     }
 
     public void SetPosition()

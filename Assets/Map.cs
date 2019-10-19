@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class Map : MonoBehaviour
 {
@@ -7,7 +8,7 @@ public class Map : MonoBehaviour
     
     public GameObject prefab;
     public GameObject cityPrefab;
-    
+    public GameObject canvas;
     private MapTile[][] map;
     private bool[][] landMap;
     
@@ -27,7 +28,7 @@ public class Map : MonoBehaviour
         BuildLandData();
         
         CreateMap();
-        CreateMapOverlay();
+        //CreateMapOverlay();
         CreateMapCities();
 
     }
@@ -88,12 +89,20 @@ public class Map : MonoBehaviour
 
     private void CreateMapCities()
     {
-        foreach (var location in  locations.LocationsList)
+        GameObject cityText = Resources.Load("CityName") as GameObject;
+        foreach (var location in  locations.LocationsList)       
+
         {
             var point = Instantiate(cityPrefab, new Vector3(GridToMapX(location.x), GridToMapY(location.y), -1), Quaternion.Euler(-90, 0, 0));
             point.transform.parent = transform;
             point.GetComponent<MeshRenderer>().material.color = new Color(1,1,0);
             point.GetComponent<CityControl>().location = location;
+
+            var text = Instantiate(cityText, new Vector3(0, 0, 0), Quaternion.identity);
+            text.GetComponent<Text>().text = location.city;
+            text.transform.SetParent(canvas.transform, false);
+            point.GetComponent<CityControl>().text = text;
+
         }
     }
 

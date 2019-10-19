@@ -7,6 +7,7 @@ public class CityControl : MonoBehaviour
     private static CityControl currentSelection;
 
     public Location location;
+    public GameObject text;
     
     // Start is called before the first frame update
     void Start()

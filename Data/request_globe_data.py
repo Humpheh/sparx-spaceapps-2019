@@ -1,6 +1,8 @@
-import requests as r
+import requests
 import json
+import numpy as np
 import pandas as pd
+import geopandas as gpd
 import sys
 import geopandas as gpd
 import numpy as np
@@ -13,7 +15,7 @@ query_params = {
   'sample': "FALSE"
 }
 
-res = r.get(base_url, params = query_params)
+res = requests.get(base_url, params = query_params)
 
 data = res.json()
 
@@ -32,11 +34,9 @@ for obs in data['features']:
   parsedData.append(parsedObs)
 
 # pass through geodataframe format and keep only key columns
-
 df = pd.DataFrame(parsedData)
-
 gdf = gpd.GeoDataFrame(
-    df, 
+    parsedData,
     geometry = gpd.points_from_xy(df.longitude, df.latitude),
     crs = {'init' :'epsg:4326'}
 ).rename(columns = {
@@ -54,7 +54,7 @@ gdf = gpd.GeoDataFrame(
     "mosquitohabitatmapperAbdomenCloseupPhotoUrls": "abdomen_images",
     "mosquitohabitatmapperWaterSourcePhotoUrls": "water_images",
 }).drop(columns = {
-    "mosquitohabitatmapperMeasurementLongitude", 
+    "mosquitohabitatmapperMeasurementLongitude",
     "mosquitohabitatmapperMeasurementLatitude",
     "countryCode",
     "mosquitohabitatmapperBreedingGroundEliminated",
@@ -75,7 +75,7 @@ gdf = gpd.GeoDataFrame(
 
 # convert strings to bools and create new column for if there were signs of mosquitos
 
-dct = {'true': True, 'false': False} 
+dct = {'true': True, 'false': False}
 
 gdf["adults"] = gdf["adults"].map(dct)
 gdf["eggs"] = gdf["eggs"].map(dct)
@@ -107,4 +107,4 @@ gdf = gdf.drop(
 )
 
 with open('processed/mosquito_data.json', 'w') as ff:
-    ff.write(json.dumps(list(gdf.T.to_dict().values()))) 
+    ff.write(json.dumps(list(gdf.T.to_dict().values())))

@@ -142,14 +142,15 @@ public class Map : MonoBehaviour
 
     public void CreateLocation(Location location)
     {
-        
-
         GameObject iconPrefab;
         if (location.isStatic) iconPrefab = cityIcon;
         else iconPrefab = doctorIcon;
 
         // Circle at the location (is clickable)
-        var worldLocation = new Vector3(GridToMapX(location.x), GridToMapY(location.y), -1);
+        Vector3 worldLocation;
+        if (location.usingLatLon) worldLocation = new Vector3(GridToMapX((int)location.latlon.x), GridToMapY((int)location.latlon.y), -1);
+        else worldLocation = new Vector3(location.position.x, location.position.y, -1);
+        
         var icon = Instantiate(iconPrefab);
         icon.GetComponent<CityControl>().location = location;
         icon.GetComponent<CityControl>().worldLocation = worldLocation;
@@ -161,15 +162,15 @@ public class Map : MonoBehaviour
         text.GetComponent<Text>().text = location.city;
         text.transform.SetParent(canvas.transform, false);
         icon.GetComponent<CityControl>().text = text;
+        icon.GetComponent<CityControl>().SetPosition();
 
         location.obj = icon;
     }
 
     public void DropDoctor(Vector3 worldLocation)
     {
-        var lat = MapXToGrid(worldLocation.x);
-        var lon = MapYToGrid(worldLocation.y);    
-        
+        var location = new Location(worldLocation, 1);
+        CreateLocation(location);
     }
 
     public float GridToMapX(int GridX)
@@ -214,9 +215,12 @@ public class Map : MonoBehaviour
         {
             Debug.Log(hit.point);
             Debug.Log(MapPointToGrid(hit.point));
-            if (CityControl.CurrentSelection != null)
+            var location = CityControl.CurrentSelection;
+            if (location != null && location.location.CanRemoveDoctor())
             {
+                location.location.RemoveDoctor();
                 PlaneBehaviour.SpawnPlane(CityControl.CurrentSelection.worldLocation, hit.point);
+                CityControl.CurrentSelection.TryRemoveCity();
                 CityControl.CurrentSelection.Deselect();
             }
         }

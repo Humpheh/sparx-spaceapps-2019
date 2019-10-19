@@ -32,7 +32,11 @@ public class CityControl : MonoBehaviour
 //                if (lastSelection != this) Select();
 //            }
 //        }
+        SetPosition();
+    }
 
+    public void SetPosition()
+    {
         RectTransform canvasRect = Map.GetSingleton().canvas.GetComponent<RectTransform>();
         Vector2 viewportPosition = Camera.main.WorldToViewportPoint(worldLocation);
         Vector2 screenPosition = new Vector2(
@@ -44,7 +48,7 @@ public class CityControl : MonoBehaviour
         uiElement.anchoredPosition = screenPosition;
         GetComponent<RectTransform>().anchoredPosition = screenPosition;
     }
-
+    
     public void HandleClick()
     {
         Debug.LogFormat("clicked city {0}", location.city);
@@ -63,5 +67,14 @@ public class CityControl : MonoBehaviour
     public void Deselect()
     {
         CurrentSelection = null;
+    }
+
+    public void TryRemoveCity()
+    {
+        if (location.doctors == 0 && !location.isStatic)
+        {
+            Destroy(text);
+            Destroy(gameObject);
+        }
     }
 }

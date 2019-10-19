@@ -38,8 +38,9 @@ public class Locations
 public class Location
 {
     public string city;
-    public double lat, lon;
-    public int x, y;
+    public bool usingLatLon;
+    public Vector2 position;
+    public Vector2 latlon;
     public GameObject obj;
     public bool isStatic;
     public int doctors;
@@ -48,25 +49,17 @@ public class Location
     public Location(string city, double lon, double lat)
     {
         this.city = city;
-        this.lat = lat;
-        this.lon = lon;
-        x = LonToX(lon);
-        y = LatToY(lat);
-        this.isStatic = true;
-        if (city != "Exeter") this.isLocked = true;
-        else this.isLocked = false;
-        this.doctors = 0;
+        usingLatLon = true;
+        latlon = new Vector2(LonToX(lon), LatToY(lat));
+        isStatic = true;
+        doctors = city == "Exeter" ? 1 : 0;
+        isLocked = city != "Exeter";
     }
 
-    public Location(double lon, double lat, int doctors)
+    public Location(Vector2 position, int doctors)
     {
-        this.city = "Doctor";
-        this.lat = lat;
-        this.lon = lon;
-        x = LonToX(lon);
-        y = LatToY(lat);
-        this.isStatic = false;
-        this.isLocked = false;
+        city = "Doctor";
+        this.position = position;
         this.doctors = doctors;
     }
 
@@ -77,12 +70,12 @@ public class Location
 
     public bool CanRemoveDoctor()
     {
-        return doctors > 1;
+        return doctors > 0;
     }
 
     public void RemoveDoctor()
     {
-        if (doctors > 1)
+        if (doctors > 0)
         {
             doctors--;
         }

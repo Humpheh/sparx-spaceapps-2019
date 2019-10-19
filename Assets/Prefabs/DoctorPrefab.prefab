@@ -69,7 +69,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 8f8d49a5e767c4ec1a5c2b2cd1a0bcdb, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 475ad2c57a41742e18cfeee380a49fb1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -173,7 +173,7 @@ GameObject:
   - component: {fileID: 6211488672586993447}
   - component: {fileID: 7545435592945601362}
   m_Layer: 0
-  m_Name: City
+  m_Name: DoctorPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -260,7 +260,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 939c4a5e119ea4965accbda91da52ff9, type: 3}
-  m_Color: {r: 0, g: 0.10516972, b: 0.509434, a: 1}
+  m_Color: {r: 0.058837783, g: 0.5283019, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

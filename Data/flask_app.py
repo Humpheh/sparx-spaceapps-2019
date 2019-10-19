@@ -15,17 +15,16 @@ with open('processed/mosquito_data.json') as json_file:
 
 class Events(Resource):
     def get(self):
-        rand_int = random.randint(0, 1)
-        if rand_int == 0:
+        if random.randint(0, 1) == 0:
             rand_int = random.randint(0, len(survey_data))
             lat = survey_data[rand_int]['latitude']
             long = survey_data[rand_int]['longitude']
-            text = 'Diagnosis'
-        if rand_int == 1:
+            text = random.choice(['Diagnosis'])
+        else:
             rand_int = random.randint(0, len(mosquito_data))
             lat = mosquito_data[rand_int]['latitude']
             long = mosquito_data[rand_int]['longitude']
-            text = 'Mosquito sighting'
+            text = random.choice(['Mosquito habitat detected', 'Mosquito larave found'])
         events = [{'event': {'lat': lat, 'long': long, 'type': 1, 'severity': 3, 'text': text}}]
         return(events)
 

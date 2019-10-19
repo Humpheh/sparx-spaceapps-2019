@@ -60,7 +60,7 @@ public class CityControl : MonoBehaviour
                 "Select something to do:",
                 new[]
                 {
-                    new ChoiceOption("Buy Doctor (L"+Resources.Level.value+")", "$100,000", delegate { UnlockCity(); }, Resources.Bank.Balance >= 100000)
+                    new ChoiceOption("Fund Doctor (L"+Resources.Level.value+")", "$100,000", delegate { UnlockCity(); }, Resources.Bank.Balance >= 100000)
                 },
                 delegate { Deselect(); }
             );
@@ -86,7 +86,7 @@ public class CityControl : MonoBehaviour
                 new[]
                 {
                     new ChoiceOption("Deploy Doctor", "$10,000", delegate { }, Resources.Bank.Balance >= 10000 && CurrentSelection.HasDoctors(1)),
-                    new ChoiceOption("Buy Doctor (L"+Resources.Level.value+")", "$100,000", delegate { AddDoctor(); }, Resources.Bank.Balance >= 100000)
+                    new ChoiceOption("Fund Doctor (L"+Resources.Level.value+")", "$100,000", delegate { AddDoctor(); }, Resources.Bank.Balance >= 100000)
                 },
                 delegate { Deselect(); }
             );

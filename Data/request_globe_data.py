@@ -106,7 +106,7 @@ gdf = gdf.drop(
     columns = {"abdomen_images", "larvae_images", "water_images"}
 )
 
-gdf = gdf[gfd.seen]
+gdf = gdf[gdf.seen]
 
 with open('processed/mosquito_data.json', 'w') as ff:
     ff.write(json.dumps(list(gdf.T.to_dict().values()), indent=4, sort_keys=True))

@@ -38,13 +38,7 @@ public class CityControl : MonoBehaviour
 
     public void SetPosition()
     {
-        RectTransform canvasRect = Map.GetSingleton().canvas.GetComponent<RectTransform>();
-        Vector2 viewportPosition = Camera.main.WorldToViewportPoint(worldLocation);
-        Vector2 screenPosition = new Vector2(
-            ((viewportPosition.x*canvasRect.sizeDelta.x)-(canvasRect.sizeDelta.x*0.5f)),
-            ((viewportPosition.y*canvasRect.sizeDelta.y)-(canvasRect.sizeDelta.y*0.5f)));
- 
-        //now you can set the position of the ui element
+        var screenPosition = Utils.CanvasPosition(worldLocation);
         var uiElement = text.GetComponent<RectTransform>();
         uiElement.anchoredPosition = screenPosition;
         GetComponent<RectTransform>().anchoredPosition = screenPosition;
@@ -54,20 +48,48 @@ public class CityControl : MonoBehaviour
     {
         //Debug.LogFormat("clicked city {0}", location.city);
 
-        Choice.OpenChoice(
-            location.city,
-            "Select something to do:",
-            new []
-            {
-                new ChoiceOption("Deploy Doctor", "$30000", delegate { }, Resources.Bank.Balance >= 30000),
-                new ChoiceOption("Remove Doctor", "$0", delegate { RemoveDoctor(); })
-            },
-            delegate { Deselect(); }
-        );
-
         var lastSelection = CurrentSelection;
-        //if (CurrentSelection != null) CurrentSelection.Deselect();
+        if (CurrentSelection != null) CurrentSelection.Deselect();
         if (lastSelection != this) Select();
+
+        if (location.isLocked == true)
+        {
+            Choice.OpenChoice(
+                location.city,
+                "Select something to do:",
+                new[]
+                {
+                    new ChoiceOption("Buy Doctor", "$100,000", delegate { UnlockCity(); }, Resources.Bank.Balance >= 100000)
+                },
+                delegate { Deselect(); }
+            );
+        }
+        else if (location.isStatic == false)
+        {
+            Choice.OpenChoice(
+                location.city,
+                "Select something to do:",
+                new[]
+                {
+                    //new ChoiceOption("Remove Doctor", "$0", delegate { RemoveDoctor(); })
+                    new ChoiceOption("Deploy Doctor", "$10,000", delegate { })
+                },
+                delegate { Deselect(); }
+            );
+        }
+        else
+        {
+            Choice.OpenChoice(
+                location.city,
+                "Select something to do:",
+                new[]
+                {
+                    new ChoiceOption("Deploy Doctor", "$10,000", delegate { }, Resources.Bank.Balance >= 10000 && CurrentSelection.HasDoctors(1)),
+                    new ChoiceOption("Buy Doctor", "$100,000", delegate { AddDoctor(); }, Resources.Bank.Balance >= 100000)
+                },
+                delegate { Deselect(); }
+            );
+        }
     }
 
     void Select()
@@ -116,11 +138,22 @@ public class CityControl : MonoBehaviour
             UpdateText();
             TryRemoveCity();
         }
+        Deselect();
     }
 
     public void AddDoctor()
     {
         location.doctors++;
+        Resources.Bank.Spend(100000);
         UpdateText();
+        Deselect();
+    }
+
+    public void UnlockCity()
+    {
+        location.isLocked = false;
+        GetComponent<Image>().color = Color.red;
+        Resources.Level.value++;
+        AddDoctor();
     }
 }

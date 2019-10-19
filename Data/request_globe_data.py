@@ -126,13 +126,23 @@ def generate_text(row):
     text += "."
     return(text)
     
+def generate_severity(row):
+    if row['adults']:
+        return('adults')
+    if row['pupae']:
+        return('pupae')
+    return('eggs') 
+
+
 gdf['text'] = gdf.apply(generate_text, axis=1)
+gdf['severity'] = gdf.apply(generate_severity, axis=1)
 
 gdf = gdf[[
   'latitude',
   'longitude',
   'text',
   'image_url',
+  'severity',
 ]]
 
 

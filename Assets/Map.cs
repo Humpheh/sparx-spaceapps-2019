@@ -45,7 +45,7 @@ public class Map : MonoBehaviour
         BuildLandData();
 
         CreateMap();
-//        CreateMapOverlay();
+        //        CreateMapOverlay();
         CreateMapCities();
 
 //        Modal.OpenModal(
@@ -53,6 +53,8 @@ public class Map : MonoBehaviour
 //            "<b>The world needs your help!</b>\\nThe world health organisation is gone, and you're the only one that can save the world from mosquitoes.",
 //            Started
 //        );
+
+        Popup.SpawnPanel(Vector3.zero, "https://data.globe.gov/system/photos/2019/05/23/1079041/original.jpg");
     }
 
     public ResourceManager GetResourceManager()
@@ -242,8 +244,8 @@ public class Map : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
         if (hit)
         {
-            Debug.Log(hit.point);
-            Debug.Log(MapPointToGrid(hit.point));
+            //Debug.Log(hit.point);
+            //Debug.Log(MapPointToGrid(hit.point));
             var location = CityControl.CurrentSelection;
             if (location != null && location.CanRemoveDoctor())
             {
@@ -255,7 +257,8 @@ public class Map : MonoBehaviour
                 }
                 
                 location.RemoveDoctor();
-                PlaneBehaviour.SpawnPlane(CityControl.CurrentSelection.worldLocation, toLocation);
+
+                PlaneBehaviour.SpawnPlane(location.worldLocation, toLocation);
                 CityControl.CurrentSelection.TryRemoveCity();
                 CityControl.CurrentSelection.Deselect();
             }

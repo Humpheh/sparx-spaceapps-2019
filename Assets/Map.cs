@@ -14,7 +14,7 @@ public class Map : MonoBehaviour
     }
 
     private bool _paused = false;
-    
+
     public MozDataParse mozData;
     private Locations locations = new Locations();
 
@@ -35,7 +35,7 @@ public class Map : MonoBehaviour
     public static int gridHeight = 180; //mapHeight*2;
 
     private List<CityControl> cities = new List<CityControl>();
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,11 +48,11 @@ public class Map : MonoBehaviour
         //        CreateMapOverlay();
         CreateMapCities();
 
-//        Modal.OpenModal(
-//            "You are the Mosquito Defender!", 
-//            "<b>The world needs your help!</b>\\nThe world health organisation is gone, and you're the only one that can save the world from mosquitoes.",
-//            Started
-//        );
+        //        Modal.OpenModal(
+        //            "You are the Mosquito Defender!", 
+        //            "<b>The world needs your help!</b>\\nThe world health organisation is gone, and you're the only one that can save the world from mosquitoes.",
+        //            Started
+        //        );
 
         Popup.SpawnPanel(Vector3.zero, "https://data.globe.gov/system/photos/2019/05/23/1079041/original.jpg");
     }
@@ -81,7 +81,7 @@ public class Map : MonoBehaviour
     {
         return _paused;
     }
-    
+
     void BuildLandData()
     {
         TextAsset bindata = UnityEngine.Resources.Load("landData") as TextAsset;
@@ -154,7 +154,7 @@ public class Map : MonoBehaviour
         Vector3 worldLocation;
         if (location.usingLatLon) worldLocation = new Vector3(GridToMapX((int)location.latlon.x), GridToMapY((int)location.latlon.y), -1);
         else worldLocation = new Vector3(location.position.x, location.position.y, -1);
-        
+
         var icon = Instantiate(iconPrefab);
         var city = icon.GetComponent<CityControl>();
         city.location = location;
@@ -175,13 +175,13 @@ public class Map : MonoBehaviour
     }
 
     [CanBeNull]
-    public CityControl FindCloseCity(Vector3 worldLocation, float threshold = 1) 
+    public CityControl FindCloseCity(Vector3 worldLocation, float threshold = 1)
     {
         foreach (var city in cities)
         {
             float num1 = worldLocation.x - city.worldLocation.x;
             float num2 = worldLocation.y - city.worldLocation.y;
-            var diff = Math.Sqrt((double) num1 * num1 + (double) num2 * num2);
+            var diff = Math.Sqrt((double)num1 * num1 + (double)num2 * num2);
             if (diff < threshold)
             {
                 return city;
@@ -190,14 +190,16 @@ public class Map : MonoBehaviour
 
         return null;
     }
-    
+
     public void DropDoctor(Vector3 worldLocation)
     {
         var closeCity = FindCloseCity(worldLocation);
         if (closeCity != null)
         {
             closeCity.AddDoctor();
-        } else {
+        }
+        else
+        {
             // None were nearby, create a new location
             var location = new Location(worldLocation, 1);
             CreateLocation(location);
@@ -255,7 +257,7 @@ public class Map : MonoBehaviour
                 {
                     toLocation = closeCity.worldLocation;
                 }
-                
+
                 location.RemoveDoctor();
 
                 PlaneBehaviour.SpawnPlane(location.worldLocation, toLocation);

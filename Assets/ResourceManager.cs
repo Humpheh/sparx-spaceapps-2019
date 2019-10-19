@@ -62,7 +62,5 @@ public class ResourceManager : MonoBehaviour
             }
             ticker = 0;
         }
-
-        Resources.Bank.Spend(360000);
     }
 }

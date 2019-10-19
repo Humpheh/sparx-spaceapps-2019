@@ -39,6 +39,7 @@ public class Location
     public string city;
     public double lat, lon;
     public int x, y;
+    public GameObject obj;
 
     public Location(string city, double lon, double lat)
     {

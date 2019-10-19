@@ -141,19 +141,22 @@ public class Map : MonoBehaviour
     private void CreateCity(Location location)
     {
         GameObject cityText = UnityEngine.Resources.Load("CityName") as GameObject;
+        GameObject cityIcon = UnityEngine.Resources.Load("CityIcon") as GameObject;
         
         // Circle at the location (is clickable)
-        var point = Instantiate(cityPrefab, new Vector3(GridToMapX(location.x), GridToMapY(location.y), -1), Quaternion.identity);
-        point.transform.parent = transform;
-        point.GetComponent<CityControl>().location = location;
+        var worldLocation = new Vector3(GridToMapX(location.x), GridToMapY(location.y), -1);
+        var icon = Instantiate(cityIcon);
+        icon.GetComponent<CityControl>().location = location;
+        icon.GetComponent<CityControl>().worldLocation = worldLocation;
+        icon.transform.SetParent(canvas.transform, false);
 
         // Text overlay for the location
-        var text = Instantiate(cityText, new Vector3(0, 0, 0), Quaternion.identity);
+        var text = Instantiate(cityText);
         text.GetComponent<Text>().text = location.city;
         text.transform.SetParent(canvas.transform, false);
-        point.GetComponent<CityControl>().text = text;
+        icon.GetComponent<CityControl>().text = text;
 
-        location.obj = point;
+        location.obj = icon;
     }
 
     public float GridToMapX(int GridX)
@@ -200,7 +203,7 @@ public class Map : MonoBehaviour
             Debug.Log(MapPointToGrid(hit.point));
             if (CityControl.CurrentSelection != null)
             {
-                PlaneBehaviour.SpawnPlane(CityControl.CurrentSelection.transform.position, hit.point);
+                PlaneBehaviour.SpawnPlane(CityControl.CurrentSelection.worldLocation, hit.point);
                 CityControl.CurrentSelection.Deselect();
             }
         }

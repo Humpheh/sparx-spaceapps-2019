@@ -8,6 +8,7 @@ public class CityControl : MonoBehaviour
 
     public Location location;
     public GameObject text;
+    public Vector3 worldLocation;
     
     // Start is called before the first frame update
     void Start()
@@ -19,41 +20,47 @@ public class CityControl : MonoBehaviour
     void Update()
     {
         if (Map.GetSingleton().IsPaused()) return;
-        
-        if (Input.GetMouseButtonDown(0)){ 
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit) && hit.transform == transform){
-                Debug.LogFormat("clicked city {0}", location.city);
-                
-                var lastSelection = CurrentSelection;
-                if (CurrentSelection != null) CurrentSelection.Deselect();
-                if (lastSelection != this) Select();
-            }
-        }
-        
+
+        //        if (Input.GetMouseButtonDown(0)){ 
+//            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+//            RaycastHit hit;
+//            if (Physics.Raycast(ray, out hit) && hit.transform == transform){
+//                Debug.LogFormat("clicked city {0}", location.city);
+//                
+//                var lastSelection = CurrentSelection;
+//                if (CurrentSelection != null) CurrentSelection.Deselect();
+//                if (lastSelection != this) Select();
+//            }
+//        }
+
         RectTransform canvasRect = Map.GetSingleton().canvas.GetComponent<RectTransform>();
-        Vector2 viewportPosition = Camera.main.WorldToViewportPoint(transform.position);
-        Vector2 WorldObject_ScreenPosition=new Vector2(
+        Vector2 viewportPosition = Camera.main.WorldToViewportPoint(worldLocation);
+        Vector2 screenPosition = new Vector2(
             ((viewportPosition.x*canvasRect.sizeDelta.x)-(canvasRect.sizeDelta.x*0.5f)),
             ((viewportPosition.y*canvasRect.sizeDelta.y)-(canvasRect.sizeDelta.y*0.5f)));
  
         //now you can set the position of the ui element
         var uiElement = text.GetComponent<RectTransform>();
-        uiElement.anchoredPosition = WorldObject_ScreenPosition;
+        uiElement.anchoredPosition = screenPosition;
+        GetComponent<RectTransform>().anchoredPosition = screenPosition;
+    }
+
+    public void HandleClick()
+    {
+        Debug.LogFormat("clicked city {0}", location.city);
+                
+        var lastSelection = CurrentSelection;
+        if (CurrentSelection != null) CurrentSelection.Deselect();
+        if (lastSelection != this) Select();
     }
 
     void Select()
     {
         CurrentSelection = this;
-        GetComponent<SpriteRenderer>().color = new Color(1,1,0);
-        transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
     }
 
     public void Deselect()
     {
-        GetComponent<SpriteRenderer>().color = new Color(1,1,1);
-        transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
         CurrentSelection = null;
     }
 }

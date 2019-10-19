@@ -100,17 +100,25 @@ def event():
     return events
 
 def spread(lat, long):
-    n_spread = random.randint(1, 4)
+    orig_infection_risk = in_malaria_area(lat, long)
+    if orig_infection_risk:
+      n_spread = random.randint(3, 6)
+    else:
+      n_spread = random.randint(1, 2)
     events = []
     for i in range(0, n_spread):
         new_loc = new_location_nearby(lat, long)
+        infection_risk = in_malaria_area(new_loc[0], new_loc[1])
+        type = "outbreak" if infection_risk else "mosquito_report";
+        text = "Outbreak of Malaria!" if infection_risk else  "Mosquito activity spreading";
         events.append({
             'lat': new_loc[0],
             'long': new_loc[1],
             'timer': random.uniform(40, 60),
-            'text': 'Mosquito activity spreading!',
+            'text': text,
             'image_url': None,
-            'malarial_risk': False
+            'infection_risk': infection_risk,
+            'type': type,
         })
     return events
 

@@ -17,6 +17,8 @@ matplotlib = "*"
 descartes = "*"
 rasterio = "*"
 nbstripout = "*"
+flask = "*"
+flask-restful = "*"
 
 [requires]
 python_version = "3.7"

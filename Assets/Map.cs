@@ -25,6 +25,7 @@ public class Map : MonoBehaviour
     public GameObject doctorIcon;
     private MapTile[][] map;
     private bool[][] landMap;
+    public bool currentlyCasting;
 
     // Bounds of the map
     private static int mapWidth = 82;
@@ -184,7 +185,8 @@ public class Map : MonoBehaviour
             var diff = Math.Sqrt((double) num1 * num1 + (double) num2 * num2);
             if (diff < threshold)
             {
-                return city;
+                if (city.location.isLocked) return null;
+                else return city;
             }
         }
 
@@ -255,13 +257,13 @@ public class Map : MonoBehaviour
                 {
                     toLocation = closeCity.worldLocation;
                 }
-                
-                location.RemoveDoctor();
 
+                location.RemoveDoctor();
                 PlaneBehaviour.SpawnPlane(location.worldLocation, toLocation);
-                CityControl.CurrentSelection.TryRemoveCity();
-                CityControl.CurrentSelection.Deselect();
+                location.TryRemoveCity();
+                location.Deselect();
             }
+            currentlyCasting = false;
         }
     }
 }

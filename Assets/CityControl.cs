@@ -53,9 +53,20 @@ public class CityControl : MonoBehaviour
     public void HandleClick()
     {
         //Debug.LogFormat("clicked city {0}", location.city);
-        
+
+        Choice.OpenChoice(
+            location.city,
+            "Select something to do:",
+            new []
+            {
+                new ChoiceOption("Deploy Doctor", "$30000", delegate { }),
+                new ChoiceOption("Remove Doctor", "$0", delegate { RemoveDoctor(); })
+            },
+            delegate { Deselect(); }
+        );
+
         var lastSelection = CurrentSelection;
-        if (CurrentSelection != null) CurrentSelection.Deselect();
+        //if (CurrentSelection != null) CurrentSelection.Deselect();
         if (lastSelection != this) Select();
     }
 
@@ -74,7 +85,8 @@ public class CityControl : MonoBehaviour
     public void Deselect()
     {
         CurrentSelection = null;
-        GetComponent<Image>().color = Color.red;
+        if (location.isStatic) GetComponent<Image>().color = Color.red;
+        else GetComponent<Image>().color = Color.blue;
     }
 
     public void TryRemoveCity()
@@ -97,6 +109,7 @@ public class CityControl : MonoBehaviour
         {
             location.doctors--;
             UpdateText();
+            TryRemoveCity();
         }
     }
 

@@ -24,8 +24,8 @@ internal class ResourceTracker<T>
 
 static class Resources
 {
-    public static ResourceTracker<double> money { get; } = new ResourceTracker<double>();
-    public static ResourceTracker<DateTime> time { get; } = new ResourceTracker<DateTime>();
+    public static Bank Bank { get; } = new Bank(DefaultResources.DefaultMoney);
+    public static ResourceTracker<DateTime> Time { get; } = new ResourceTracker<DateTime>();
 }
 
 public class ResourceManager : MonoBehaviour
@@ -35,14 +35,16 @@ public class ResourceManager : MonoBehaviour
 
     public ResourceManager()
     {
+        var MoneyTicker = new BroadcastingResourceUpdater<double>("GlobalMoney", new MoneyTicker(
+            DefaultResources.MoneyIncrement
+        ));
+        MoneyTicker.RegisterReceiver(Resources.Bank.Add);
+
         updaters = new ResourceUpdater[]
         {
             new BroadcastingResourceUpdater<DateTime>("GlobalTimeStep", new TimeTicker()),
-            new BroadcastingResourceUpdater<double>("GlobalMoney", new MoneyTicker(
-                DefaultResources.MoneyIncrement,
-                DefaultResources.DefaultMoney
-            )),
             new BroadcastingResourceUpdater<MozEvent?>("MozEvent", new MozEventTicker())
+            MoneyTicker,
         };
     }
 
@@ -58,5 +60,7 @@ public class ResourceManager : MonoBehaviour
             }
             ticker = 0;
         }
+
+        Resources.Bank.Spend(360000);
     }
 }

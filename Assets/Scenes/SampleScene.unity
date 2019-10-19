@@ -701,7 +701,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 3957819215582022896, guid: f7da8264a692f49b591095dc9fde1b78, type: 3}
-  cityPrefab: {fileID: 0}
+  cityPrefab: {fileID: 8703937251319470419, guid: baac921ac004d4ab299171c0661beac1,
+    type: 3}
 --- !u!1 &2065459609
 GameObject:
   m_ObjectHideFlags: 0

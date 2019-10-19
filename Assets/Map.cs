@@ -88,11 +88,12 @@ public class Map : MonoBehaviour
 
     private void CreateMapCities()
     {
-        for (var l = 0; l < locations.LocationsList.Length; l++)
+        foreach (var location in  locations.LocationsList)
         {
-            var point = Instantiate(cityPrefab, new Vector3(GridToMapX(locations.LocationsList[l].x), GridToMapY(locations.LocationsList[l].y), -1), Quaternion.Euler(-90, 0, 0));
+            var point = Instantiate(cityPrefab, new Vector3(GridToMapX(location.x), GridToMapY(location.y), -1), Quaternion.Euler(-90, 0, 0));
             point.transform.parent = transform;
             point.GetComponent<MeshRenderer>().material.color = new Color(1,1,0);
+            point.GetComponent<CityControl>().location = location;
         }
     }
 

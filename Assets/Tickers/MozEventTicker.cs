@@ -6,8 +6,6 @@ namespace mosquitodefenders.Tickers
 {
     public class MozEventTicker : IResourceTicker<MozEvent>
     {
-        private MozEvent mozEvent;
-
         private string[] mozEventTypes = { "outbreak", "report" };
 
         public MozEvent NextValue()
@@ -18,9 +16,9 @@ namespace mosquitodefenders.Tickers
                 DataPoint location = Utils.RandomInArr(locations);
                 string evtType = Utils.RandomInArr(mozEventTypes);
 
-                MozEvent mosEvent;
-                mosEvent.eventType = evtType;
-                mosEvent.location = location;
+                MozEvent mozEvent;
+                mozEvent.eventType = evtType;
+                mozEvent.location = location;
 
                 return mozEvent;
             }

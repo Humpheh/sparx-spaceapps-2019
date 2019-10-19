@@ -5,17 +5,17 @@ using UnityEngine.UI;
 
 public class UIMoneyValueControl : MonoBehaviour
 {
-    public UIMoneyValueControl()
+    private void Update()
     {
-        Resources.Bank.RegisterBalanceReceiver(SetBalanceText);
+        SetBalanceText(Resources.Bank.Balance);
     }
 
     public void SetBalanceText(double balance)
     {
-        var prefix = "";
-        if (balance < (double)1000000000.00f)
+        var prefix = "Bank: ";
+        if (balance < -1000000000)
         {
-            prefix = "Your student loan 😢: ";
+            prefix = "YEE HOWDY BOY BETTER CHECK Your student loan 😢: ";
         }
 
         GetComponent<Text>().text = $"{prefix} ${balance}";

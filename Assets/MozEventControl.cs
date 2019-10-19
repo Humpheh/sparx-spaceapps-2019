@@ -11,11 +11,7 @@ public class MozEventControl : MonoBehaviour
     public void MozEvent(MozEvent evt)
     {
         // Create a point for the moz event
-        Vector3 pos = new Vector3(
-            Map.GetSingleton().GridToMapX((int)evt.location.longitude + 180),
-            Map.GetSingleton().GridToMapY((int)evt.location.latitude + 90),
-            -1
-            );
+        Vector3 pos = Utils.LatLongToMapCoords((int)evt.location.latitude, (int)evt.location.longitude);
 
         GameObject newObject = Instantiate(eventPrefab, pos, Quaternion.identity);
         newObject.transform.parent = transform;

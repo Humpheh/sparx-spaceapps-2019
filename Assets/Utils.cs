@@ -13,8 +13,13 @@ public class Utils
         RectTransform canvasRect = Map.GetSingleton().canvas.GetComponent<RectTransform>();
         Vector2 viewportPosition = Camera.main.WorldToViewportPoint(worldPosition);
         return new Vector2(
-            ((viewportPosition.x*canvasRect.sizeDelta.x)-(canvasRect.sizeDelta.x*0.5f)),
-            ((viewportPosition.y*canvasRect.sizeDelta.y)-(canvasRect.sizeDelta.y*0.5f)));
+            ((viewportPosition.x * canvasRect.sizeDelta.x) - (canvasRect.sizeDelta.x * 0.5f)),
+            ((viewportPosition.y * canvasRect.sizeDelta.y) - (canvasRect.sizeDelta.y * 0.5f)));
 
+    }
+
+    public static Vector3 LatLongToMapCoords(int lat, int longitude)
+    {
+        return new Vector3(Map.GetSingleton().GridToMapX(longitude + 180), Map.GetSingleton().GridToMapY(lat + 90), -1);
     }
 }

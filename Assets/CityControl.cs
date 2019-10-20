@@ -100,7 +100,7 @@ public class CityControl : MonoBehaviour
                 {
                     new ChoiceOption("Deploy Doctor", "$10,000", delegate {
                         mapSingleton.dispatchType = PlaneBehaviour.PlaneType.DOCTOR;
-                    }, Resources.Bank.Balance >= 10000 && CurrentSelection.HasDoctors(1)),
+                    }, Resources.Bank.Balance >= 10000 && HasDoctors(1)),
                     new ChoiceOption("Fund Doctor", "$100,000", delegate {
                         AddDoctor(1, 1, 0, true);
                     }, Resources.Bank.Balance >= 100000),

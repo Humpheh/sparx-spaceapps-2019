@@ -53,7 +53,8 @@ public class Map : MonoBehaviour
 
         Modal.OpenModal(
             "You are the Mosquito Defender!",
-            "<b>The world needs your help!</b>\\nThe world health organisation is gone, and you're the only one that can save the world from mosquitoes.",
+            "You're in charge of dispatching doctors as a first line of defence against mosquito outbreaks.\\n " + 
+            "Use the data sent in by the public to help inform your decisions.\\n\\n<b>Good luck!</b>",
             Started
         );
     }
@@ -65,7 +66,11 @@ public class Map : MonoBehaviour
 
     void Started(string option)
     {
-        //        Popup.SpawnPanel(Vector3.zero, "https://data.globe.gov/system/photos/2019/05/23/1079041/original.jpg");
+        Modal.OpenModal(
+            "Instructions",
+            "Use the mouse to navigate around the map and click on cities to choose actions.\\n" +
+            "Keep an eye out for NASA GLOBE citizen science reports of mosquito sightings."
+        );
     }
 
     public void PauseMap()
@@ -209,7 +214,7 @@ public class Map : MonoBehaviour
             );
             
             totalDoctors += city.location.doctors;
-            if (distance < 5)
+            if (distance < 4)
             {
                 nearbyDoctors += city.location.doctors;
             }
@@ -333,7 +338,7 @@ public class Map : MonoBehaviour
 
     IEnumerator ClearPlaneType()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.1f);
         dispatchType = PlaneBehaviour.PlaneType.NONE;
     }
 }

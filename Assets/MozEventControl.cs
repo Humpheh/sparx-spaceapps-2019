@@ -15,5 +15,6 @@ public class MozEventControl : MonoBehaviour
 
         GameObject newObject = Instantiate(eventPrefab, pos, Quaternion.identity);
         newObject.transform.parent = transform;
+        newObject.GetComponent<Outbreak>().evt = evt;
     }
 }

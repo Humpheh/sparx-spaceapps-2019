@@ -8,7 +8,7 @@ using UnityEngine.Networking;
 public class MozEventCaller : MonoBehaviour
 {
     public float nextEvent = 10;
-    public int maxIncrement = 10;
+    public float maxIncrement = 10;
     System.Random rnd = new System.Random();
     private readonly string server = System.IO.File.ReadAllText("Assets/ngrok.txt").Trim();
 
@@ -37,7 +37,7 @@ public class MozEventCaller : MonoBehaviour
         if (nextEvent <= 0)
         {
             StartCoroutine(DoEvent(OnEvents));
-            nextEvent = rnd.Next(1, maxIncrement);
+            nextEvent = (float)(rnd.NextDouble() * maxIncrement);
         }
     }
     public delegate void CallbackDelegate(List<MozEvent> evts);

@@ -85,18 +85,20 @@ def event():
     event = new_event()
     lat = event['latitude']
     long = event['longitude']
-    events = [{
-        'event': {
-            'lat': event['latitude'],
-            'long': event['longitude'],
-            'timer': new_timer(event['severity']),
-            'text': event['text'],
-            'image_url': event['image_url'],
-            'infection_risk': in_malaria_area(lat, long),
-            'type': event['type'],
-            'debug': event['debug']
-        }
-    }]
+    events = {
+        'events': [
+            {
+                'lat': event['latitude'],
+                'long': event['longitude'],
+                'timer': new_timer(event['severity']),
+                'text': event['text'],
+                'image_url': event['image_url'],
+                'infection_risk': in_malaria_area(lat, long),
+                'type': event['type'],
+                'debug': event['debug']
+            }
+        ]
+    }
     return events
 
 def spread(lat, long):

@@ -1,7 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
+using Image = UnityEngine.UI.Image;
 
 public class CityControl : MonoBehaviour
 {
@@ -45,10 +48,10 @@ public class CityControl : MonoBehaviour
 
     public void HandleClick()
     {
-        if (Map.GetSingleton().dispatchType != PlaneBehaviour.PlaneType.NONE)
-        {
-            return;
-        }
+//        if (Map.GetSingleton().dispatchType != PlaneBehaviour.PlaneType.NONE)
+//        {
+//            return;
+//        }
         //Debug.LogFormat("clicked city {0}", location.city);
 
         var lastSelection = CurrentSelection;
@@ -56,21 +59,15 @@ public class CityControl : MonoBehaviour
         if (lastSelection != this) Select();
 
         var mapSingleton = Map.GetSingleton();
-        if (location.isLocked == true)
+        if (location.isStatic == false)
         {
-            Choice.OpenChoice(
-                location.city,
-                "No doctors available",
-                new[]
-                {
-                    new ChoiceOption("Fund Doctor", "$100,000", delegate { AddDoctor(1, 1, 0); }, Resources.Bank.Balance >= 100000),
-                    new ChoiceOption("Research Upgrade (L"+Resources.Level.value+")", "$1,000,000", delegate { UnlockCity(); }, Resources.Bank.Balance >= 1000000)
-                },
-                delegate { Deselect(); }
-            );
-        }
-        else if (location.isStatic == false)
-        {
+            // Shortcut to send
+            if (Input.GetKey(KeyCode.Space) && Resources.Bank.Balance >= 10000 && HasDoctors(1))
+            {
+                mapSingleton.dispatchType = PlaneBehaviour.PlaneType.DOCTOR;
+                return;
+            }
+            
             Choice.OpenChoice(
                 location.city,
                 "Select something to do:",
@@ -79,13 +76,20 @@ public class CityControl : MonoBehaviour
                     //new ChoiceOption("Remove Doctor", "$0", delegate { RemoveDoctor(); })
                     new ChoiceOption("Deploy Doctor", "$10,000", delegate {
                         mapSingleton.dispatchType = PlaneBehaviour.PlaneType.DOCTOR;
-                    }, Resources.Bank.Balance >= 10000 && CurrentSelection.HasDoctors(1)),
+                    }, Resources.Bank.Balance >= 10000 && HasDoctors(1)),
                 },
                 delegate { Deselect(); }
             );
         }
         else
         {
+            // Shortcut to send
+            if (Input.GetKey(KeyCode.Space) && Resources.Bank.Balance >= 10000 && HasDoctors(1))
+            {
+                mapSingleton.dispatchType = PlaneBehaviour.PlaneType.DOCTOR;
+                return;
+            }
+            
             Choice.OpenChoice(
                 location.city,
                 location.doctors + " doctors available",
@@ -95,7 +99,7 @@ public class CityControl : MonoBehaviour
                         mapSingleton.dispatchType = PlaneBehaviour.PlaneType.DOCTOR;
                     }, Resources.Bank.Balance >= 10000 && CurrentSelection.HasDoctors(1)),
                     new ChoiceOption("Fund Doctor", "$100,000", delegate {
-                        AddDoctor(1, 1, 0);
+                        AddDoctor(1, 1, 0, true);
                     }, Resources.Bank.Balance >= 100000),
                     new ChoiceOption("Dispatch Mosquito Netting", "$1,000", delegate {
                         mapSingleton.dispatchType = PlaneBehaviour.PlaneType.AIRDROP_NETTING; 
@@ -135,7 +139,7 @@ public class CityControl : MonoBehaviour
     {
         CurrentSelection = null;
         if (location.isStatic == false) GetComponent<Image>().color = new Color(0, 0.42f, 1f);
-        else if (location.isLocked == true) GetComponent<Image>().color = Color.grey;
+        else if (location.isLocked == true && location.doctors == 0) GetComponent<Image>().color = Color.grey;
         else GetComponent<Image>().color = new Color(1f, 0.5f, 0.25f);
     }
 
@@ -169,10 +173,14 @@ public class CityControl : MonoBehaviour
         Deselect();
     }
 
-    public void AddDoctor(int doctors, float effectiveness, int timeDuration)
+    public void AddDoctor(int doctors, float effectiveness, int timeDuration, bool cost = false)
     {
+        if (cost)
+        {
+            Resources.Bank.Spend(100000);
+        }
+
         location.doctors += doctors;
-        Resources.Bank.Spend(100000);
         UpdateText();
         Deselect();
     }
@@ -183,7 +191,7 @@ public class CityControl : MonoBehaviour
         GetComponent<Image>().color = Color.red;
         Resources.Level.value++;
         Resources.Bank.Spend(900000);
-        AddDoctor(1, 1, 0);
+        AddDoctor(1, 1, 0, false);
         Modal.OpenModal(
             "Congratulations!",
             "You're now Level " + Resources.Level.value + "!\\nDoctors are now more effective in the fight against Malaria.",

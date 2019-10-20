@@ -46,31 +46,36 @@ def random_land_location():
 
 def sample_real_event():
     event = random.sample(mosquito_data, 1)[0]
+    if abs(event['latitude']) > 50:
+        # don't use arctic events
+        return create_fake_event()
+    event['latitude'] = -(event['latitude'] + 90) % 180
+    event['longitude'] = (event['longitude'] + 180) % 360
     event['type'] = "mosquito_report"
     event['debug'] = "genuine_event"
     return event
 
 def create_fake_event():
     event = sample_real_event()
-    lat, longitude = random_land_location()
+    lat, long = random_land_location()
     event['latitude'] = lat
-    event['longitude'] = longitude
+    event['longitude'] = long
     event['type'] = "mosquito_report"
     event['debug'] = "fake_event"
     return event
 
-def new_event(pReal = 0.2):
+def new_event(pReal = 0.3):
     real = random.uniform(0, 1) < pReal
     method = sample_real_event if real else create_fake_event
     return method()
 
-def new_location_nearby(lat, longitude):
+def new_location_nearby(lat, long):
     N = 100
     n = 1
     while True:
         n += 1
         new_lat = (lat + random.uniform(-5, 5)) % 180
-        new_long = (longitude + random.uniform(-10, 10)) % 360
+        new_long = (long + random.uniform(-10, 10)) % 360
         if inland(new_lat, new_long):
             return np.round(np.array([new_lat, new_long]), 5)
         if n > N:
@@ -102,7 +107,6 @@ def event():
             }
         ]
     }
-    print(events)
     return events
 
 def spread(lat, long):

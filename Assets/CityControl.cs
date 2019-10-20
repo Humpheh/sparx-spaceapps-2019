@@ -58,7 +58,7 @@ public class CityControl : MonoBehaviour
         {
             Choice.OpenChoice(
                 location.city,
-                "Select something to do:",
+                "No doctors available",
                 new[]
                 {
                     new ChoiceOption("Fund Doctor (L"+Resources.Level.value+")", "$100,000", delegate { UnlockCity(); }, Resources.Bank.Balance >= 100000)
@@ -85,7 +85,7 @@ public class CityControl : MonoBehaviour
         {
             Choice.OpenChoice(
                 location.city,
-                "Select something to do:",
+                location.doctors +" doctors available",
                 new[]
                 {
                     new ChoiceOption("Deploy Doctor", "$10,000", delegate {

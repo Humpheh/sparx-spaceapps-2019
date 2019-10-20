@@ -13,8 +13,7 @@ namespace mosquitodefenders.Tickers
 
         public TickValue<int> NextValue()
         {
-            //Debug.LogFormat("Update time {0}", currentDate.ToString());
-            //currentDate = currentDate.AddHours(24);
+            if (Resources.Dead.value > 1000000) GameControl.EndGame();
             return new TickValue<int>(Resources.Dead.value);
         }
     }

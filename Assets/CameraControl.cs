@@ -20,7 +20,7 @@ public class CameraControl : MonoBehaviour
     {
         limX = Mathf.Clamp((float)(1.725 * (20 - Camera.main.orthographicSize) + 6.6), 6.6f, 37.5f);
         limY = Mathf.Clamp((float)((20 - Camera.main.orthographicSize) + 0.5), 0.5f, 18.5f);
-}
+    }
 
     // Update is called once per frame
     void Update()

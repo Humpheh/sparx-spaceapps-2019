@@ -19,8 +19,8 @@ public class MozEventReceiver : MonoBehaviour
 
         if (evt.imageURL.Trim() != "")
         {
-            Vector2 position = Utils.LatLongToMapCoords((int)evt.location.latitude, (int)evt.location.longitude);
-            Popup.SpawnPanel(position, evt.imageURL, evt.text);
+            Vector3 position = Utils.ApiEvtToMapCoords(evt.location);
+            Popup.SpawnPanel((Vector2)position, evt.imageURL, evt.text);
         }
     }
 }

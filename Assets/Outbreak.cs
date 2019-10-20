@@ -58,7 +58,7 @@ public class Outbreak : MonoBehaviour
     public bool FindYourLocalDoctor()
     {
         Vector3 worldLocation = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-        return Map.GetSingleton().FindDoctersNearby(worldLocation);
+        return Map.GetSingleton().FindDocterNearby(worldLocation);
 
     }
 }

@@ -53,6 +53,7 @@ public class CityControl : MonoBehaviour
         if (CurrentSelection != null) CurrentSelection.Deselect();
         if (lastSelection != this) Select();
 
+        var mapSingleton = Map.GetSingleton();
         if (location.isLocked == true)
         {
             Choice.OpenChoice(
@@ -73,7 +74,9 @@ public class CityControl : MonoBehaviour
                 new[]
                 {
                     //new ChoiceOption("Remove Doctor", "$0", delegate { RemoveDoctor(); })
-                    new ChoiceOption("Deploy Doctor", "$10,000", delegate { })
+                    new ChoiceOption("Deploy Doctor", "$10,000", delegate {
+                        mapSingleton.dispatchType = PlaneBehaviour.PlaneType.DOCTOR; 
+                    }, Resources.Bank.Balance >= 10000 && CurrentSelection.HasDoctors(1)),
                 },
                 delegate { Deselect(); }
             );
@@ -85,8 +88,18 @@ public class CityControl : MonoBehaviour
                 "Select something to do:",
                 new[]
                 {
-                    new ChoiceOption("Deploy Doctor", "$10,000", delegate { }, Resources.Bank.Balance >= 10000 && CurrentSelection.HasDoctors(1)),
-                    new ChoiceOption("Fund Doctor (L"+Resources.Level.value+")", "$100,000", delegate { AddDoctor(); }, Resources.Bank.Balance >= 100000)
+                    new ChoiceOption("Deploy Doctor", "$10,000", delegate {
+                        mapSingleton.dispatchType = PlaneBehaviour.PlaneType.DOCTOR; 
+                    }, Resources.Bank.Balance >= 10000 && CurrentSelection.HasDoctors(1)),
+                    new ChoiceOption("Fund Doctor (L"+Resources.Level.value+")", "$100,000", delegate {
+                        AddDoctor();
+                    }, Resources.Bank.Balance >= 100000),
+                    new ChoiceOption("Dispatch Mosquito Netting", "$1,000", delegate {
+                        mapSingleton.dispatchType = PlaneBehaviour.PlaneType.AIRDROP; 
+                    }, Resources.Bank.Balance >= 1000),
+                    new ChoiceOption("Dispatch Insecticide", "$2,250", delegate {
+                        mapSingleton.dispatchType = PlaneBehaviour.PlaneType.AIRDROP; 
+                    }, Resources.Bank.Balance >= 2250),
                 },
                 delegate { Deselect(); }
             );

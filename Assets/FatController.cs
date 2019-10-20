@@ -10,13 +10,13 @@ public class FatController : MonoBehaviour
     private CommunityChestCard[] cards = {
         new CommunityChestCard(
             "Congratulations",
-            "You won a research grant. You got £14950 in funding",
+            "You won a research grant. You got £14950 in funding.",
             WinCallback(14950)
         ),
         new CommunityChestCard(
             "Hard Brexit",
-            "Unfortunately there was a hard Brexit, and you lose out on £14500 of funding",
-            LoseCallback(-14000)
+            "Unfortunately there was a hard Brexit, and you lose out on £14500 of funding.",
+            LoseCallback(14000)
         ),
         new CommunityChestCard(
             "You won SpaceApps!",
@@ -25,7 +25,7 @@ public class FatController : MonoBehaviour
         ),
         new CommunityChestCard(
             "Doctors getting ill",
-            "Unfortunately one of your doctors has been affected by a mosquito-borne disease and will be out of action for a while",
+            "Unfortunately one of your doctors has been affected by a mosquito-borne disease and will be out of action for a while.",
             AddRemoveDocCallback(-1)
         ),
         new CommunityChestCard(
@@ -36,12 +36,12 @@ public class FatController : MonoBehaviour
         new CommunityChestCard(
             "Funding cut",
             "Due to new government policies, your funding has been cut by £10000.",
-            LoseCallback(-10000)
+            LoseCallback(10000)
         ),
         new CommunityChestCard(
             "Funding boost",
-            "New government policies on foreign aid mean that your funding is incresed by £50000 a week.",
-            LoseCallback(50000)
+            "New government policies on foreign aid mean that you get an additional £50000 in funding.",
+            WinCallback(50000)
         )
     };
 

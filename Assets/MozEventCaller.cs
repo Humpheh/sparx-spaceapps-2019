@@ -10,7 +10,7 @@ public class MozEventCaller : MonoBehaviour
     public float nextEvent = 10;
     public int maxIncrement = 10;
     System.Random rnd = new System.Random();
-    private readonly string server = System.IO.File.ReadAllText("Assets/ngrok.txt");
+    private readonly string server = System.IO.File.ReadAllText("Assets/ngrok.txt").Trim();
 
     private void OnEvents(List<MozEvent> events)
     {

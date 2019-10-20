@@ -50,7 +50,7 @@ public class Outbreak : MonoBehaviour
 
         eventType = infection_risk ? "outbreak" : "report";
         nearbyDoctorEffect = NearbyDoctorTimeMultipler();
-        change = Time.deltaTime * nearbyDoctorEffect * 40;
+        change = Time.deltaTime * nearbyDoctorEffect;
         alive = Mathf.Clamp(alive + change, -0.2f, GROW_TIME * growSpeed);
 
         var timer = alive / GROW_TIME * growSpeed;
@@ -65,11 +65,9 @@ public class Outbreak : MonoBehaviour
         transform.localScale = new Vector3(scaleRatio, scaleRatio, scaleRatio);
         GetComponent<SpriteRenderer>().color = Color.Lerp(START_COLOR, END_COLOR, timer);
 
-        deadly = GROW_TIME * growSpeed > CAT_1 && infection_risk && change >= 0.3f;
-        
+        deadly = GROW_TIME * growSpeed > CAT_1 && infection_risk && nearbyDoctorEffect >= 0.25f;
 
         if (deadly) toll = (int)Mathf.Round(population * Random.value / 200);
-        //Debug.Log(toll);
         Resources.Dead.value += toll;
     }
 
@@ -79,12 +77,8 @@ public class Outbreak : MonoBehaviour
         Instantiate(checkPrefab, transform.position, Quaternion.identity);
         Destroy(gameObject);
 
-        //this cancels future event spread - dispatch in the actual cure event
-        SendMessage("CuredLocation", new DataPoint
-        {
-            latitude = evt.location.latitude,
-            longitude = evt.location.longitude,
-        });
+        // Stop from spreading
+        Map.GetSingleton().BroadcastCure(evt);
     }
 
     public float NearbyDoctorTimeMultipler()

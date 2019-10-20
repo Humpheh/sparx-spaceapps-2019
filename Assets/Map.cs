@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using mosquitodefenders.Tickers;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -218,7 +219,7 @@ public class Map : MonoBehaviour
             }
         }
 
-        return growSpeed - totalDoctors / 100f - (nearbyDoctors * growSpeed * 0.9f);
+        return growSpeed - totalDoctors / 100f - (nearbyDoctors * growSpeed * 0.5f) - (nearbyDoctors > 0 ? 1 : 0);
     }
 
     public void AddRemoveRandomDoc(int numberToAddOrRemove)
@@ -246,6 +247,16 @@ public class Map : MonoBehaviour
         }
     }
 
+    public void BroadcastCure(MozEvent evt)
+    {
+        //this cancels future event spread - dispatch in the actual cure event
+        BroadcastMessage("CuredLocation", new DataPoint
+        {
+            latitude = evt.location.latitude,
+            longitude = evt.location.longitude,
+        });
+    }
+    
     public void DropDoctor(Vector3 worldLocation, int doctors, float effectiveness = 1, int timeDuration = 0)
     {
         var closeCity = FindCloseCity(worldLocation);
@@ -314,6 +325,7 @@ public class Map : MonoBehaviour
             //Debug.Log(hit.point);
             //Debug.Log(MapPointToGrid(hit.point));
             var location = CityControl.CurrentSelection;
+            Debug.Log(location);
             if (location != null && location.CanRemoveDoctor())
             {
                 Vector3 toLocation = hit.point;
@@ -323,6 +335,7 @@ public class Map : MonoBehaviour
                     toLocation = closeCity.worldLocation;
                 }
 
+                Debug.Log("spawn plane");
                 location.RemoveDoctor();
                 PlaneBehaviour.SpawnPlane(location.worldLocation, toLocation, dispatchType);
                 Resources.Bank.Spend(10000);

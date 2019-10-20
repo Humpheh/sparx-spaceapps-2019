@@ -76,7 +76,6 @@ public class CityControl : MonoBehaviour
                 "Select something to do:",
                 new[]
                 {
-                    //new ChoiceOption("Remove Doctor", "$0", delegate { RemoveDoctor(); })
                     new ChoiceOption("Deploy Doctor", "$10,000", delegate {
                         mapSingleton.dispatchType = PlaneBehaviour.PlaneType.DOCTOR;
                     }, Resources.Bank.Balance >= 10000 && HasDoctors(1)),
@@ -106,6 +105,7 @@ public class CityControl : MonoBehaviour
                 {
                     new ChoiceOption("Deploy Doctor", "$10,000", delegate {
                         mapSingleton.dispatchType = PlaneBehaviour.PlaneType.DOCTOR;
+                        Debug.Log("Deploying from here");
                     }, Resources.Bank.Balance >= 10000 && HasDoctors(1)),
                     new ChoiceOption("Fund Doctor", "$100,000", delegate {
                         AddDoctor(1, 1, 0, true);

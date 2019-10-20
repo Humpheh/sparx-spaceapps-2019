@@ -181,7 +181,7 @@ public class Map : MonoBehaviour
     }
 
     [CanBeNull]
-    public CityControl FindCloseCity(Vector3 worldLocation, float threshold = 1, bool isStatic = false)
+    public CityControl FindCloseCity(Vector3 worldLocation, float threshold = 1)
     {
         foreach (var city in cities)
         {
@@ -190,10 +190,7 @@ public class Map : MonoBehaviour
             var diff = Math.Sqrt((double)num1 * num1 + (double)num2 * num2);
             if (diff < threshold)
             {
-                if (city.location.isStatic == isStatic)
-                {
-                    if (city.location.isLocked == false) return city;
-                }
+                return city;
             }
         }
 
@@ -234,8 +231,7 @@ public class Map : MonoBehaviour
             {
                 while (numberToAddOrRemove > 0)
                 {
-                    Resources.Bank.Add(100000); // Make it free
-                    city.AddDoctor(numberToAddOrRemove, 1, 0);
+                    city.AddDoctor(numberToAddOrRemove, 1, 0, false);
                     numberToAddOrRemove--;
                 }
                 while (numberToAddOrRemove < 0 && city.location.doctors > 0)
@@ -256,7 +252,7 @@ public class Map : MonoBehaviour
         var closeCity = FindCloseCity(worldLocation);
         if (closeCity != null)
         {
-            closeCity.AddDoctor(doctors, effectiveness, timeDuration);
+            closeCity.AddDoctor(doctors, effectiveness, timeDuration, false);
         }
         else
         {
@@ -294,7 +290,7 @@ public class Map : MonoBehaviour
     void Update()
     {
         if (IsPaused()) return;
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
         {
             CastRay();
         }

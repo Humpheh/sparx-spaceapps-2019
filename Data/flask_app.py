@@ -62,7 +62,7 @@ def new_event():
     return method()
 
 def new_location_nearby(lat, long):
-    N = 10
+    N = 100
     n = 1
     while True:
         n += 1
@@ -75,11 +75,11 @@ def new_location_nearby(lat, long):
 
 def new_timer(lifestage):
     if lifestage == 'adults':
-        return 15
+        return random.uniform(10, 20)
     elif lifestage == 'pupae':
-        return 30
+        return random.uniform(20, 40)
     else:
-        return 60
+        return random.uniform(40, 60)
 
 def event():
     event = new_event()

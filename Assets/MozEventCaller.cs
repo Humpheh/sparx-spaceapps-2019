@@ -18,13 +18,6 @@ public class MozEventCaller : MonoBehaviour
         {
             SendMessage("MozEvent", @event);
             StartCoroutine(DoSpreadEvent(OnEvents, @event.timer, @event.location.latitude, @event.location.longitude));
-
-            //this cancels future event spread - dispatch in the actual cure event
-            //SendMessage("CuredLocation", new DataPoint
-            //{
-            //    latitude = @event.location.latitude,
-            //    longitude = @event.location.longitude,
-            //});
         }
     }
 

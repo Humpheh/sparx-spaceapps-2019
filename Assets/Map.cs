@@ -230,6 +230,7 @@ public class Map : MonoBehaviour
                 while (numberToAddOrRemove > 0)
                 {
                     city.AddDoctor();
+                    Resources.Bank.Add(100000); // Make it free
                     numberToAddOrRemove--;
                 }
                 while (numberToAddOrRemove < 0 && city.location.doctors > 0)

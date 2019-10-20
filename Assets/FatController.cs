@@ -15,13 +15,13 @@ public class FatController : MonoBehaviour
         ),
         new CommunityChestCard(
             "Hard Brexit",
-            "Unfortunately there was a hard Brexit, and your funding has been cut by £8000",
-            LoseCallback(35000)
+            "Unfortunately there was a hard Brexit, and you lose out on £14500 of funding",
+            LoseCallback(-14000)
         ),
         new CommunityChestCard(
             "You won SpaceApps!",
-            "Congratulations, you won an award in the NASA SpaceApps hackathon and get some prize money",
-            WinCallback(8450000)
+            "Congratulations, you won an award in the NASA SpaceApps hackathon and get some prize money!",
+            WinCallback(8400)
         ),
         new CommunityChestCard(
             "Doctors getting ill",
@@ -31,7 +31,17 @@ public class FatController : MonoBehaviour
         new CommunityChestCard(
             "Inspirational",
             "Your efforts have inspired other doctors to join your cause!",
-            AddRemoveDocCallback(3)
+            AddRemoveDocCallback(2)
+        ),
+        new CommunityChestCard(
+            "Funding cut",
+            "Due to new government policies, your funding has been cut by £10000.",
+            LoseCallback(-10000)
+        ),
+        new CommunityChestCard(
+            "Funding boost",
+            "New government policies on foreign aid mean that your funding is incresed by £50000 a week.",
+            LoseCallback(50000)
         )
     };
 

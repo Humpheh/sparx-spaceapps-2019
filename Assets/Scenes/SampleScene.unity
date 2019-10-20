@@ -663,7 +663,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b6d0b77eeeff4e2c898aa7c0e159307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eventPrefab: {fileID: 8703937251319470419, guid: 942ee3e2fade04e46b5ebf964c11f1e1,
+  eventPrefab: {fileID: 2395466428171680225, guid: 1e3f9bf0355774edf92b864698882e55,
     type: 3}
 --- !u!114 &1853712248
 MonoBehaviour:

@@ -9,8 +9,8 @@ using System.Collections.Generic;
 
 static class DefaultResources
 {
-    readonly public static double DefaultMoney = 10000000;
-    readonly public static double MoneyIncrement = 1000;
+    readonly public static double DefaultMoney = 45000;
+    readonly public static double MoneyIncrement = 1500;
     readonly public static int StartLevel = 1;
     readonly public static int StartDead = 0;
 }
@@ -47,15 +47,13 @@ public class ResourceManager : MonoBehaviour
         var MoneyTicker = new BroadcastingResourceUpdater<double>(
             "GlobalMoney",
             new MoneyTicker(
-                new MoneyTickCountIncrementer(7, DefaultResources.MoneyIncrement)
+                new MoneyTickCountIncrementer(1, DefaultResources.MoneyIncrement)
             )
         );
         MoneyTicker.RegisterReceiver(Resources.Bank.Add);
 
         updaters = new ResourceUpdater[]
         {
-            new BroadcastingResourceUpdater<DateTime>("GlobalTimeStep", new TimeTicker()),
-            new BroadcastingResourceUpdater<int>("GlobalDeathToll", new DeathTicker()),
             new BroadcastingResourceUpdater<bool>("CommunityChest", new CommunityChest()),
             MoneyTicker
         };

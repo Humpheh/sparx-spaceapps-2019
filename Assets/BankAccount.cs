@@ -54,6 +54,11 @@ public class Bank
         {
             throw new Exception("Hey use Add if you want to print your own $£€ you QE stalwart!");
         }
+
+        if (this.Balance - amount < 0)
+        {
+            throw new Exception("Uh oh doesn't look like you can afford it.");
+        }
         this.Balance -= amount;
     }
 

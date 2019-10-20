@@ -35,9 +35,9 @@ public class UIMoneyValueControl : MonoBehaviour
             printBalance = balance / 1000000;
             suffix = "m";
         }
-        if (balance > 10000000)
+        if (balance > 1000000000)
         {
-            printBalance = balance / 10000000;
+            printBalance = balance / 1000000000;
             suffix = "Bn";
         }
 

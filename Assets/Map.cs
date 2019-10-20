@@ -204,10 +204,10 @@ public class Map : MonoBehaviour
         foreach (var city in cities)
         {
             var distance = Vector2.Distance(
-                new Vector2(loc.x, loc.y), 
+                new Vector2(loc.x, loc.y),
                 new Vector2(city.worldLocation.x, city.worldLocation.y)
             );
-            
+
             totalDoctors += city.location.doctors;
             if (distance < 5)
             {
@@ -228,6 +228,7 @@ public class Map : MonoBehaviour
                 while (numberToAddOrRemove > 0)
                 {
                     city.AddDoctor(numberToAddOrRemove, 1, 0);
+                    // Resources.Bank.Add(100000); // Make it free
                     numberToAddOrRemove--;
                 }
                 while (numberToAddOrRemove < 0 && city.location.doctors > 0)

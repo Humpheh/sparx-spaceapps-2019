@@ -41,6 +41,6 @@ public class UIMoneyValueControl : MonoBehaviour
             suffix = "Bn";
         }
 
-        GetComponent<Text>().text = $"{prefix} ${printBalance}{suffix}";
+        GetComponent<Text>().text = $"{prefix} £{printBalance}{suffix}";
     }
 }

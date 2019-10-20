@@ -6,7 +6,7 @@ namespace mosquitodefenders.Tickers
     {
         public TickValue<bool> NextValue()
         {
-            if (Random.value < 0.01)
+            if (Random.value < 0.05)
             {
                 return new TickValue<bool>(true);
             }

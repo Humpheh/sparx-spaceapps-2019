@@ -7,7 +7,7 @@ public class Outbreak : MonoBehaviour
 {
     private Color START_COLOR = new Color(1, 0.75f, 0, 1);
     private Color END_COLOR = new Color(1, 0, 0.05f, 0.3f);
-    
+
     const float MAX_SIZE = 2f;
     const float CAT_1 = 40f;
     const float CAT_2 = 20f;
@@ -22,8 +22,8 @@ public class Outbreak : MonoBehaviour
     public bool deadly;
     public float population;
     public int toll;
-    public CityControl nearbyDoctor;
-    
+    public bool nearbyDoctor;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -55,12 +55,10 @@ public class Outbreak : MonoBehaviour
         Resources.Dead.value += toll;
     }
 
-    public CityControl FindYourLocalDoctor()
+    public bool FindYourLocalDoctor()
     {
         Vector3 worldLocation = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-        return Map.GetSingleton().FindCloseCity(worldLocation, 1, true);
-        
+        return Map.GetSingleton().FindDocterNearby(worldLocation);
+
     }
 }
-
-

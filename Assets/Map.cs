@@ -259,6 +259,16 @@ public class Map : MonoBehaviour
         {
             CastRay();
         }
+
+        if (Input.GetKeyDown(KeyCode.T)) StartCoroutine(TestCityChcking());
+    }
+
+    IEnumerator TestCityChcking()
+    {
+        var iUnityEnumerableEntityGameObject = Instantiate(UnityEngine.Resources.Load("Egg") as GameObject);
+        iUnityEnumerableEntityGameObject.transform.SetParent(canvas.transform, false);
+        yield return new WaitForSeconds(5);
+        Destroy(iUnityEnumerableEntityGameObject);
     }
 
     void CastRay()

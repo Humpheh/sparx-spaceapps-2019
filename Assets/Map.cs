@@ -53,7 +53,7 @@ public class Map : MonoBehaviour
 
         Modal.OpenModal(
             "You are the Mosquito Defender!",
-            "You're in charge of dispatching doctors as a first line of defence against mosquito outbreaks.\\n " + 
+            "You're in charge of dispatching doctors as a first line of defence against mosquito outbreaks.\\n " +
             "Use the data sent in by the public to help inform your decisions.\\n\\n<b>Good luck!</b>",
             Started
         );
@@ -209,10 +209,10 @@ public class Map : MonoBehaviour
         foreach (var city in cities)
         {
             var distance = Vector2.Distance(
-                new Vector2(loc.x, loc.y), 
+                new Vector2(loc.x, loc.y),
                 new Vector2(city.worldLocation.x, city.worldLocation.y)
             );
-            
+
             totalDoctors += city.location.doctors;
             if (distance < 4)
             {
@@ -232,8 +232,8 @@ public class Map : MonoBehaviour
             {
                 while (numberToAddOrRemove > 0)
                 {
-                    city.AddDoctor();
                     Resources.Bank.Add(100000); // Make it free
+                    city.AddDoctor();
                     numberToAddOrRemove--;
                 }
                 while (numberToAddOrRemove < 0 && city.location.doctors > 0)

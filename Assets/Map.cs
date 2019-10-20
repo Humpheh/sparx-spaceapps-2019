@@ -219,6 +219,8 @@ public class Map : MonoBehaviour
                 nearbyDoctors += city.location.doctors;
             }
         }
+        Debug.Log(nearbyDoctors);
+        Debug.Log(growSpeed - totalDoctors / 100f - (nearbyDoctors * growSpeed * 0.9f));
 
         return growSpeed - totalDoctors / 100f - (nearbyDoctors * growSpeed * 0.9f);
     }

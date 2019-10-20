@@ -28,6 +28,7 @@ public class Outbreak : MonoBehaviour
     public bool nearbyDoctor;
     public float lethality;
     public float baseLethality;
+    public float change;
 
     public string eventType;
 
@@ -48,7 +49,7 @@ public class Outbreak : MonoBehaviour
     {
         if (Map.GetSingleton().IsPaused()) return;
 
-        var change = Time.deltaTime * NearbyDoctorTimeMultipler();
+        change = Time.deltaTime * NearbyDoctorTimeMultipler() * 40;
         alive = Mathf.Clamp(alive + change, -0.2f, GROW_TIME * growSpeed);
 
         var timer = alive / GROW_TIME * growSpeed;
@@ -63,16 +64,10 @@ public class Outbreak : MonoBehaviour
         transform.localScale = new Vector3(scaleRatio, scaleRatio, scaleRatio);
         GetComponent<SpriteRenderer>().color = Color.Lerp(START_COLOR, END_COLOR, timer);
 
-        nearbyDoctorEffect = NearbyDoctorTimeMultipler();
-
-        //nearbyDoctorEffect <= 0.1
-
-        //lethality = baseLethality - nearbyDoctorEffect;
-        //if (deadly) toll = (int)Mathf.Round(population * lethality);
-        //Resources.Dead.value += toll;
-
         deadly = GROW_TIME * growSpeed > CAT_1 && malariaRisk && change >= 0.3f;
-        if (deadly) toll = (int)Mathf.Round(population * Random.value);
+        
+        if (deadly) toll = (int)Mathf.Round(population * Random.value / 200);
+        Debug.Log(toll);
         Resources.Dead.value += toll;
     }
 

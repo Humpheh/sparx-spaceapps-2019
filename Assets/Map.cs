@@ -299,7 +299,7 @@ public class Map : MonoBehaviour
 
                 location.RemoveDoctor();
                 PlaneBehaviour.SpawnPlane(location.worldLocation, toLocation, dispatchType);
-                Resources.Bank.Spend(30000);
+                Resources.Bank.Spend(10000);
                 location.TryRemoveCity();
                 location.Deselect();
                 StartCoroutine(ClearPlaneType());

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class CityControl : MonoBehaviour
 {
     private static float ZOOM_CUTOFF = 10;
-    
+
     public static CityControl CurrentSelection;
 
     public Location location;
@@ -14,7 +14,7 @@ public class CityControl : MonoBehaviour
     public Vector3 worldLocation;
 
     private bool fullText = false;
-    
+
     // Update is called once per frame
     void Update()
     {
@@ -29,7 +29,7 @@ public class CityControl : MonoBehaviour
             fullText = false;
             UpdateText();
         }
-        
+
         if (Map.GetSingleton().IsPaused()) return;
 
         SetPosition();
@@ -42,7 +42,7 @@ public class CityControl : MonoBehaviour
         uiElement.anchoredPosition = screenPosition;
         GetComponent<RectTransform>().anchoredPosition = screenPosition;
     }
-    
+
     public void HandleClick()
     {
         if (Map.GetSingleton().dispatchType != PlaneBehaviour.PlaneType.NONE)
@@ -77,7 +77,7 @@ public class CityControl : MonoBehaviour
                 {
                     //new ChoiceOption("Remove Doctor", "$0", delegate { RemoveDoctor(); })
                     new ChoiceOption("Deploy Doctor", "$10,000", delegate {
-                        mapSingleton.dispatchType = PlaneBehaviour.PlaneType.DOCTOR; 
+                        mapSingleton.dispatchType = PlaneBehaviour.PlaneType.DOCTOR;
                     }, Resources.Bank.Balance >= 10000 && CurrentSelection.HasDoctors(1)),
                 },
                 delegate { Deselect(); }
@@ -87,20 +87,20 @@ public class CityControl : MonoBehaviour
         {
             Choice.OpenChoice(
                 location.city,
-                location.doctors +" doctors available",
+                location.doctors + " doctors available",
                 new[]
                 {
                     new ChoiceOption("Deploy Doctor", "$10,000", delegate {
-                        mapSingleton.dispatchType = PlaneBehaviour.PlaneType.DOCTOR; 
+                        mapSingleton.dispatchType = PlaneBehaviour.PlaneType.DOCTOR;
                     }, Resources.Bank.Balance >= 10000 && CurrentSelection.HasDoctors(1)),
                     new ChoiceOption("Fund Doctor (L"+Resources.Level.value+")", "$100,000", delegate {
                         AddDoctor();
                     }, Resources.Bank.Balance >= 100000),
                     new ChoiceOption("Dispatch Mosquito Netting", "$1,000", delegate {
-                        mapSingleton.dispatchType = PlaneBehaviour.PlaneType.AIRDROP; 
+                        mapSingleton.dispatchType = PlaneBehaviour.PlaneType.AIRDROP;
                     }, Resources.Bank.Balance >= 1000),
                     new ChoiceOption("Dispatch Insecticide", "$2,250", delegate {
-                        mapSingleton.dispatchType = PlaneBehaviour.PlaneType.AIRDROP; 
+                        mapSingleton.dispatchType = PlaneBehaviour.PlaneType.AIRDROP;
                     }, Resources.Bank.Balance >= 2250),
                 },
                 delegate { Deselect(); }
@@ -143,7 +143,7 @@ public class CityControl : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    
+
     public bool CanRemoveDoctor()
     {
         return location.doctors > 0;
@@ -153,7 +153,7 @@ public class CityControl : MonoBehaviour
     {
         return location.doctors >= number;
     }
-    
+
     public void RemoveDoctor()
     {
         if (location.doctors > 0)
@@ -181,7 +181,7 @@ public class CityControl : MonoBehaviour
         AddDoctor();
         Modal.OpenModal(
             "Congratulations!",
-            "You're now Level "+Resources.Level.value+"!\\nDoctors are now more effective in the fight against Malaria.",
+            "You're now Level " + Resources.Level.value + "!\\nDoctors are now more effective in the fight against Malaria.",
             delegate { });
     }
 }

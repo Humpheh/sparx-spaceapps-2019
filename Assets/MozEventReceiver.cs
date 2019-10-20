@@ -9,7 +9,7 @@ public class MozEventReceiver : MonoBehaviour
     public void MozEvent(MozEvent evt)
     {
         Debug.Log(evt);
-        Vector3 pos = Utils.LatLongToMapCoords(-(int)evt.location.latitude, (int)evt.location.longitude);
+        Vector3 pos = Utils.ApiEvtToMapCoords(evt.location);
         GameObject newObject = Instantiate(eventPrefab, pos, Quaternion.identity);
         newObject.transform.parent = transform;
     }

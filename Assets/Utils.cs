@@ -22,4 +22,13 @@ public class Utils
     {
         return new Vector3(Map.GetSingleton().GridToMapX(longitude + 180), Map.GetSingleton().GridToMapY(lat + 90), -1);
     }
+
+    public static Vector3 ApiEvtToMapCoords(DataPoint location)
+    {
+        return new Vector3(
+            Map.GetSingleton().GridToMapX((int)location.longitude),
+            Map.GetSingleton().GridToMapY(180 - (int)location.latitude),
+            -1
+        );
+    }
 }

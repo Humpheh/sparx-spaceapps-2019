@@ -13,7 +13,8 @@ public class MozEventReceiver : MonoBehaviour
         GameObject newObject = Instantiate(eventPrefab, pos, Quaternion.identity);
         newObject.transform.parent = transform;
         newObject.GetComponent<Outbreak>().eventType = evt.eventType;
-        Debug.Log(evt.eventType);
+        newObject.GetComponent<Outbreak>().evt = evt;
+        // Debug.Log(evt.eventType);
 
         Debug.Log(evt.imageURL);
         // Debug.Log(evt.location.latitude);

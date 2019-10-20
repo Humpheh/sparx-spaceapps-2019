@@ -46,6 +46,8 @@ public class Location
     public int doctors;
     public bool isLocked;
     public bool isSelected;
+    public float effectiveness;
+    public int timeDuration;
 
     public Location(string city, double lon, double lat)
     {
@@ -55,14 +57,18 @@ public class Location
         isStatic = true;
         doctors = city == "Exeter" ? 10 : 0;
         isLocked = city != "Exeter";
+        effectiveness = 0;
+        timeDuration = 0;
     }
 
-    public Location(Vector2 position, int doctors)
+    public Location(Vector2 position, int doctors, float effectiveness, int timeDuration)
     {
         city = "Doctor";
         this.position = position;
         this.doctors = doctors;
-        this.isSelected = false;
+        isSelected = false;
+        this.effectiveness = effectiveness;
+        this.timeDuration = timeDuration;
     }
 
     public void UnlockCity()

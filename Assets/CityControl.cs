@@ -63,7 +63,8 @@ public class CityControl : MonoBehaviour
                 "No doctors available",
                 new[]
                 {
-                    new ChoiceOption("Fund Doctor (L"+Resources.Level.value+")", "$100,000", delegate { UnlockCity(); }, Resources.Bank.Balance >= 100000)
+                    new ChoiceOption("Fund Doctor", "$100,000", delegate { AddDoctor(1, 1, 0); }, Resources.Bank.Balance >= 100000),
+                    new ChoiceOption("Research Upgrade (L"+Resources.Level.value+")", "$1,000,000", delegate { UnlockCity(); }, Resources.Bank.Balance >= 1000000)
                 },
                 delegate { Deselect(); }
             );
@@ -93,15 +94,18 @@ public class CityControl : MonoBehaviour
                     new ChoiceOption("Deploy Doctor", "$10,000", delegate {
                         mapSingleton.dispatchType = PlaneBehaviour.PlaneType.DOCTOR;
                     }, Resources.Bank.Balance >= 10000 && CurrentSelection.HasDoctors(1)),
-                    new ChoiceOption("Fund Doctor (L"+Resources.Level.value+")", "$100,000", delegate {
-                        AddDoctor();
+                    new ChoiceOption("Fund Doctor", "$100,000", delegate {
+                        AddDoctor(1, 1, 0);
                     }, Resources.Bank.Balance >= 100000),
                     new ChoiceOption("Dispatch Mosquito Netting", "$1,000", delegate {
-                        mapSingleton.dispatchType = PlaneBehaviour.PlaneType.AIRDROP;
+                        mapSingleton.dispatchType = PlaneBehaviour.PlaneType.AIRDROP_NETTING; 
                     }, Resources.Bank.Balance >= 1000),
                     new ChoiceOption("Dispatch Insecticide", "$2,250", delegate {
-                        mapSingleton.dispatchType = PlaneBehaviour.PlaneType.AIRDROP;
+                        mapSingleton.dispatchType = PlaneBehaviour.PlaneType.AIRDROP_INSECTICIDE; 
                     }, Resources.Bank.Balance >= 2250),
+                    new ChoiceOption("Research Upgrade (L"+Resources.Level.value+")",
+                        "$1,000,000", delegate { UnlockCity(); },
+                        Resources.Bank.Balance >= 1000000)
                 },
                 delegate { Deselect(); }
             );
@@ -165,9 +169,9 @@ public class CityControl : MonoBehaviour
         Deselect();
     }
 
-    public void AddDoctor()
+    public void AddDoctor(int doctors, float effectiveness, int timeDuration)
     {
-        location.doctors++;
+        location.doctors += doctors;
         Resources.Bank.Spend(100000);
         UpdateText();
         Deselect();
@@ -178,7 +182,8 @@ public class CityControl : MonoBehaviour
         location.isLocked = false;
         GetComponent<Image>().color = Color.red;
         Resources.Level.value++;
-        AddDoctor();
+        Resources.Bank.Spend(900000);
+        AddDoctor(1, 1, 0);
         Modal.OpenModal(
             "Congratulations!",
             "You're now Level " + Resources.Level.value + "!\\nDoctors are now more effective in the fight against Malaria.",

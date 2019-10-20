@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using mosquitodefenders.Tickers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +16,7 @@ public class Outbreak : MonoBehaviour
 
     private const float GROW_TIME = 60; // seconds
 
+    public MozEvent evt;
     public float growSpeed = 0.1f;
     public float alive = 0;
 
@@ -54,9 +56,7 @@ public class Outbreak : MonoBehaviour
 
         if (alive < -0.01f)
         {
-            GameObject checkPrefab = UnityEngine.Resources.Load("CheckIcon") as GameObject;
-            Instantiate(checkPrefab, transform.position, Quaternion.identity);
-            Destroy(gameObject);
+            Cure();
             return;
         }
         
@@ -76,6 +76,20 @@ public class Outbreak : MonoBehaviour
         Resources.Dead.value += toll;
     }
 
+    private void Cure()
+    {
+        GameObject checkPrefab = UnityEngine.Resources.Load("CheckIcon") as GameObject;
+        Instantiate(checkPrefab, transform.position, Quaternion.identity);
+        Destroy(gameObject);
+            
+        //this cancels future event spread - dispatch in the actual cure event
+        SendMessage("CuredLocation", new DataPoint
+        {
+            latitude = evt.location.latitude,
+            longitude = evt.location.longitude,
+        });
+    }
+    
     public float NearbyDoctorTimeMultipler()
     {
         return Map.GetSingleton().NearbyDoctorTimeMultipler(transform.position);

@@ -6,12 +6,13 @@ public class PlaneBehaviour : MonoBehaviour
 {
     public enum PlaneType
     {
+        NONE,
         DOCTOR,
         AIRDROP,
         EMPTY,
     };
 
-    public PlaneType type;
+    public PlaneType type = PlaneType.NONE;
     public float maxScale = 0.5f;
     public float maxSpeed = 2f;
     public Vector2 startPosition;
@@ -74,7 +75,7 @@ public class PlaneBehaviour : MonoBehaviour
         GameObject line = new GameObject("PlaneLine");
         var lineRender = line.AddComponent<LineRenderer>();
         lineRender.material = lineMaterial;
-        lineRender.material.color = new Color(0.5f, 0.5f, 0.5f);
+        lineRender.material.color = new Color(1f, 0.5f, 0.25f);
         lineRender.startWidth = 0.05f;
         lineRender.endWidth = 0.05f;
         lineRender.numCornerVertices = 4;

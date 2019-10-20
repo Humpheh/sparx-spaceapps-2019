@@ -65,7 +65,7 @@ public class Map : MonoBehaviour
 
     void Started(string option)
     {
-        Popup.SpawnPanel(Vector3.zero, "https://data.globe.gov/system/photos/2019/05/23/1079041/original.jpg");
+//        Popup.SpawnPanel(Vector3.zero, "https://data.globe.gov/system/photos/2019/05/23/1079041/original.jpg");
     }
 
     public void PauseMap()
@@ -284,8 +284,15 @@ public class Map : MonoBehaviour
                 Resources.Bank.Spend(30000);
                 location.TryRemoveCity();
                 location.Deselect();
+                StartCoroutine(ClearPlaneType());
             }
         }
+    }
+
+    IEnumerator ClearPlaneType()
+    {
+        yield return new WaitForSeconds(0.5f);
+        dispatchType = PlaneBehaviour.PlaneType.NONE;
     }
 }
 

@@ -22,6 +22,16 @@ public class FatController : MonoBehaviour
             "You won SpaceApps!",
             "Congratulations, you won an award in the NASA SpaceApps hackathon and get some prize money",
             WinCallback(8450000)
+        ),
+        new CommunityChestCard(
+            "Doctors getting ill",
+            "Unfortunately one of your doctors has been affected by a mosquito-borne disease and will be out of action for a while",
+            AddRemoveDocCallback(-1)
+        ),
+        new CommunityChestCard(
+            "Inspirational",
+            "Your efforts have inspired other doctors to join your cause!",
+            AddRemoveDocCallback(3)
         )
     };
 
@@ -65,6 +75,14 @@ public class FatController : MonoBehaviour
         return delegate (string option)
         {
             Resources.Bank.Spend(money);
+        };
+    }
+
+    static Modal.ModalCallback AddRemoveDocCallback(int number)
+    {
+        return delegate (string option)
+        {
+            Map.GetSingleton().AddRemoveRandomDoc(number);
         };
     }
 }

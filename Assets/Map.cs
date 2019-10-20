@@ -220,6 +220,31 @@ public class Map : MonoBehaviour
         }
     }
 
+    public void AddRemoveRandomDoc(int numberToAddOrRemove)
+    {
+        foreach (var city in cities)
+        {
+            // Only affect cities that aren't locked
+            if (!city.location.isLocked && numberToAddOrRemove != 0)
+            {
+                while (numberToAddOrRemove > 0)
+                {
+                    city.AddDoctor();
+                    numberToAddOrRemove--;
+                }
+                while (numberToAddOrRemove < 0 && city.location.doctors > 0)
+                {
+                    city.RemoveDoctor();
+                    numberToAddOrRemove++;
+                }
+                if (numberToAddOrRemove == 0)
+                {
+                    return;
+                }
+            }
+        }
+    }
+
     public void DropDoctor(Vector3 worldLocation)
     {
         var closeCity = FindCloseCity(worldLocation);

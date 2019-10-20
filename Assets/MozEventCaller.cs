@@ -9,7 +9,7 @@ public class MozEventCaller : MonoBehaviour
 {
     public float nextEvent = 10;
     public int maxIncrement = 10;
-    public static string server = "http://localhost:5002";
+    public static string server = "https://f24ea93f.ngrok.io";
     System.Random rnd = new System.Random();
 
     private void OnEvents(List<MozEvent> events)

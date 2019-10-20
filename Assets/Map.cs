@@ -195,29 +195,27 @@ public class Map : MonoBehaviour
         return null;
     }
 
-    public float NearbyDoctorTimerDecrease(Vector3 loc, float threshold = 10)
+    public float NearbyDoctorTimeMultipler(Vector3 loc, float threshold = 10)
     {
-        float totalDist = 0f;
-        int numDoctors = 0;
+        const float growSpeed = 1f;
 
+        float totalDoctors = 0;
+        float nearbyDoctors = 0;
         foreach (var city in cities)
         {
-            if (city.location.doctors > 0)
+            var distance = Vector2.Distance(
+                new Vector2(loc.x, loc.y), 
+                new Vector2(city.worldLocation.x, city.worldLocation.y)
+            );
+            
+            totalDoctors += city.location.doctors;
+            if (distance < 5)
             {
-                numDoctors += city.location.doctors;
-
-                var cityLoc = Utils.LatLongToMapCoords((int)city.location.latlon.x, (int)city.location.latlon.y);
-                totalDist += Vector3.Distance(cityLoc, loc);
+                nearbyDoctors += city.location.doctors;
             }
         }
-        if (numDoctors > 0)
-        {
-            return numDoctors / totalDist;
-        }
-        else
-        {
-            return 0;
-        }
+
+        return growSpeed - totalDoctors / 100f - (nearbyDoctors * growSpeed * 0.9f);
     }
 
     public void AddRemoveRandomDoc(int numberToAddOrRemove)

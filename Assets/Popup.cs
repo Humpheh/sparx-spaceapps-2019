@@ -55,6 +55,7 @@ public class Popup : MonoBehaviour
 
             panelChild.SetActive(true);
             yield return new WaitForSeconds(10);
+            Destroy(gameObject);
         }
     }
 

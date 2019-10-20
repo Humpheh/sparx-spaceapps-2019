@@ -648,8 +648,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc4d2e2211d314dfb9392e74d239419d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextEvent: 1
-  maxIncrement: 2
+  nextEvent: 10
+  maxIncrement: 10
 --- !u!114 &1853712247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -677,7 +677,6 @@ GameObject:
   - component: {fileID: 2012416258}
   - component: {fileID: 2012416259}
   - component: {fileID: 2012416261}
-  - component: {fileID: 2012416260}
   m_Layer: 0
   m_Name: EarthMap
   m_TagString: Untagged
@@ -796,25 +795,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 81.92, y: 40.96}
   m_EdgeRadius: 0
---- !u!114 &2012416260
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2012416255}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ee54f853281044cdb97b6a2abd8f80c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  growSpeed: 0.1
-  alive: 0
-  malariaRisk: 0
-  deadly: 0
-  population: 0
-  toll: 0
-  nearbyDoctorEffect: 0
 --- !u!114 &2012416261
 MonoBehaviour:
   m_ObjectHideFlags: 0

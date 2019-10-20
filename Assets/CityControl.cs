@@ -12,24 +12,22 @@ public class CityControl : MonoBehaviour
     public Location location;
     public GameObject text;
     public Vector3 worldLocation;
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
+    private bool fullText = false;
+    
     // Update is called once per frame
     void Update()
     {
         // Update if the text should be shown
-        if (Camera.main.orthographicSize < ZOOM_CUTOFF && !text.activeSelf)
+        if (Camera.main.orthographicSize < ZOOM_CUTOFF && !fullText)
         {
-            text.SetActive(true);
+            fullText = true;
+            UpdateText();
         }
-        else if (Camera.main.orthographicSize >= ZOOM_CUTOFF && text.activeSelf)
+        else if (Camera.main.orthographicSize >= ZOOM_CUTOFF && fullText)
         {
-            text.SetActive(false);
+            fullText = false;
+            UpdateText();
         }
         
         if (Map.GetSingleton().IsPaused()) return;
@@ -47,6 +45,10 @@ public class CityControl : MonoBehaviour
     
     public void HandleClick()
     {
+        if (Map.GetSingleton().dispatchType != PlaneBehaviour.PlaneType.NONE)
+        {
+            return;
+        }
         //Debug.LogFormat("clicked city {0}", location.city);
 
         var lastSelection = CurrentSelection;
@@ -58,7 +60,7 @@ public class CityControl : MonoBehaviour
         {
             Choice.OpenChoice(
                 location.city,
-                "Select something to do:",
+                "No doctors available",
                 new[]
                 {
                     new ChoiceOption("Fund Doctor (L"+Resources.Level.value+")", "$100,000", delegate { UnlockCity(); }, Resources.Bank.Balance >= 100000)
@@ -85,7 +87,7 @@ public class CityControl : MonoBehaviour
         {
             Choice.OpenChoice(
                 location.city,
-                "Select something to do:",
+                location.doctors +" doctors available",
                 new[]
                 {
                     new ChoiceOption("Deploy Doctor", "$10,000", delegate {
@@ -115,7 +117,14 @@ public class CityControl : MonoBehaviour
 
     public void UpdateText()
     {
-        text.GetComponent<Text>().text = location.city + " x" + location.doctors;
+        if (fullText)
+        {
+            text.GetComponent<Text>().text = location.city + " x" + location.doctors;
+        }
+        else
+        {
+            text.GetComponent<Text>().text = location.doctors.ToString();
+        }
     }
 
     public void Deselect()

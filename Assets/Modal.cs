@@ -28,7 +28,7 @@ public class Modal : MonoBehaviour
         callback?.Invoke("Continue");
     }
 
-    public static void OpenModal(string title, string text, ModalCallback callback)
+    public static void OpenModal(string title, string text, ModalCallback callback = null)
     {
         GameObject modalPrefab = UnityEngine.Resources.Load("ModalPrefab") as GameObject;
         

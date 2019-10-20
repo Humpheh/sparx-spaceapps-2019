@@ -5,6 +5,7 @@ using System.Linq;
 using mosquitodefenders.Tickers;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 static class DefaultResources
 {
@@ -33,6 +34,7 @@ static class Resources
     public static ResourceTracker<DateTime> Time { get; } = new ResourceTracker<DateTime>();
     public static ResourceTracker<int> Level { get; } = new ResourceTracker<int>();
     public static ResourceTracker<int> Dead { get; } = new ResourceTracker<int>();
+    public static List<DataPoint> DontSpread { get; } = new List<DataPoint>();
 }
 
 public class ResourceManager : MonoBehaviour
@@ -62,6 +64,11 @@ public class ResourceManager : MonoBehaviour
     {
         Resources.Level.value = DefaultResources.StartLevel;
         Resources.Dead.value = DefaultResources.StartDead;
+    }
+
+    public void CuredLocation(DataPoint location)
+    {
+        Resources.DontSpread.Add(location);
     }
 
     // Update is called once per frame

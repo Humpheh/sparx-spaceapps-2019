@@ -22,7 +22,7 @@ public class Outbreak : MonoBehaviour
     public bool deadly;
     public float population;
     public int toll;
-    public bool nearbyDoctor;
+    public float nearbyDoctorEffect;
 
     // Start is called before the first frame update
     void Awake()
@@ -32,7 +32,7 @@ public class Outbreak : MonoBehaviour
         malariaRisk = Random.value > 0.5;
         deadly = false;
         population = Random.value * 10000f;
-        nearbyDoctor = FindYourLocalDoctor();
+        nearbyDoctorEffect = FindYourLocalDoctor();
     }
 
     // Update is called once per frame
@@ -40,25 +40,25 @@ public class Outbreak : MonoBehaviour
     {
         alive += Time.deltaTime;
 
+        nearbyDoctorEffect = FindYourLocalDoctor();
+
         if (alive < GROW_TIME * growSpeed)
         {
-            var timer = alive / GROW_TIME * growSpeed;
+            var timer = alive / GROW_TIME * growSpeed * -nearbyDoctorEffect;
             var scaleRatio = timer * MAX_SIZE;
             transform.localScale = new Vector3(scaleRatio, scaleRatio, scaleRatio);
             GetComponent<SpriteRenderer>().color = Color.Lerp(START_COLOR, END_COLOR, timer);
         }
 
-        nearbyDoctor = FindYourLocalDoctor();
-
-        deadly = GROW_TIME * growSpeed > CAT_1 && malariaRisk && nearbyDoctor == false;
+        deadly = GROW_TIME * growSpeed > CAT_1 && malariaRisk && nearbyDoctorEffect <= 0.1;
         if (deadly) toll = (int)Mathf.Round(population * Random.value / 10000);
         Resources.Dead.value += toll;
     }
 
-    public bool FindYourLocalDoctor()
+    public float FindYourLocalDoctor()
     {
         Vector3 worldLocation = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-        return Map.GetSingleton().FindDocterNearby(worldLocation);
+        return Map.GetSingleton().NearbyDoctorTimerDecrease(worldLocation);
 
     }
 }

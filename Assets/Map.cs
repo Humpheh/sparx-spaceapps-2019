@@ -65,7 +65,7 @@ public class Map : MonoBehaviour
 
     void Started(string option)
     {
-//        Popup.SpawnPanel(Vector3.zero, "https://data.globe.gov/system/photos/2019/05/23/1079041/original.jpg");
+        //        Popup.SpawnPanel(Vector3.zero, "https://data.globe.gov/system/photos/2019/05/23/1079041/original.jpg");
     }
 
     public void PauseMap()
@@ -195,21 +195,35 @@ public class Map : MonoBehaviour
         return null;
     }
 
-    public bool FindDocterNearby(Vector3 loc, float threshold = 10)
+    public float NearbyDoctorTimerDecrease(Vector3 loc, float threshold = 10)
     {
+        float totalDist = 0f;
+        int numDoctors = 0;
+
         foreach (var city in cities)
         {
             if (city.location.doctors > 0)
             {
+                numDoctors += city.location.doctors;
+
                 var cityLoc = Utils.LatLongToMapCoords((int)city.location.latlon.x, (int)city.location.latlon.y);
                 var dist = Vector3.Distance(cityLoc, loc);
+
+                // Only add to total if doctors are near enough to make a difference
                 if (dist < threshold)
                 {
-                    return true;
+                    totalDist += dist;
                 }
             }
         }
-        return false;
+        if (numDoctors > 0)
+        {
+            return numDoctors / totalDist;
+        }
+        else
+        {
+            return 0;
+        }
     }
 
     public void DropDoctor(Vector3 worldLocation)

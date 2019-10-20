@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1174053334839159954}
   - component: {fileID: 5363775877438808412}
+  - component: {fileID: 8680715538244652005}
   m_Layer: 0
-  m_Name: check
+  m_Name: CheckIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -81,6 +82,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8680715538244652005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3006216078752053565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57052a3362c3c4265937ba444b1280a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4401483582375971123
 GameObject:
   m_ObjectHideFlags: 0

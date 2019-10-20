@@ -36,6 +36,8 @@ public class Outbreak : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Map.GetSingleton().IsPaused()) return;
+
         var change = Time.deltaTime * NearbyDoctorTimeMultipler();
         alive = Mathf.Clamp(alive + change, -0.2f, GROW_TIME * growSpeed);
 
@@ -44,7 +46,8 @@ public class Outbreak : MonoBehaviour
 
         if (alive < -0.01f)
         {
-            StartCoroutine(ShowTick());
+            GameObject checkPrefab = UnityEngine.Resources.Load("CheckIcon") as GameObject;
+            Instantiate(checkPrefab, transform.position, Quaternion.identity);
             Destroy(gameObject);
             return;
         }
@@ -57,14 +60,6 @@ public class Outbreak : MonoBehaviour
         Resources.Dead.value += toll;
     }
 
-    IEnumerator ShowTick()
-    {
-        GameObject checkPrefab = UnityEngine.Resources.Load("CheckIcon") as GameObject;
-        var check = Instantiate(checkPrefab, transform.position, Quaternion.identity);
-        yield return new WaitForSeconds(10f);
-        Destroy(check.gameObject);
-    }
-    
     public float NearbyDoctorTimeMultipler()
     {
         return Map.GetSingleton().NearbyDoctorTimeMultipler(transform.position);

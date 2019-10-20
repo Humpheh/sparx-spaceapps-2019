@@ -7,8 +7,8 @@ using UnityEngine.Networking;
 
 public class MozEventCaller : MonoBehaviour
 {
-    public float nextEvent = 1;
-    public float maxIncrement = 10;
+    public float nextEvent = 3;
+    public float maxIncrement = 50;
     System.Random rnd = new System.Random();
     private readonly string server = "http://localhost:5002"; //System.IO.File.ReadAllText("Assets/ngrok.txt").Trim();
 
@@ -30,7 +30,7 @@ public class MozEventCaller : MonoBehaviour
         if (nextEvent <= 0)
         {
             StartCoroutine(DoEvent(OnEvents));
-            nextEvent = (float)(rnd.NextDouble() * maxIncrement * 2);
+            nextEvent = (float)(rnd.NextDouble() * maxIncrement);
         }
     }
     public delegate void CallbackDelegate(List<MozEvent> evts);
@@ -105,7 +105,7 @@ static class EventExtensions
     {
         return new MozEvent
         {
-            eventType = evt.infection_risk ? "report" : "outbreak",
+            infection_risk = evt.infection_risk,
             location = new DataPoint
             {
                 latitude = (float)evt.lat,

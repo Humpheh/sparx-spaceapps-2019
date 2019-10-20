@@ -80,6 +80,12 @@ public class CityControl : MonoBehaviour
                     new ChoiceOption("Deploy Doctor", "$10,000", delegate {
                         mapSingleton.dispatchType = PlaneBehaviour.PlaneType.DOCTOR;
                     }, Resources.Bank.Balance >= 10000 && HasDoctors(1)),
+                    new ChoiceOption("Buy Mosquito Netting", "$1,000", delegate {
+                        AddDoctor(0, 0.2f, 0);
+                    }, Resources.Bank.Balance >= 1000),
+                    new ChoiceOption("Buy Insecticide", "$2,250", delegate {
+                        AddDoctor(0, 0.3f, 0);
+                    }, Resources.Bank.Balance >= 2250),
                 },
                 delegate { Deselect(); }
             );
@@ -185,7 +191,7 @@ public class CityControl : MonoBehaviour
         }
 
         location.doctors += doctors;
-        location.effectiveness += doctors;
+        location.effectiveness += effectiveness;
         UpdateText();
         Deselect();
     }

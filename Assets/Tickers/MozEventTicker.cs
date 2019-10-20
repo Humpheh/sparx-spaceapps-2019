@@ -9,7 +9,7 @@ namespace mosquitodefenders.Tickers
 {
     public struct MozEvent
     {
-        public string eventType;
+        public bool infection_risk;
         public DataPoint location;
         public string imageURL;
         public int timer;

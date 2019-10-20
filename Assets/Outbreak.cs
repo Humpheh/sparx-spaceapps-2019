@@ -20,14 +20,12 @@ public class Outbreak : MonoBehaviour
     public float growSpeed = 0.1f;
     public float alive = 0;
 
-    public bool malariaRisk;
+    public bool infection_risk;
     public bool deadly;
     public float population;
     public int toll;
     public float nearbyDoctorEffect;
     public bool nearbyDoctor;
-    public float lethality;
-    public float baseLethality;
     public float change;
 
     public string eventType;
@@ -35,12 +33,9 @@ public class Outbreak : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        Debug.Log(this);
+        Debug.Log(this.eventType);
         transform.localScale = new Vector3(0, 0, 0);
         growSpeed = Random.value + 0.1f;
-        malariaRisk = Random.value > 0.5;
-        deadly = eventType == "outbreak"; // infection_risk
-        lethality = Random.value;
         population = Random.value * 10000; // Density based on location?
     }
 
@@ -53,7 +48,9 @@ public class Outbreak : MonoBehaviour
     {
         if (Map.GetSingleton().IsPaused()) return;
 
-        change = Time.deltaTime * NearbyDoctorTimeMultipler() * 40;
+        eventType = infection_risk ? "outbreak" : "report";
+        nearbyDoctorEffect = NearbyDoctorTimeMultipler();
+        change = Time.deltaTime * nearbyDoctorEffect * 40;
         alive = Mathf.Clamp(alive + change, -0.2f, GROW_TIME * growSpeed);
 
         var timer = alive / GROW_TIME * growSpeed;
@@ -68,10 +65,11 @@ public class Outbreak : MonoBehaviour
         transform.localScale = new Vector3(scaleRatio, scaleRatio, scaleRatio);
         GetComponent<SpriteRenderer>().color = Color.Lerp(START_COLOR, END_COLOR, timer);
 
-        deadly = GROW_TIME * growSpeed > CAT_1 && malariaRisk && change >= 0.3f;
+        deadly = GROW_TIME * growSpeed > CAT_1 && infection_risk && change >= 0.3f;
+        
 
         if (deadly) toll = (int)Mathf.Round(population * Random.value / 200);
-        Debug.Log(toll);
+        //Debug.Log(toll);
         Resources.Dead.value += toll;
     }
 

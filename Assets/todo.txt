@@ -1,0 +1,5 @@
+﻿- Expiry of outbreaks
+- Effectiveness by level
+- Insecticide and netting as city types
+- Cities have effectiveness ratings as sums of all effectiveness
+- Cities have doctors and effectiveness ratings

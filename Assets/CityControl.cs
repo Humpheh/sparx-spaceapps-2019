@@ -121,9 +121,9 @@ public class CityControl : MonoBehaviour
     public void Deselect()
     {
         CurrentSelection = null;
-        if (location.isStatic == false) GetComponent<Image>().color = Color.blue;
+        if (location.isStatic == false) GetComponent<Image>().color = new Color(0, 0.42f, 1f);
         else if (location.isLocked == true) GetComponent<Image>().color = Color.grey;
-        else GetComponent<Image>().color = Color.red;
+        else GetComponent<Image>().color = new Color(1f, 0.5f, 0.25f);
     }
 
     public void TryRemoveCity()

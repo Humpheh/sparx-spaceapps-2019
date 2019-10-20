@@ -23,7 +23,7 @@ public class SplashEntry : MonoBehaviour
 
     IEnumerator ToGame()
     {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(10);
         SceneManager.LoadScene("SampleScene");
     }
 }

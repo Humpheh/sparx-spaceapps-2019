@@ -207,13 +207,7 @@ public class Map : MonoBehaviour
                 numDoctors += city.location.doctors;
 
                 var cityLoc = Utils.LatLongToMapCoords((int)city.location.latlon.x, (int)city.location.latlon.y);
-                var dist = Vector3.Distance(cityLoc, loc);
-
-                // Only add to total if doctors are near enough to make a difference
-                if (dist < threshold)
-                {
-                    totalDist += dist;
-                }
+                totalDist += Vector3.Distance(cityLoc, loc);
             }
         }
         if (numDoctors > 0)

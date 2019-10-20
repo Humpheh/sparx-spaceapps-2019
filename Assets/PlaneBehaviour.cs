@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class PlaneBehaviour : MonoBehaviour
 {
+    public enum PlaneType
+    {
+        DOCTOR,
+        AIRDROP,
+        EMPTY,
+    };
+
+    public PlaneType type;
     public float maxScale = 0.5f;
     public float maxSpeed = 2f;
     public Vector2 startPosition;
@@ -20,8 +28,8 @@ public class PlaneBehaviour : MonoBehaviour
         var distanceEnd = Vector2.Distance(endPosition, transform.position);
 
         float scale = 1f;
-        if (distanceStart < 4f) scale = distanceStart / 4f;
-        if (distanceEnd < 4f) scale = distanceEnd / 4f;
+        if (distanceStart < 4f && distanceStart < distanceEnd) scale = distanceStart / 4f;
+        else if (distanceEnd < 4f) scale = distanceEnd / 4f;
 
         // Update the scale based on distance from start
         var planeScale = Mathf.Clamp((scale + 0.5f) * maxScale, 0.2f, maxScale);
@@ -36,11 +44,28 @@ public class PlaneBehaviour : MonoBehaviour
             Debug.Log("reached destination");
             Destroy(gameObject);
             Destroy(line);
-            Map.GetSingleton().DropDoctor(endPosition);
+
+            switch (type)
+            {
+                case PlaneType.DOCTOR:
+                    Map.GetSingleton().DropDoctor(endPosition);
+                    break;
+                
+                case PlaneType.AIRDROP:
+                    // Spawn an empty returning plane
+                    StartCoroutine(SpawnWithDelay(endPosition, startPosition, PlaneType.EMPTY));
+                    break;
+            }
         }
     }
 
-    public static void SpawnPlane(Vector2 from, Vector2 to)
+    IEnumerator SpawnWithDelay(Vector2 from, Vector2 to, PlaneType type)
+    {
+        yield return new WaitForSeconds(3);
+        SpawnPlane(from, to, type);
+    }
+
+    public static void SpawnPlane(Vector2 from, Vector2 to, PlaneType type)
     {
         var from3 = new Vector3(from.x, from.y, -6f);
         var to3 = new Vector3(to.x, to.y, -6f);
@@ -49,7 +74,7 @@ public class PlaneBehaviour : MonoBehaviour
         GameObject line = new GameObject("PlaneLine");
         var lineRender = line.AddComponent<LineRenderer>();
         lineRender.material = lineMaterial;
-        lineRender.material.color = new Color(0.8f, 0.8f, 0.8f);
+        lineRender.material.color = new Color(0.5f, 0.5f, 0.5f);
         lineRender.startWidth = 0.05f;
         lineRender.endWidth = 0.05f;
         lineRender.numCornerVertices = 4;
@@ -64,8 +89,6 @@ public class PlaneBehaviour : MonoBehaviour
         planeB.startPosition = from3;
         planeB.endPosition = to3;
         planeB.line = line;
-
-        Resources.Bank.Spend(30000);
-
+        planeB.type = type;
     }
 }

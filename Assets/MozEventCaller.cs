@@ -17,6 +17,7 @@ public class MozEventCaller : MonoBehaviour
         foreach (MozEvent @event in events)
         {
             SendMessage("MozEvent", @event);
+            StartCoroutine(DoSpreadEvent(OnEvents, @event.timer, @event.location.latitude, @event.location.longitude));
         }
     }
 
@@ -45,6 +46,28 @@ public class MozEventCaller : MonoBehaviour
         Debug.Log(request.downloadHandler.text);
         Events data = JsonUtility.FromJson<Events>(request.downloadHandler.text);
         callback(new List<MozEvent>(new MozEvent[] { data.events[0].ToMozEvent() }));
+    }
+    private IEnumerator DoSpreadEvent(CallbackDelegate callback, float wait, float lat, float @long)
+    {
+        Debug.LogFormat("Waiting {0} seconds to spread", wait.ToString());
+        yield return new WaitForSecondsRealtime(wait);
+        Debug.LogFormat("Spreading {0}, {1}", lat.ToString(), @long.ToString());
+        UnityWebRequest request = UnityWebRequest.Get($"{server}/events/spread/{lat}/{@long}");
+        yield return request.SendWebRequest();
+        if (request.isNetworkError || request.isHttpError)
+        {
+            Debug.Log(request.error);
+            yield break;
+        }
+        Debug.Log(request.downloadHandler.text);
+        Events data = JsonUtility.FromJson<Events>(request.downloadHandler.text);
+
+        var evts = new List<MozEvent>();
+        foreach (Event @event in data.events)
+        {
+            evts.Add(@event.ToMozEvent());
+        }
+        callback(evts);
     }
 
     [Serializable]

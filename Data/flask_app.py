@@ -122,7 +122,7 @@ def spread(lat, long):
             'infection_risk': infection_risk,
             'type': type,
         })
-    return events
+    return {'events': events}
 
 class Events(Resource):
     def get(self):

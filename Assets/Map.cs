@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -14,6 +15,8 @@ public class Map : MonoBehaviour
     }
 
     private bool _paused = false;
+
+    public PlaneBehaviour.PlaneType dispatchType;
 
     public MozDataParse mozData;
     private Locations locations = new Locations();
@@ -277,7 +280,8 @@ public class Map : MonoBehaviour
                 }
 
                 location.RemoveDoctor();
-                PlaneBehaviour.SpawnPlane(location.worldLocation, toLocation);
+                PlaneBehaviour.SpawnPlane(location.worldLocation, toLocation, dispatchType);
+                Resources.Bank.Spend(30000);
                 location.TryRemoveCity();
                 location.Deselect();
             }

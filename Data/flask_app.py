@@ -62,7 +62,7 @@ def new_event():
     return method()
 
 def new_location_nearby(lat, long):
-    N = 10
+    N = 100
     n = 1
     while True:
         n += 1
@@ -75,11 +75,11 @@ def new_location_nearby(lat, long):
 
 def new_timer(lifestage):
     if lifestage == 'adults':
-        return 15
+        return random.uniform(10, 20)
     elif lifestage == 'pupae':
-        return 30
+        return random.uniform(20, 40)
     else:
-        return 60
+        return random.uniform(40, 60)
 
 def event():
     event = new_event()
@@ -100,17 +100,25 @@ def event():
     return events
 
 def spread(lat, long):
-    n_spread = random.randint(1, 4)
+    orig_infection_risk = in_malaria_area(lat, long)
+    if orig_infection_risk:
+      n_spread = random.randint(3, 6)
+    else:
+      n_spread = random.randint(1, 2)
     events = []
     for i in range(0, n_spread):
         new_loc = new_location_nearby(lat, long)
+        infection_risk = in_malaria_area(new_loc[0], new_loc[1])
+        type = "outbreak" if infection_risk else "mosquito_report";
+        text = "Outbreak of Malaria!" if infection_risk else  "Mosquito activity spreading";
         events.append({
             'lat': new_loc[0],
             'long': new_loc[1],
             'timer': random.uniform(40, 60),
-            'text': 'Mosquito activity spreading!',
+            'text': text,
             'image_url': None,
-            'malarial_risk': False
+            'infection_risk': infection_risk,
+            'type': type,
         })
     return events
 

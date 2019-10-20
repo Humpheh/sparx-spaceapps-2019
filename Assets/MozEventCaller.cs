@@ -24,6 +24,8 @@ public class MozEventCaller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Map.GetSingleton().IsPaused()) return;
+
         nextEvent -= Time.deltaTime;
         if (nextEvent <= 0)
         {
@@ -101,6 +103,7 @@ static class EventExtensions
             },
             imageURL = evt.image_url,
             timer = evt.timer,
+            text = evt.text,
         };
     }
 }

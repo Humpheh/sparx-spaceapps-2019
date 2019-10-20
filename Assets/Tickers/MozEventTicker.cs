@@ -13,5 +13,6 @@ namespace mosquitodefenders.Tickers
         public DataPoint location;
         public string imageURL;
         public int timer;
+        public string text;
     }
 }

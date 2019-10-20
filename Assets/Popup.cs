@@ -10,6 +10,8 @@ public class Popup : MonoBehaviour
     private GameObject panelChild;
     private GameObject imageChild;
     private Vector3 worldLocation;
+
+    private static bool onboarded = false;
     
     // Start is called before the first frame update
     void Start()
@@ -32,20 +34,33 @@ public class Popup : MonoBehaviour
         if (request.isNetworkError || request.isHttpError)
         {
             Debug.Log(request.error);
+            Destroy(gameObject);
         }
         else
         {
             var texture = ((DownloadHandlerTexture) request.downloadHandler).texture;
             var rect = new Rect(0, 0, texture.width, texture.height);
             imageChild.GetComponent<Image>().sprite = Sprite.Create(texture, rect, Vector2.zero);
+
+            if (!onboarded)
+            {
+                Modal.OpenModal(
+                    "First report received!",
+                    "<b>You've received a mosquito report.</b>\\n\\n" +
+                    "These reports are useful first indicators of mosquito activity send in by the public. " +
+                    "They will appear on your map in bubbles."
+                );
+                onboarded = true;
+            }
+
+            panelChild.SetActive(true);
+            yield return new WaitForSeconds(10);
         }
-        panelChild.SetActive(true);
-        yield return new WaitForSeconds(10);
-        Destroy(gameObject);
     }
 
-    public static void SpawnPanel(Vector2 worldPosition, string imageURL)
+    public static void SpawnPanel(Vector2 worldPosition, string imageURL, string text = "")
     {
+        Debug.LogFormat("Loading image: {0}", imageURL);
         GameObject popupPrefab = UnityEngine.Resources.Load("ImagePanel") as GameObject;
                
         var modal = Instantiate(popupPrefab);
@@ -54,5 +69,7 @@ public class Popup : MonoBehaviour
         var choice = modal.GetComponent<Popup>();
         choice.url = imageURL;
         choice.worldLocation = worldPosition;
+        
+        modal.transform.Find("Panel").Find("Text").GetComponent<Text>().text = text;
     }
 }

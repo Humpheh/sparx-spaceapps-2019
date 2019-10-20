@@ -14,7 +14,7 @@ public class Outbreak : MonoBehaviour
     const float CAT_2 = 20f;
     const float CAT_3 = 5f;
 
-    private const float GROW_TIME = 60; // seconds
+    private float GROW_TIME = 60; // seconds
 
     public MozEvent evt;
     public float growSpeed = 0.1f;
@@ -44,6 +44,10 @@ public class Outbreak : MonoBehaviour
         population = Random.value * 10000; // Density based on location?
     }
 
+    void Start()
+    {
+        GROW_TIME = evt.timer;
+    }
     // Update is called once per frame
     void Update()
     {
@@ -60,12 +64,12 @@ public class Outbreak : MonoBehaviour
             Cure();
             return;
         }
-        
+
         transform.localScale = new Vector3(scaleRatio, scaleRatio, scaleRatio);
         GetComponent<SpriteRenderer>().color = Color.Lerp(START_COLOR, END_COLOR, timer);
 
         deadly = GROW_TIME * growSpeed > CAT_1 && malariaRisk && change >= 0.3f;
-        
+
         if (deadly) toll = (int)Mathf.Round(population * Random.value / 200);
         Debug.Log(toll);
         Resources.Dead.value += toll;
@@ -76,7 +80,7 @@ public class Outbreak : MonoBehaviour
         GameObject checkPrefab = UnityEngine.Resources.Load("CheckIcon") as GameObject;
         Instantiate(checkPrefab, transform.position, Quaternion.identity);
         Destroy(gameObject);
-            
+
         //this cancels future event spread - dispatch in the actual cure event
         SendMessage("CuredLocation", new DataPoint
         {
@@ -84,7 +88,7 @@ public class Outbreak : MonoBehaviour
             longitude = evt.location.longitude,
         });
     }
-    
+
     public float NearbyDoctorTimeMultipler()
     {
         return Map.GetSingleton().NearbyDoctorTimeMultipler(transform.position);

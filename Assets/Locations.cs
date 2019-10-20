@@ -57,13 +57,13 @@ public class Location
         isStatic = true;
         doctors = city == "Exeter" ? 10 : 0;
         isLocked = city != "Exeter";
-        effectiveness = 0;
+        effectiveness = doctors;
         timeDuration = 0;
     }
 
     public Location(Vector2 position, int doctors, float effectiveness, int timeDuration)
     {
-        city = "Doctor";
+        city = doctors > 0 ? "Doctor" : "Supplies";
         this.position = position;
         this.doctors = doctors;
         isSelected = false;

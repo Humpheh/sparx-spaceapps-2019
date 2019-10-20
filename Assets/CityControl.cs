@@ -15,6 +15,7 @@ public class CityControl : MonoBehaviour
     public Location location;
     public GameObject text;
     public Vector3 worldLocation;
+    public float effectiveness;
 
     private bool fullText = false;
 
@@ -36,6 +37,8 @@ public class CityControl : MonoBehaviour
         if (Map.GetSingleton().IsPaused()) return;
 
         SetPosition();
+
+        effectiveness = location.effectiveness;
     }
 
     public void SetPosition()
@@ -145,7 +148,7 @@ public class CityControl : MonoBehaviour
 
     public void TryRemoveCity()
     {
-        if (location.doctors == 0 && !location.isStatic)
+        if (location.doctors == 0 && !location.isStatic && location.effectiveness <= 0)
         {
             Destroy(text);
             Destroy(gameObject);
@@ -167,6 +170,7 @@ public class CityControl : MonoBehaviour
         if (location.doctors > 0)
         {
             location.doctors--;
+            location.effectiveness--;
             UpdateText();
             TryRemoveCity();
         }
@@ -181,6 +185,7 @@ public class CityControl : MonoBehaviour
         }
 
         location.doctors += doctors;
+        location.effectiveness += doctors;
         UpdateText();
         Deselect();
     }

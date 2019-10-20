@@ -165,6 +165,7 @@ public class Map : MonoBehaviour
         var city = icon.GetComponent<CityControl>();
         city.location = location;
         city.worldLocation = worldLocation;
+        city.effectiveness = location.effectiveness;
         if (location.isLocked) icon.GetComponent<Image>().color = Color.grey;
         icon.transform.SetParent(canvas.transform, false);
 
@@ -201,7 +202,7 @@ public class Map : MonoBehaviour
     {
         const float growSpeed = 1f;
 
-        float totalDoctors = 0;
+        float totalDoctors = 0; // effectiveness
         float nearbyDoctors = 0;
         foreach (var city in cities)
         {
@@ -210,14 +211,12 @@ public class Map : MonoBehaviour
                 new Vector2(city.worldLocation.x, city.worldLocation.y)
             );
 
-            totalDoctors += city.location.doctors;
+            totalDoctors += city.location.effectiveness;
             if (distance < 4)
             {
-                nearbyDoctors += city.location.doctors;
+                nearbyDoctors += city.location.effectiveness;
             }
         }
-        Debug.Log(nearbyDoctors);
-        Debug.Log(growSpeed - totalDoctors / 100f - (nearbyDoctors * growSpeed * 0.9f));
 
         return growSpeed - totalDoctors / 100f - (nearbyDoctors * growSpeed * 0.9f);
     }

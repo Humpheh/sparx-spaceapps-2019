@@ -34,6 +34,7 @@ public class MozEventCaller : MonoBehaviour
 
     private IEnumerator DoEvent(CallbackDelegate callback)
     {
+        Debug.Log($"{server}/events/new");
         UnityWebRequest request = UnityWebRequest.Get($"{server}/events/new");
         yield return request.SendWebRequest();
         if (request.isNetworkError || request.isHttpError)

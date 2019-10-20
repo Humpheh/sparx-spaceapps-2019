@@ -12,6 +12,8 @@ public class MozEventReceiver : MonoBehaviour
         Vector3 pos = Utils.ApiEvtToMapCoords(evt.location);
         GameObject newObject = Instantiate(eventPrefab, pos, Quaternion.identity);
         newObject.transform.parent = transform;
+        newObject.GetComponent<Outbreak>().eventType = evt.eventType;
+        Debug.Log(evt.eventType);
 
         Debug.Log(evt.imageURL);
         // Debug.Log(evt.location.latitude);

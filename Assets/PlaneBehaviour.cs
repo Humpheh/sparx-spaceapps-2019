@@ -8,7 +8,8 @@ public class PlaneBehaviour : MonoBehaviour
     {
         NONE,
         DOCTOR,
-        AIRDROP,
+        AIRDROP_NETTING,
+        AIRDROP_INSECTICIDE,
         EMPTY,
     };
 
@@ -49,11 +50,18 @@ public class PlaneBehaviour : MonoBehaviour
             switch (type)
             {
                 case PlaneType.DOCTOR:
-                    Map.GetSingleton().DropDoctor(endPosition);
+                    Map.GetSingleton().DropDoctor(endPosition, 1);
                     break;
                 
-                case PlaneType.AIRDROP:
+                case PlaneType.AIRDROP_NETTING:
                     // Spawn an empty returning plane
+                    Map.GetSingleton().DropDoctor(endPosition, 0, 0.2f, 60);
+                    StartCoroutine(SpawnWithDelay(endPosition, startPosition, PlaneType.EMPTY));
+                    break;
+
+                case PlaneType.AIRDROP_INSECTICIDE:
+                    // Spawn an empty returning plane
+                    Map.GetSingleton().DropDoctor(endPosition, 0, 0.3f, 90);
                     StartCoroutine(SpawnWithDelay(endPosition, startPosition, PlaneType.EMPTY));
                     break;
             }

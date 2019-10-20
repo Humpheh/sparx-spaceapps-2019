@@ -233,7 +233,7 @@ public class Map : MonoBehaviour
                 while (numberToAddOrRemove > 0)
                 {
                     Resources.Bank.Add(100000); // Make it free
-                    city.AddDoctor();
+                    city.AddDoctor(numberToAddOrRemove, 1, 0);
                     numberToAddOrRemove--;
                 }
                 while (numberToAddOrRemove < 0 && city.location.doctors > 0)
@@ -249,17 +249,17 @@ public class Map : MonoBehaviour
         }
     }
 
-    public void DropDoctor(Vector3 worldLocation)
+    public void DropDoctor(Vector3 worldLocation, int doctors, float effectiveness = 1, int timeDuration = 0)
     {
         var closeCity = FindCloseCity(worldLocation);
         if (closeCity != null)
         {
-            closeCity.AddDoctor();
+            closeCity.AddDoctor(doctors, effectiveness, timeDuration);
         }
         else
         {
             // None were nearby, create a new location
-            var location = new Location(worldLocation, 1);
+            var location = new Location(worldLocation, doctors, effectiveness, timeDuration);
             CreateLocation(location);
         }
     }

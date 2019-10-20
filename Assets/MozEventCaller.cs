@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 
 public class MozEventCaller : MonoBehaviour
 {
-    public float nextEvent = 5;
+    public float nextEvent = 1;
     public float maxIncrement = 10;
     System.Random rnd = new System.Random();
     private readonly string server = System.IO.File.ReadAllText("Assets/ngrok.txt").Trim();
@@ -37,7 +37,7 @@ public class MozEventCaller : MonoBehaviour
 
     private IEnumerator DoEvent(CallbackDelegate callback)
     {
-        Debug.Log($"{server}/events/new");
+        //Debug.Log($"{server}/events/new");
         UnityWebRequest request = UnityWebRequest.Get($"{server}/events/new");
         yield return request.SendWebRequest();
         if (request.isNetworkError || request.isHttpError)
@@ -90,6 +90,7 @@ public class MozEventCaller : MonoBehaviour
     [Serializable]
     public class Event
     {
+        public bool infection_risk;
         public double lat;
         public double @long; // @ick
         public int timer;
@@ -104,7 +105,7 @@ static class EventExtensions
     {
         return new MozEvent
         {
-            eventType = "report",
+            eventType = evt.infection_risk ? "report" : "outbreak",
             location = new DataPoint
             {
                 latitude = (float)evt.lat,

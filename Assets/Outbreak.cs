@@ -24,15 +24,23 @@ public class Outbreak : MonoBehaviour
     public bool deadly;
     public float population;
     public int toll;
+    public float nearbyDoctorEffect;
+    public bool nearbyDoctor;
+    public float lethality;
+    public float baseLethality;
+
+    public string eventType;
 
     // Start is called before the first frame update
     void Awake()
     {
+        Debug.Log(this);
         transform.localScale = new Vector3(0, 0, 0);
         growSpeed = Random.value + 0.1f;
         malariaRisk = Random.value > 0.5;
-        deadly = false;
-        population = Random.value * 10000f;
+        deadly = eventType == "outbreak"; // infection_risk
+        lethality = Random.value;
+        population = Random.value * 10000; // Density based on location?
     }
 
     // Update is called once per frame
@@ -55,8 +63,16 @@ public class Outbreak : MonoBehaviour
         transform.localScale = new Vector3(scaleRatio, scaleRatio, scaleRatio);
         GetComponent<SpriteRenderer>().color = Color.Lerp(START_COLOR, END_COLOR, timer);
 
+        nearbyDoctorEffect = NearbyDoctorTimeMultipler();
+
+        //nearbyDoctorEffect <= 0.1
+
+        //lethality = baseLethality - nearbyDoctorEffect;
+        //if (deadly) toll = (int)Mathf.Round(population * lethality);
+        //Resources.Dead.value += toll;
+
         deadly = GROW_TIME * growSpeed > CAT_1 && malariaRisk && change >= 0.3f;
-        if (deadly) toll = (int)Mathf.Round(population * Random.value / 10000);
+        if (deadly) toll = (int)Mathf.Round(population * Random.value);
         Resources.Dead.value += toll;
     }
 

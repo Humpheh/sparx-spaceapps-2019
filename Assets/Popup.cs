@@ -73,4 +73,10 @@ public class Popup : MonoBehaviour
         
         modal.transform.Find("Panel").Find("Text").GetComponent<Text>().text = text;
     }
+
+    public void DeletePanel()
+    {
+        Debug.Log(this);
+        Destroy(transform.Find("Panel").gameObject);
+    }
 }

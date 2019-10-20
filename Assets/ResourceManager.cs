@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Linq;
 using mosquitodefenders.Tickers;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 static class DefaultResources
 {
@@ -52,7 +54,6 @@ public class ResourceManager : MonoBehaviour
         {
             new BroadcastingResourceUpdater<DateTime>("GlobalTimeStep", new TimeTicker()),
             new BroadcastingResourceUpdater<int>("GlobalDeathToll", new DeathTicker()),
-            new BroadcastingResourceUpdater<MozEvent>("MozEvent", new MozEventTicker()),
             MoneyTicker
         };
     }

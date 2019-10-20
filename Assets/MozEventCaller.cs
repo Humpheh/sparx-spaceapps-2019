@@ -18,6 +18,13 @@ public class MozEventCaller : MonoBehaviour
         {
             SendMessage("MozEvent", @event);
             StartCoroutine(DoSpreadEvent(OnEvents, @event.timer, @event.location.latitude, @event.location.longitude));
+
+            //this cancels future event spread - dispatch in the actual cure event
+            //SendMessage("CuredLocation", new DataPoint
+            //{
+            //    latitude = @event.location.latitude,
+            //    longitude = @event.location.longitude,
+            //});
         }
     }
 
@@ -53,6 +60,15 @@ public class MozEventCaller : MonoBehaviour
     {
         Debug.LogFormat("Waiting {0} seconds to spread", wait.ToString());
         yield return new WaitForSecondsRealtime(wait);
+        foreach (DataPoint loc in Resources.DontSpread)
+        {
+            if (loc.latitude.Equals(lat) && loc.longitude.Equals(@long))
+            {
+                // this outbreak has already been cured
+                Debug.LogFormat("{0} {1} already cured, stopping", lat.ToString(), @long.ToString());
+                yield break;
+            }
+        }
         Debug.LogFormat("Spreading {0}, {1}", lat.ToString(), @long.ToString());
         UnityWebRequest request = UnityWebRequest.Get($"{server}/events/spread/{lat}/{@long}");
         yield return request.SendWebRequest();

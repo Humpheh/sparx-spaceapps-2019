@@ -13,6 +13,7 @@ static class DefaultResources
     readonly public static double MoneyIncrement = 1500;
     readonly public static int StartLevel = 1;
     readonly public static int StartDead = 0;
+    readonly public static int StartInfected = 0;
 }
 
 internal class ResourceTracker<T>
@@ -34,6 +35,7 @@ static class Resources
     public static ResourceTracker<DateTime> Time { get; } = new ResourceTracker<DateTime>();
     public static ResourceTracker<int> Level { get; } = new ResourceTracker<int>();
     public static ResourceTracker<int> Dead { get; } = new ResourceTracker<int>();
+    public static ResourceTracker<int> Infected { get; } = new ResourceTracker<int>();
     public static List<DataPoint> DontSpread { get; } = new List<DataPoint>();
 }
 

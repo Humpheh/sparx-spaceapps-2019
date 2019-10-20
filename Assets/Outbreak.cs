@@ -22,7 +22,6 @@ public class Outbreak : MonoBehaviour
     public bool deadly;
     public float population;
     public int toll;
-    public float nearbyDoctorEffect;
 
     // Start is called before the first frame update
     void Awake()
@@ -32,33 +31,37 @@ public class Outbreak : MonoBehaviour
         malariaRisk = Random.value > 0.5;
         deadly = false;
         population = Random.value * 10000f;
-        nearbyDoctorEffect = FindYourLocalDoctor();
     }
 
     // Update is called once per frame
     void Update()
     {
-        alive += Time.deltaTime;
+        if (Map.GetSingleton().IsPaused()) return;
 
-        nearbyDoctorEffect = FindYourLocalDoctor();
+        var change = Time.deltaTime * NearbyDoctorTimeMultipler();
+        alive = Mathf.Clamp(alive + change, -0.2f, GROW_TIME * growSpeed);
 
-        if (alive < GROW_TIME * growSpeed)
+        var timer = alive / GROW_TIME * growSpeed;
+        var scaleRatio = timer * MAX_SIZE;
+
+        if (alive < -0.01f)
         {
-            var timer = alive / GROW_TIME * growSpeed * -nearbyDoctorEffect;
-            var scaleRatio = timer * MAX_SIZE;
-            transform.localScale = new Vector3(scaleRatio, scaleRatio, scaleRatio);
-            GetComponent<SpriteRenderer>().color = Color.Lerp(START_COLOR, END_COLOR, timer);
+            GameObject checkPrefab = UnityEngine.Resources.Load("CheckIcon") as GameObject;
+            Instantiate(checkPrefab, transform.position, Quaternion.identity);
+            Destroy(gameObject);
+            return;
         }
+        
+        transform.localScale = new Vector3(scaleRatio, scaleRatio, scaleRatio);
+        GetComponent<SpriteRenderer>().color = Color.Lerp(START_COLOR, END_COLOR, timer);
 
-        deadly = GROW_TIME * growSpeed > CAT_1 && malariaRisk && nearbyDoctorEffect <= 0.1;
+        deadly = GROW_TIME * growSpeed > CAT_1 && malariaRisk && change >= 0.3f;
         if (deadly) toll = (int)Mathf.Round(population * Random.value / 10000);
         Resources.Dead.value += toll;
     }
 
-    public float FindYourLocalDoctor()
+    public float NearbyDoctorTimeMultipler()
     {
-        Vector3 worldLocation = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-        return Map.GetSingleton().NearbyDoctorTimerDecrease(worldLocation);
-
+        return Map.GetSingleton().NearbyDoctorTimeMultipler(transform.position);
     }
 }

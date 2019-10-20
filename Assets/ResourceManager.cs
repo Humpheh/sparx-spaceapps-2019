@@ -56,6 +56,8 @@ public class ResourceManager : MonoBehaviour
 
         updaters = new ResourceUpdater[]
         {
+            new BroadcastingResourceUpdater<DateTime>("GlobalTimeStep", new TimeTicker()),
+            new BroadcastingResourceUpdater<int>("GlobalDeathToll", new DeathTicker()),
             new BroadcastingResourceUpdater<bool>("CommunityChest", new CommunityChest()),
             MoneyTicker
         };

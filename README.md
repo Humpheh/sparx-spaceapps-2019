@@ -6,6 +6,27 @@ Mosquito Defenders is our entry for the "1UP for NASA Earth!" challenge in the [
 
 In the game, we imagine what it might be like if citizen scientists were the last line of defense against mosquito-borne diseases like malaria. You play as the head of a public health agency tasked with responding to mosquito sighting reports from these citizen scientists. You have a limited budget of money and people available, and you'll need to spread them over the globe to stall or prevent disease outbreaks.
 
+## How to run
+### Requirements
+This game was made using Unity, with a python web server serving mosquito outbreak events. You will need the following installed:
+ - Unity
+ - Python3
+ - pipenv
+
+To set up the server, run the following commands.
+```
+cd Data
+pipenv --python3.7 install
+```
+
+### Running
+To run the server, run the following from the `Data/` directory.
+```
+pipenv run ./flask_app.py
+```
+__If the address from the output of the command doesn't match http://127.0.0.1:5002, you will need to update the `Assets/ngrok.txt` file to match the address of the server.__
+With the python server running, open the project in Unity and build for your platform.
+
 ## The data
 
 This game draws its data from the [NASA Globe citizen science programme](www.globe.gov), specifically the mosquito habitat dataset. We use the Globe API to randomly provide real mosquito observations. Each observation can come with a lat/long, mosquito counts, information about what spources of water they are breeding in, species ID and associated photos taken with the Globe app. This means that the alerts you see in the game are based on real mosquito sightings from all over the world. 

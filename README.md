@@ -22,7 +22,7 @@ pipenv --python3.7 install
 ### Running
 To run the server, run the following from the `Data/` directory.
 ```
-pipenv run ./flask_app.py
+pipenv make serve
 ```
 __If the address from the output of the command doesn't match http://127.0.0.1:5002, you will need to update the `Assets/ngrok.txt` file to match the address of the server.__
 With the python server running, open the project in Unity and build for your platform.
